@@ -14,175 +14,137 @@
       font-family: Georgia, serif;
       min-height: 100vh;
     }
-    .login-screen {
+    .screen { display: none; }
+    .active { display: block; }
+
+    /* LOGIN */
+    #loginScreen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
     }
-    .dashboard-screen { display: none; }
-    .logo {
-      color: #D4A574;
-      font-size: 2rem;
-      letter-spacing: 0.3em;
-      margin-bottom: 0.5rem;
-    }
-    .tagline {
-      color: #888;
-      font-size: 0.9rem;
-      letter-spacing: 0.2em;
-      margin-bottom: 3rem;
-    }
-    .login-box {
-      background: #222;
-      padding: 2.5rem;
-      width: 90%;
-      max-width: 400px;
-      border: 1px solid #333;
-    }
-    .login-box h2 {
-      color: #D4A574;
-      font-size: 1rem;
-      letter-spacing: 0.2em;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      background: #1A1A1A;
-      border: 1px solid #444;
-      color: #fff;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1rem;
-      font-family: Georgia, serif;
-      font-size: 0.9rem;
-    }
+    .logo { color: #D4A574; font-size: 2rem; letter-spacing: 0.3em; margin-bottom: 0.5rem; }
+    .tagline { color: #888; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 3rem; }
+    .login-box { background: #222; padding: 2.5rem; width: 90%; max-width: 400px; border: 1px solid #333; }
+    .login-box h2 { color: #D4A574; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; text-align: center; }
+    input { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
     input::placeholder { color: #666; }
-    button {
-      width: 100%;
-      background: #D4A574;
-      color: #1A1A1A;
-      border: none;
-      padding: 0.9rem;
-      font-family: Georgia, serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      cursor: pointer;
-      margin-top: 0.5rem;
-    }
-    button:hover { background: #c49060; }
+    .btn { width: 100%; background: #D4A574; color: #1A1A1A; border: none; padding: 0.9rem; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.15em; cursor: pointer; margin-top: 0.5rem; }
+    .btn:hover { background: #c49060; }
+    .btn-outline { background: transparent; color: #D4A574; border: 1px solid #D4A574; margin-top: 0.5rem; }
+    .btn-outline:hover { background: #D4A574; color: #1A1A1A; }
     .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
 
-    /* Dashboard */
-    .top-bar {
-      background: #111;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #333;
-    }
+    /* TOP BAR */
+    .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
     .top-bar .logo-small { color: #D4A574; font-size: 1.2rem; letter-spacing: 0.2em; }
-    .top-bar button { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; }
-    .welcome {
-      padding: 1.5rem;
-      color: #888;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-    }
+    .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
+
+    /* NAV */
+    .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
+    .nav-item { padding: 0.8rem 1.2rem; color: #666; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
+    .nav-item.active-nav { color: #D4A574; border-bottom: 2px solid #D4A574; }
+
+    /* DASHBOARD */
+    .welcome { padding: 1.5rem; color: #888; font-size: 0.9rem; letter-spacing: 0.1em; }
     .welcome span { color: #D4A574; }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      padding: 0 1rem 1rem;
-    }
-    .card {
-      background: #222;
-      border: 1px solid #333;
-      padding: 1.2rem;
-    }
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem 1rem; }
+    .card { background: #222; border: 1px solid #333; padding: 1.2rem; }
     .card-label { color: #666; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
     .card-value { color: #D4A574; font-size: 1.5rem; }
     .card-sub { color: #888; font-size: 0.75rem; margin-top: 0.3rem; }
-    .section-title {
-      color: #D4A574;
-      font-size: 0.85rem;
-      letter-spacing: 0.2em;
-      padding: 1rem 1rem 0.5rem;
-      border-top: 1px solid #333;
-      margin-top: 0.5rem;
-    }
-    .service-item {
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid #222;
-      display: flex;
-      justify-content: space-between;
-    }
+    .section-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; padding: 1rem 1rem 0.5rem; border-top: 1px solid #333; margin-top: 0.5rem; }
+    .service-item { padding: 0.8rem 1rem; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
     .service-item .name { color: #fff; font-size: 0.9rem; }
     .service-item .date { color: #666; font-size: 0.8rem; }
-    .service-item .status {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      background: #1a3a1a;
-      color: #4caf50;
-    }
+    .service-item .status { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: #1a3a1a; color: #4caf50; }
+
+    /* MEDIA */
+    .media-page { padding: 1rem; }
+    .media-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
+    .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    .media-item { background: #222; border: 1px solid #333; overflow: hidden; cursor: pointer; }
+    .media-item img { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .media-item-label { padding: 0.5rem; color: #888; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .upload-btn { margin-top: 1rem; }
+    .empty-media { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; }
   </style>
 </head>
 <body>
 
   <!-- LOGIN -->
-  <div class="login-screen" id="loginScreen">
+  <div id="loginScreen">
     <div class="logo">P.A.L.</div>
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
     <div class="login-box">
       <h2>CLIENT PORTAL</h2>
       <input type="email" placeholder="Email address" id="email">
       <input type="password" placeholder="Password" id="password">
-      <button onclick="login()">ACCESS MY PORTAL</button>
+      <button class="btn" onclick="login()">ACCESS MY PORTAL</button>
       <div class="error" id="errorMsg"></div>
       <div class="loading" id="loadingMsg"></div>
     </div>
   </div>
 
   <!-- DASHBOARD -->
-  <div class="dashboard-screen" id="dashboardScreen">
+  <div id="dashboardScreen" class="screen">
     <div class="top-bar">
       <div class="logo-small">P.A.L.</div>
-      <button onclick="logout()">LOGOUT</button>
+      <button class="btn" onclick="logout()">LOGOUT</button>
     </div>
-    <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
-    <div class="cards">
-      <div class="card">
-        <div class="card-label">SERVICES THIS MONTH</div>
-        <div class="card-value" id="totalServices">0</div>
-        <div class="card-sub">completed</div>
+    <div class="nav">
+      <div class="nav-item active-nav" onclick="showTab('dashboard')">DASHBOARD</div>
+      <div class="nav-item" onclick="showTab('media')">PHOTOS & VIDEOS</div>
+    </div>
+
+    <!-- TAB: DASHBOARD -->
+    <div id="tabDashboard">
+      <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">SERVICES THIS MONTH</div>
+          <div class="card-value" id="totalServices">0</div>
+          <div class="card-sub">completed</div>
+        </div>
+        <div class="card">
+          <div class="card-label">TOTAL COST</div>
+          <div class="card-value" id="totalCost">$0</div>
+          <div class="card-sub">this month</div>
+        </div>
+        <div class="card">
+          <div class="card-label">HOURS LOGGED</div>
+          <div class="card-value" id="totalHours">0</div>
+          <div class="card-sub">this month</div>
+        </div>
+        <div class="card">
+          <div class="card-label">PURCHASES</div>
+          <div class="card-value" id="totalPurchases">$0</div>
+          <div class="card-sub">additional spend</div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-label">TOTAL COST</div>
-        <div class="card-value" id="totalCost">$0</div>
-        <div class="card-sub">this month</div>
-      </div>
-      <div class="card">
-        <div class="card-label">HOURS LOGGED</div>
-        <div class="card-value" id="totalHours">0</div>
-        <div class="card-sub">this month</div>
-      </div>
-      <div class="card">
-        <div class="card-label">PURCHASES</div>
-        <div class="card-value" id="totalPurchases">$0</div>
-        <div class="card-sub">additional spend</div>
+      <div class="section-title">RECENT SERVICES</div>
+      <div id="servicesList"></div>
+    </div>
+
+    <!-- TAB: MEDIA -->
+    <div id="tabMedia" class="screen">
+      <div class="media-page">
+        <div class="media-title">PHOTOS & VIDEOS</div>
+        <div class="media-grid" id="mediaGrid">
+          <div class="empty-media">Loading media...</div>
+        </div>
+        <button class="btn upload-btn" onclick="uploadMedia()">+ UPLOAD PHOTO OR VIDEO</button>
       </div>
     </div>
-    <div class="section-title">RECENT SERVICES</div>
-    <div id="servicesList"></div>
   </div>
 
   <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE' };
 
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}`);
@@ -196,10 +158,8 @@
       const password = document.getElementById('password').value.trim();
       const errorMsg = document.getElementById('errorMsg');
       const loadingMsg = document.getElementById('loadingMsg');
-
       errorMsg.textContent = '';
       loadingMsg.textContent = 'Verifying...';
-
       try {
         const rows = await fetchSheet('Clients');
         let found = null;
@@ -220,7 +180,7 @@
           loadingMsg.textContent = '';
           errorMsg.textContent = 'Incorrect email or password.';
         }
-      } catch (e) {
+      } catch(e) {
         loadingMsg.textContent = '';
         errorMsg.textContent = 'Connection error. Please try again.';
       }
@@ -230,55 +190,59 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
       document.getElementById('clientName').textContent = clientName.toUpperCase();
-
       try {
         const services = await fetchSheet('Services');
         const timelog = await fetchSheet('Time Log');
         const purchases = await fetchSheet('Purchases');
-
-        const now = new Date();
-        const month = now.getMonth();
-        const year = now.getFullYear();
-
         let totalServices = 0, totalCost = 0, totalHours = 0, totalPurchases = 0;
         let serviceItems = [];
-
         for (const row of services) {
           if (row.c[1]?.v === clientId) {
             totalServices++;
             totalCost += row.c[6]?.v || 0;
-            serviceItems.push({
-              name: row.c[3]?.v || 'Service',
-              date: row.c[2]?.v || '',
-              status: row.c[5]?.v || 'Completed'
-            });
+            serviceItems.push({ name: row.c[3]?.v || 'Service', date: row.c[2]?.v || '', status: row.c[5]?.v || 'Completed' });
           }
         }
-        for (const row of timelog) {
-          if (row.c[1]?.v === clientId) totalHours += row.c[4]?.v || 0;
-        }
-        for (const row of purchases) {
-          if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
-        }
-
+        for (const row of timelog) { if (row.c[1]?.v === clientId) totalHours += row.c[4]?.v || 0; }
+        for (const row of purchases) { if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0; }
         document.getElementById('totalServices').textContent = totalServices;
         document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(0);
         document.getElementById('totalHours').textContent = totalHours;
         document.getElementById('totalPurchases').textContent = '$' + totalPurchases.toFixed(0);
-
         const list = document.getElementById('servicesList');
         list.innerHTML = serviceItems.length ? serviceItems.map(s => `
           <div class="service-item">
-            <div>
-              <div class="name">${s.name}</div>
-              <div class="date">${s.date}</div>
-            </div>
+            <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
             <div class="status">${s.status}</div>
           </div>`).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
+      } catch(e) { console.log('Dashboard error:', e); }
+      loadMedia(clientId);
+    }
 
+    async function loadMedia(clientId) {
+      const folderId = FOLDER_MAP[clientId];
+      if (!folderId) return;
+      const grid = document.getElementById('mediaGrid');
+      grid.innerHTML = '<div class="empty-media">Loading media...</div>';
+      try {
+        const url = `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
+        grid.innerHTML = `<iframe src="${url}" style="width:100%;height:400px;border:none;background:#1A1A1A;" allowfullscreen></iframe>`;
       } catch(e) {
-        console.log('Dashboard error:', e);
+        grid.innerHTML = '<div class="empty-media">Unable to load media.</div>';
       }
+    }
+
+    function uploadMedia() {
+      const clientId = sessionStorage.getItem('clientId');
+      const folderId = FOLDER_MAP[clientId];
+      if (folderId) window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
+    }
+
+    function showTab(tab) {
+      document.getElementById('tabDashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
+      document.getElementById('tabMedia').style.display = tab === 'media' ? 'block' : 'none';
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
+      event.target.classList.add('active-nav');
     }
 
     function logout() {
@@ -287,9 +251,7 @@
       document.getElementById('dashboardScreen').style.display = 'none';
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
   </script>
 </body>
 </html>
