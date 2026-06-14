@@ -1,0 +1,22 @@
+{
+  "name": "PAL Client Portal",
+  "short_name": "PAL",
+  "description": "Premium Activities & Lifestyle Client Portal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1A1A",
+  "theme_color": "#1A1A1A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://pallifestyle.com.au/cdn/shop/files/pal-logo_black_1200x1200.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://pallifestyle.com.au/cdn/shop/files/pal-logo_black_1200x1200.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
