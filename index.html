@@ -13,11 +13,15 @@
       color: #FFFFFF;
       font-family: Georgia, serif;
       min-height: 100vh;
+    }
+    .login-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      min-height: 100vh;
     }
+    .dashboard-screen { display: none; }
     .logo {
       color: #D4A574;
       font-size: 2rem;
@@ -68,25 +72,221 @@
       margin-top: 0.5rem;
     }
     button:hover { background: #c49060; }
+    .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+
+    /* Dashboard */
+    .top-bar {
+      background: #111;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+    }
+    .top-bar .logo-small { color: #D4A574; font-size: 1.2rem; letter-spacing: 0.2em; }
+    .top-bar button { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; }
+    .welcome {
+      padding: 1.5rem;
+      color: #888;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+    .welcome span { color: #D4A574; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 0 1rem 1rem;
+    }
+    .card {
+      background: #222;
+      border: 1px solid #333;
+      padding: 1.2rem;
+    }
+    .card-label { color: #666; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+    .card-value { color: #D4A574; font-size: 1.5rem; }
+    .card-sub { color: #888; font-size: 0.75rem; margin-top: 0.3rem; }
+    .section-title {
+      color: #D4A574;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      padding: 1rem 1rem 0.5rem;
+      border-top: 1px solid #333;
+      margin-top: 0.5rem;
+    }
+    .service-item {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+    }
+    .service-item .name { color: #fff; font-size: 0.9rem; }
+    .service-item .date { color: #666; font-size: 0.8rem; }
+    .service-item .status {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      background: #1a3a1a;
+      color: #4caf50;
+    }
   </style>
 </head>
 <body>
-  <div class="logo">P.A.L.</div>
-  <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
-  <div class="login-box">
-    <h2>CLIENT PORTAL</h2>
-    <input type="email" placeholder="Email address" id="email">
-    <input type="password" placeholder="Password" id="password">
-    <button onclick="login()">ACCESS MY PORTAL</button>
+
+  <!-- LOGIN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="logo">P.A.L.</div>
+    <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
+    <div class="login-box">
+      <h2>CLIENT PORTAL</h2>
+      <input type="email" placeholder="Email address" id="email">
+      <input type="password" placeholder="Password" id="password">
+      <button onclick="login()">ACCESS MY PORTAL</button>
+      <div class="error" id="errorMsg"></div>
+      <div class="loading" id="loadingMsg"></div>
+    </div>
   </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard-screen" id="dashboardScreen">
+    <div class="top-bar">
+      <div class="logo-small">P.A.L.</div>
+      <button onclick="logout()">LOGOUT</button>
+    </div>
+    <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">SERVICES THIS MONTH</div>
+        <div class="card-value" id="totalServices">0</div>
+        <div class="card-sub">completed</div>
+      </div>
+      <div class="card">
+        <div class="card-label">TOTAL COST</div>
+        <div class="card-value" id="totalCost">$0</div>
+        <div class="card-sub">this month</div>
+      </div>
+      <div class="card">
+        <div class="card-label">HOURS LOGGED</div>
+        <div class="card-value" id="totalHours">0</div>
+        <div class="card-sub">this month</div>
+      </div>
+      <div class="card">
+        <div class="card-label">PURCHASES</div>
+        <div class="card-value" id="totalPurchases">$0</div>
+        <div class="card-sub">additional spend</div>
+      </div>
+    </div>
+    <div class="section-title">RECENT SERVICES</div>
+    <div id="servicesList"></div>
+  </div>
+
   <script>
-    function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      if (email && password) {
-        alert('Portal coming soon. Welcome to PAL.');
+    const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
+    const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+    async function fetchSheet(sheet) {
+      const res = await fetch(`${API_URL}&sheet=${sheet}`);
+      const text = await res.text();
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      return json.table.rows;
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      const loadingMsg = document.getElementById('loadingMsg');
+
+      errorMsg.textContent = '';
+      loadingMsg.textContent = 'Verifying...';
+
+      try {
+        const rows = await fetchSheet('Clients');
+        let found = null;
+        for (const row of rows) {
+          const rowEmail = row.c[2]?.v?.toString().toLowerCase();
+          const rowPassword = row.c[6]?.v?.toString();
+          if (rowEmail === email && rowPassword === password) {
+            found = { id: row.c[0]?.v, name: row.c[1]?.v };
+            break;
+          }
+        }
+        if (found) {
+          loadingMsg.textContent = '';
+          sessionStorage.setItem('clientId', found.id);
+          sessionStorage.setItem('clientName', found.name);
+          showDashboard(found.id, found.name);
+        } else {
+          loadingMsg.textContent = '';
+          errorMsg.textContent = 'Incorrect email or password.';
+        }
+      } catch (e) {
+        loadingMsg.textContent = '';
+        errorMsg.textContent = 'Connection error. Please try again.';
       }
     }
+
+    async function showDashboard(clientId, clientName) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboardScreen').style.display = 'block';
+      document.getElementById('clientName').textContent = clientName.toUpperCase();
+
+      try {
+        const services = await fetchSheet('Services');
+        const timelog = await fetchSheet('Time Log');
+        const purchases = await fetchSheet('Purchases');
+
+        const now = new Date();
+        const month = now.getMonth();
+        const year = now.getFullYear();
+
+        let totalServices = 0, totalCost = 0, totalHours = 0, totalPurchases = 0;
+        let serviceItems = [];
+
+        for (const row of services) {
+          if (row.c[1]?.v === clientId) {
+            totalServices++;
+            totalCost += row.c[6]?.v || 0;
+            serviceItems.push({
+              name: row.c[3]?.v || 'Service',
+              date: row.c[2]?.v || '',
+              status: row.c[5]?.v || 'Completed'
+            });
+          }
+        }
+        for (const row of timelog) {
+          if (row.c[1]?.v === clientId) totalHours += row.c[4]?.v || 0;
+        }
+        for (const row of purchases) {
+          if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
+        }
+
+        document.getElementById('totalServices').textContent = totalServices;
+        document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(0);
+        document.getElementById('totalHours').textContent = totalHours;
+        document.getElementById('totalPurchases').textContent = '$' + totalPurchases.toFixed(0);
+
+        const list = document.getElementById('servicesList');
+        list.innerHTML = serviceItems.length ? serviceItems.map(s => `
+          <div class="service-item">
+            <div>
+              <div class="name">${s.name}</div>
+              <div class="date">${s.date}</div>
+            </div>
+            <div class="status">${s.status}</div>
+          </div>`).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
+
+      } catch(e) {
+        console.log('Dashboard error:', e);
+      }
+    }
+
+    function logout() {
+      sessionStorage.clear();
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashboardScreen').style.display = 'none';
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
