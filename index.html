@@ -8,47 +8,27 @@
   <link rel="manifest" href="manifest.json">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background-color: #1A1A1A;
-      color: #FFFFFF;
-      font-family: Georgia, serif;
-      min-height: 100vh;
-    }
+    body { background-color: #1A1A1A; color: #FFFFFF; font-family: Georgia, serif; min-height: 100vh; }
     .screen { display: none; }
-    .active { display: block; }
-
-    /* LOGIN */
-    #loginScreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+    #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
     .logo { color: #D4A574; font-size: 2rem; letter-spacing: 0.3em; margin-bottom: 0.5rem; }
     .tagline { color: #888; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 3rem; }
     .login-box { background: #222; padding: 2.5rem; width: 90%; max-width: 400px; border: 1px solid #333; }
     .login-box h2 { color: #D4A574; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; text-align: center; }
-    input { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
-    input::placeholder { color: #666; }
+    input, textarea { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
+    input::placeholder, textarea::placeholder { color: #666; }
+    textarea { height: 100px; resize: vertical; }
     .btn { width: 100%; background: #D4A574; color: #1A1A1A; border: none; padding: 0.9rem; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.15em; cursor: pointer; margin-top: 0.5rem; }
     .btn:hover { background: #c49060; }
-    .btn-outline { background: transparent; color: #D4A574; border: 1px solid #D4A574; margin-top: 0.5rem; }
-    .btn-outline:hover { background: #D4A574; color: #1A1A1A; }
     .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
-
-    /* TOP BAR */
+    .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
     .top-bar .logo-small { color: #D4A574; font-size: 1.2rem; letter-spacing: 0.2em; }
     .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
-
-    /* NAV */
     .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
     .nav-item { padding: 0.8rem 1.2rem; color: #666; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
     .nav-item.active-nav { color: #D4A574; border-bottom: 2px solid #D4A574; }
-
-    /* DASHBOARD */
     .welcome { padding: 1.5rem; color: #888; font-size: 0.9rem; letter-spacing: 0.1em; }
     .welcome span { color: #D4A574; }
     .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem 1rem; }
@@ -61,16 +41,17 @@
     .service-item .name { color: #fff; font-size: 0.9rem; }
     .service-item .date { color: #666; font-size: 0.8rem; }
     .service-item .status { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: #1a3a1a; color: #4caf50; }
-
-    /* MEDIA */
     .media-page { padding: 1rem; }
     .media-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
-    .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-    .media-item { background: #222; border: 1px solid #333; overflow: hidden; cursor: pointer; }
-    .media-item img { width: 100%; height: 150px; object-fit: cover; display: block; }
-    .media-item-label { padding: 0.5rem; color: #888; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .upload-btn { margin-top: 1rem; }
-    .empty-media { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; }
+    .feedback-page { padding: 1rem; }
+    .feedback-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+    .stars { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .star { font-size: 2rem; cursor: pointer; color: #444; transition: color 0.2s; }
+    .star.active { color: #D4A574; }
+    .feedback-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
+    .feedback-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    select { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -96,47 +77,56 @@
       <button class="btn" onclick="logout()">LOGOUT</button>
     </div>
     <div class="nav">
-      <div class="nav-item active-nav" onclick="showTab('dashboard')">DASHBOARD</div>
-      <div class="nav-item" onclick="showTab('media')">PHOTOS & VIDEOS</div>
+      <div class="nav-item active-nav" onclick="showTab('dashboard', this)">DASHBOARD</div>
+      <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
+      <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
     </div>
 
-    <!-- TAB: DASHBOARD -->
+    <!-- DASHBOARD TAB -->
     <div id="tabDashboard">
       <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
       <div class="cards">
-        <div class="card">
-          <div class="card-label">SERVICES THIS MONTH</div>
-          <div class="card-value" id="totalServices">0</div>
-          <div class="card-sub">completed</div>
-        </div>
-        <div class="card">
-          <div class="card-label">TOTAL COST</div>
-          <div class="card-value" id="totalCost">$0</div>
-          <div class="card-sub">this month</div>
-        </div>
-        <div class="card">
-          <div class="card-label">HOURS LOGGED</div>
-          <div class="card-value" id="totalHours">0</div>
-          <div class="card-sub">this month</div>
-        </div>
-        <div class="card">
-          <div class="card-label">PURCHASES</div>
-          <div class="card-value" id="totalPurchases">$0</div>
-          <div class="card-sub">additional spend</div>
-        </div>
+        <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub">completed</div></div>
+        <div class="card"><div class="card-label">TOTAL COST</div><div class="card-value" id="totalCost">$0</div><div class="card-sub">this month</div></div>
+        <div class="card"><div class="card-label">HOURS LOGGED</div><div class="card-value" id="totalHours">0</div><div class="card-sub">this month</div></div>
+        <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="totalPurchases">$0</div><div class="card-sub">additional spend</div></div>
       </div>
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
     </div>
 
-    <!-- TAB: MEDIA -->
+    <!-- MEDIA TAB -->
     <div id="tabMedia" class="screen">
       <div class="media-page">
         <div class="media-title">PHOTOS & VIDEOS</div>
-        <div class="media-grid" id="mediaGrid">
-          <div class="empty-media">Loading media...</div>
-        </div>
+        <div id="mediaGrid"></div>
         <button class="btn upload-btn" onclick="uploadMedia()">+ UPLOAD PHOTO OR VIDEO</button>
+      </div>
+    </div>
+
+    <!-- FEEDBACK TAB -->
+    <div id="tabFeedback" class="screen">
+      <div class="feedback-page">
+        <div class="feedback-title">LEAVE FEEDBACK</div>
+        <div class="feedback-box">
+          <label>SELECT SERVICE</label>
+          <select id="feedbackService">
+            <option value="">Select a service...</option>
+          </select>
+          <label>YOUR RATING</label>
+          <div class="stars">
+            <span class="star" onclick="setRating(1)">★</span>
+            <span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span>
+            <span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+          </div>
+          <label>YOUR COMMENTS</label>
+          <textarea placeholder="Share your experience..." id="feedbackComment"></textarea>
+          <button class="btn" onclick="submitFeedback()">SUBMIT FEEDBACK</button>
+          <div class="success-msg" id="feedbackSuccess"></div>
+          <div class="error" id="feedbackError"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -144,7 +134,10 @@
   <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE' };
+    let currentRating = 0;
+    let clientServices = [];
 
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}`);
@@ -196,11 +189,15 @@
         const purchases = await fetchSheet('Purchases');
         let totalServices = 0, totalCost = 0, totalHours = 0, totalPurchases = 0;
         let serviceItems = [];
+        clientServices = [];
         for (const row of services) {
           if (row.c[1]?.v === clientId) {
             totalServices++;
             totalCost += row.c[6]?.v || 0;
-            serviceItems.push({ name: row.c[3]?.v || 'Service', date: row.c[2]?.v || '', status: row.c[5]?.v || 'Completed' });
+            const sName = row.c[3]?.v || 'Service';
+            const sId = row.c[0]?.v || '';
+            serviceItems.push({ name: sName, date: row.c[2]?.v || '', status: row.c[5]?.v || 'Completed' });
+            clientServices.push({ id: sId, name: sName });
           }
         }
         for (const row of timelog) { if (row.c[1]?.v === clientId) totalHours += row.c[4]?.v || 0; }
@@ -215,6 +212,11 @@
             <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
             <div class="status">${s.status}</div>
           </div>`).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
+        const select = document.getElementById('feedbackService');
+        select.innerHTML = '<option value="">Select a service...</option>';
+        clientServices.forEach(s => {
+          select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+        });
       } catch(e) { console.log('Dashboard error:', e); }
       loadMedia(clientId);
     }
@@ -223,13 +225,7 @@
       const folderId = FOLDER_MAP[clientId];
       if (!folderId) return;
       const grid = document.getElementById('mediaGrid');
-      grid.innerHTML = '<div class="empty-media">Loading media...</div>';
-      try {
-        const url = `https://drive.google.com/embeddedfolderview?id=${folderId}#grid`;
-        grid.innerHTML = `<iframe src="${url}" style="width:100%;height:400px;border:none;background:#1A1A1A;" allowfullscreen></iframe>`;
-      } catch(e) {
-        grid.innerHTML = '<div class="empty-media">Unable to load media.</div>';
-      }
+      grid.innerHTML = `<iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#grid" style="width:100%;height:400px;border:none;background:#1A1A1A;" allowfullscreen></iframe>`;
     }
 
     function uploadMedia() {
@@ -238,11 +234,46 @@
       if (folderId) window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
     }
 
-    function showTab(tab) {
+    function setRating(rating) {
+      currentRating = rating;
+      document.querySelectorAll('.star').forEach((star, i) => {
+        star.classList.toggle('active', i < rating);
+      });
+    }
+
+    async function submitFeedback() {
+      const clientId = sessionStorage.getItem('clientId');
+      const serviceId = document.getElementById('feedbackService').value;
+      const comment = document.getElementById('feedbackComment').value.trim();
+      const successEl = document.getElementById('feedbackSuccess');
+      const errorEl = document.getElementById('feedbackError');
+      successEl.textContent = '';
+      errorEl.textContent = '';
+      if (!serviceId) { errorEl.textContent = 'Please select a service.'; return; }
+      if (!currentRating) { errorEl.textContent = 'Please select a rating.'; return; }
+      const feedbackId = 'F' + Date.now();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment] })
+        });
+        successEl.textContent = 'Thank you! Your feedback has been submitted.';
+        document.getElementById('feedbackComment').value = '';
+        document.getElementById('feedbackService').value = '';
+        setRating(0);
+      } catch(e) {
+        errorEl.textContent = 'Error submitting feedback. Please try again.';
+      }
+    }
+
+    function showTab(tab, el) {
       document.getElementById('tabDashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
       document.getElementById('tabMedia').style.display = tab === 'media' ? 'block' : 'none';
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
-      event.target.classList.add('active-nav');
+      document.getElementById('tabFeedback').style.display = tab === 'feedback' ? 'block' : 'none';
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+      el.classList.add('active-nav');
     }
 
     function logout() {
