@@ -42,8 +42,19 @@
     .service-item .date { color: #666; font-size: 0.8rem; }
     .service-item .status { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: #1a3a1a; color: #4caf50; }
     .media-page { padding: 1rem; }
-    .media-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
-    .upload-btn { margin-top: 1rem; }
+    .media-section-title { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; margin: 1rem 0 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #333; }
+    .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+    .media-card { background: #222; border: 1px solid #333; overflow: hidden; cursor: pointer; }
+    .media-card img { width: 100%; height: 140px; object-fit: cover; display: block; }
+    .media-card-info { padding: 0.6rem; }
+    .media-card-caption { color: #fff; font-size: 0.8rem; margin-bottom: 0.3rem; }
+    .media-card-meta { color: #666; font-size: 0.7rem; display: flex; justify-content: space-between; }
+    .media-card-by-pal { color: #D4A574; }
+    .media-card-by-client { color: #888; }
+    .upload-section { background: #222; border: 1px solid #333; padding: 1.2rem; margin-top: 1rem; }
+    .upload-section label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.8rem; }
+    .upload-section input[type="text"] { margin-bottom: 0.8rem; }
+    .empty-media { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; grid-column: span 2; }
     .feedback-page { padding: 1rem; }
     .feedback-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; }
     .stars { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
@@ -94,9 +105,16 @@
 
     <div id="tabMedia" class="screen">
       <div class="media-page">
-        <div class="media-title">PHOTOS & VIDEOS</div>
-        <div id="mediaGrid"></div>
-        <button class="btn upload-btn" onclick="uploadMedia()">+ UPLOAD PHOTO OR VIDEO</button>
+        <div class="media-section-title">FROM P.A.L.</div>
+        <div class="media-grid" id="mediaFromPAL"><div class="empty-media">No media yet.</div></div>
+        <div class="media-section-title">FROM CLIENT</div>
+        <div class="media-grid" id="mediaFromClient"><div class="empty-media">No media yet.</div></div>
+        <div class="upload-section">
+          <label>SHARE A PHOTO OR VIDEO WITH P.A.L.</label>
+          <input type="text" placeholder="Add a caption..." id="uploadCaption">
+          <button class="btn" onclick="uploadMedia()">+ UPLOAD PHOTO OR VIDEO</button>
+          <div class="success-msg" id="uploadSuccess"></div>
+        </div>
       </div>
     </div>
 
@@ -236,16 +254,56 @@
     }
 
     async function loadMedia(clientId) {
-      const folderId = FOLDER_MAP[clientId];
-      if (!folderId) return;
-      const grid = document.getElementById('mediaGrid');
-      grid.innerHTML = `<iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#grid" style="width:100%;height:400px;border:none;background:#1A1A1A;" allowfullscreen></iframe>`;
+      try {
+        const rows = await fetchSheet('Media');
+        const palGrid = document.getElementById('mediaFromPAL');
+        const clientGrid = document.getElementById('mediaFromClient');
+        let palItems = [], clientItems = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) {
+            const item = {
+              fileId: row.c[0]?.v || '',
+              caption: row.c[2]?.v || '',
+              uploadedBy: row.c[3]?.v || '',
+              date: row.c[4]?.v || ''
+            };
+            if (item.uploadedBy === 'PAL') palItems.push(item);
+            else clientItems.push(item);
+          }
+        }
+        palGrid.innerHTML = palItems.length ? palItems.map(item => `
+          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
+            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
+            <div class="media-card-info">
+              <div class="media-card-caption">${item.caption}</div>
+              <div class="media-card-meta">
+                <span class="media-card-by-pal">P.A.L.</span>
+                <span>${item.date}</span>
+              </div>
+            </div>
+          </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
+        clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
+          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
+            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
+            <div class="media-card-info">
+              <div class="media-card-caption">${item.caption}</div>
+              <div class="media-card-meta">
+                <span class="media-card-by-client">You</span>
+                <span>${item.date}</span>
+              </div>
+            </div>
+          </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
+      } catch(e) { console.log('Media error:', e); }
     }
 
     function uploadMedia() {
       const clientId = sessionStorage.getItem('clientId');
+      const caption = document.getElementById('uploadCaption').value.trim();
       const folderId = FOLDER_MAP[clientId];
-      if (folderId) window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
+      if (folderId) {
+        window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
+        document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
+      }
     }
 
     function setRating(rating) {
