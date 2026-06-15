@@ -56,7 +56,6 @@
 </head>
 <body>
 
-  <!-- LOGIN -->
   <div id="loginScreen">
     <div class="logo">P.A.L.</div>
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
@@ -70,7 +69,6 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="dashboardScreen" class="screen">
     <div class="top-bar">
       <div class="logo-small">P.A.L.</div>
@@ -82,7 +80,6 @@
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
     </div>
 
-    <!-- DASHBOARD TAB -->
     <div id="tabDashboard">
       <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
       <div class="cards">
@@ -95,7 +92,6 @@
       <div id="servicesList"></div>
     </div>
 
-    <!-- MEDIA TAB -->
     <div id="tabMedia" class="screen">
       <div class="media-page">
         <div class="media-title">PHOTOS & VIDEOS</div>
@@ -104,7 +100,6 @@
       </div>
     </div>
 
-    <!-- FEEDBACK TAB -->
     <div id="tabFeedback" class="screen">
       <div class="feedback-page">
         <div class="feedback-title">LEAVE FEEDBACK</div>
@@ -138,6 +133,19 @@
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE' };
     let currentRating = 0;
     let clientServices = [];
+
+    function formatDate(dateVal) {
+      if (!dateVal) return '';
+      if (typeof dateVal === 'string' && dateVal.includes('Date')) {
+        const parts = dateVal.match(/\d+/g);
+        if (parts) {
+          const d = new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+          return d.toLocaleDateString('en-AU');
+        }
+      }
+      if (dateVal instanceof Date) return dateVal.toLocaleDateString('en-AU');
+      return dateVal;
+    }
 
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}`);
@@ -196,7 +204,13 @@
             totalCost += row.c[6]?.v || 0;
             const sName = row.c[3]?.v || 'Service';
             const sId = row.c[0]?.v || '';
-            serviceItems.push({ name: sName, date: row.c[2]?.v || '', status: row.c[5]?.v || 'Completed' });
+            const rawDate = row.c[2];
+            let dateStr = '';
+            if (rawDate) {
+              if (rawDate.v) dateStr = formatDate(rawDate.v.toString());
+              else if (rawDate.f) dateStr = rawDate.f;
+            }
+            serviceItems.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed' });
             clientServices.push({ id: sId, name: sName });
           }
         }
