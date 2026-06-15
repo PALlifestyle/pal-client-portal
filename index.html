@@ -67,8 +67,6 @@
     .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
     .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
     .book-btn:hover { background: #c49060; }
-
-    /* ABOUT PAGE */
     .about-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
     .about-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1.5rem; border: 2px solid #D4A574; }
     .about-name { color: #fff; font-size: 1.3rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.3rem; }
@@ -79,6 +77,21 @@
     .about-stat { background: #222; border: 1px solid #333; padding: 1rem 0.5rem; text-align: center; }
     .about-stat-value { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
     .about-stat-label { color: #666; font-size: 0.65rem; letter-spacing: 0.1em; line-height: 1.4; }
+
+    /* JOURNEY PAGE */
+    .journey-page { padding: 1.5rem; max-width: 600px; margin: 0 auto; }
+    .journey-welcome { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.15em; text-align: center; margin-bottom: 0.3rem; }
+    .journey-since { color: #666; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 1.5rem; }
+    .journey-pet-photo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 1.5rem; border: 2px solid #D4A574; }
+    .journey-divider { border: none; border-top: 1px solid #333; margin: 1.5rem 0; }
+    .journey-section-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.8rem; }
+    .journey-services { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .journey-service-tag { background: #222; border: 1px solid #333; color: #aaa; font-size: 0.75rem; padding: 0.4rem 0.8rem; letter-spacing: 0.1em; }
+    .journey-note { background: #222; border-left: 3px solid #D4A574; padding: 1rem 1.2rem; color: #aaa; font-size: 0.9rem; line-height: 1.8; font-style: italic; margin-bottom: 1rem; }
+    .journey-reward { background: #1a1a1a; border: 1px solid #D4A574; padding: 1.2rem; text-align: center; margin-top: 1rem; }
+    .journey-reward-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+    .journey-reward-value { color: #fff; font-size: 1rem; letter-spacing: 0.1em; }
+    .journey-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
   </style>
 </head>
 <body>
@@ -106,6 +119,7 @@
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
       <div class="nav-item" onclick="showTab('book', this)">BOOK A SERVICE</div>
+      <div class="nav-item" onclick="showTab('journey', this)">OUR JOURNEY</div>
       <div class="nav-item" onclick="showTab('about', this)">ABOUT</div>
     </div>
 
@@ -169,6 +183,29 @@
       </div>
     </div>
 
+    <div id="tabJourney" class="screen">
+      <div class="journey-page">
+        <div class="journey-loading" id="journeyLoading">Loading your journey...</div>
+        <div id="journeyContent" style="display:none">
+          <div class="journey-welcome" id="journeyWelcome"></div>
+          <div class="journey-since" id="journeySince"></div>
+          <img src="sabrina.jpeg" alt="Sabrina" class="journey-pet-photo" id="journeyPetPhoto" style="display:none">
+          <hr class="journey-divider">
+          <div class="journey-section-label">OUR SERVICES TOGETHER</div>
+          <div class="journey-services" id="journeyServices"></div>
+          <hr class="journey-divider">
+          <div class="journey-section-label">A NOTE FROM PÂMELA</div>
+          <div class="journey-note" id="journeyNote"></div>
+          <hr class="journey-divider">
+          <div class="journey-section-label">YOUR REWARD</div>
+          <div class="journey-reward">
+            <div class="journey-reward-label">🎁 EXCLUSIVE FOR YOU</div>
+            <div class="journey-reward-value" id="journeyReward"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="tabAbout" class="screen">
       <div class="about-page">
         <img src="luz_portrait_bw_pal_badge.png" alt="Pâmela Luz" class="about-photo">
@@ -207,6 +244,7 @@
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE' };
+    const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg' };
     let currentRating = 0;
     let clientServices = [];
 
@@ -309,6 +347,43 @@
         });
       } catch(e) { console.log('Dashboard error:', e); }
       loadMedia(clientId);
+      loadJourney(clientId);
+    }
+
+    async function loadJourney(clientId) {
+      try {
+        const rows = await fetchSheet('Relationship');
+        let found = null;
+        for (const row of rows) {
+          if (row.c[0]?.v === clientId) {
+            found = {
+              welcome: row.c[1]?.v || '',
+              since: row.c[2]?.v || '',
+              services: row.c[3]?.v || '',
+              note: row.c[4]?.v || '',
+              reward: row.c[5]?.v || ''
+            };
+            break;
+          }
+        }
+        document.getElementById('journeyLoading').style.display = 'none';
+        if (found) {
+          document.getElementById('journeyContent').style.display = 'block';
+          document.getElementById('journeyWelcome').textContent = found.welcome;
+          document.getElementById('journeySince').textContent = 'TOGETHER SINCE ' + found.since.toUpperCase();
+          document.getElementById('journeyNote').textContent = found.note;
+          document.getElementById('journeyReward').textContent = found.reward;
+          const servicesList = found.services.split(',').map(s => s.trim());
+          document.getElementById('journeyServices').innerHTML = servicesList.map(s =>
+            `<div class="journey-service-tag">${s}</div>`).join('');
+          const petPhoto = PET_PHOTO_MAP[clientId];
+          if (petPhoto) {
+            const img = document.getElementById('journeyPetPhoto');
+            img.src = petPhoto;
+            img.style.display = 'block';
+          }
+        }
+      } catch(e) { console.log('Journey error:', e); }
     }
 
     async function loadMedia(clientId) {
@@ -403,6 +478,7 @@
       document.getElementById('tabMedia').style.display = tab === 'media' ? 'block' : 'none';
       document.getElementById('tabFeedback').style.display = tab === 'feedback' ? 'block' : 'none';
       document.getElementById('tabBook').style.display = tab === 'book' ? 'block' : 'none';
+      document.getElementById('tabJourney').style.display = tab === 'journey' ? 'block' : 'none';
       document.getElementById('tabAbout').style.display = tab === 'about' ? 'block' : 'none';
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
       el.classList.add('active-nav');
