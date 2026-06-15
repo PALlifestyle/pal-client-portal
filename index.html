@@ -63,12 +63,10 @@
     .feedback-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
     .feedback-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     select { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
-
-    /* BOOK TAB */
-    .book-page { display: flex; flex-direction: column; height: calc(100vh - 110px); }
-    .book-header { padding: 1.2rem 1rem 0.8rem; border-bottom: 1px solid #333; }
-    .book-header p { color: #888; font-size: 0.82rem; letter-spacing: 0.1em; margin-top: 0.3rem; }
-    .book-iframe { flex: 1; width: 100%; border: none; background: #fff; }
+    .book-page { padding: 2rem 1rem; text-align: center; }
+    .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
+    .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
+    .book-btn:hover { background: #c49060; }
   </style>
 </head>
 <body>
@@ -151,17 +149,10 @@
     </div>
 
     <div id="tabBook" class="screen">
+      <div class="section-title">BOOK A SERVICE</div>
       <div class="book-page">
-        <div class="book-header">
-          <div class="section-title" style="padding: 0; border: none; margin: 0;">BOOK A SERVICE</div>
-          <p>Select your service and secure your spot with a $100 deposit.</p>
-        </div>
-        <iframe
-          class="book-iframe"
-          src="https://pallifestyle.com.au/products/book-here"
-          title="Book a Service"
-          allow="payment">
-        </iframe>
+        <p>Select your service, choose a time, and secure your spot with a $100 deposit.</p>
+        <a class="book-btn" href="https://pallifestyle.com.au/products/book-here" target="_blank">BOOK NOW</a>
       </div>
     </div>
 
