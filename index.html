@@ -6,6 +6,29 @@
   <title>PAL Client Portal</title>
   <meta name="theme-color" content="#1A1A1A">
   <link rel="manifest" href="manifest.json">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "e806ea20-ebbf-4764-83af-ef5770bfad1c",
+        notifyButton: { enable: false },
+        promptOptions: {
+          slidedown: {
+            prompts: [{
+              type: "push",
+              autoPrompt: true,
+              text: {
+                actionMessage: "P.A.L. would like to send you notifications about your services.",
+                acceptButton: "Allow",
+                cancelButton: "No Thanks"
+              }
+            }]
+          }
+        }
+      });
+    });
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background-color: #1A1A1A; color: #FFFFFF; font-family: Georgia, serif; min-height: 100vh; }
