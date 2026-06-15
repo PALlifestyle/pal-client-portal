@@ -67,6 +67,18 @@
     .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
     .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
     .book-btn:hover { background: #c49060; }
+
+    /* ABOUT PAGE */
+    .about-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
+    .about-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1.5rem; border: 2px solid #D4A574; }
+    .about-name { color: #fff; font-size: 1.3rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.3rem; }
+    .about-title { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 1.5rem; }
+    .about-divider { border: none; border-top: 1px solid #D4A574; margin: 1.5rem 0; opacity: 0.4; }
+    .about-text { color: #aaa; font-size: 0.9rem; line-height: 1.9; margin-bottom: 1.2rem; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+    .about-stat { background: #222; border: 1px solid #333; padding: 1rem 0.5rem; text-align: center; }
+    .about-stat-value { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .about-stat-label { color: #666; font-size: 0.65rem; letter-spacing: 0.1em; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -94,6 +106,7 @@
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
       <div class="nav-item" onclick="showTab('book', this)">BOOK A SERVICE</div>
+      <div class="nav-item" onclick="showTab('about', this)">ABOUT</div>
     </div>
 
     <div id="tabDashboard">
@@ -153,6 +166,37 @@
       <div class="book-page">
         <p>Select your service, choose a time, and secure your spot with a $100 deposit.</p>
         <a class="book-btn" href="https://pallifestyle.com.au/products/book-here" target="_blank">BOOK NOW</a>
+      </div>
+    </div>
+
+    <div id="tabAbout" class="screen">
+      <div class="about-page">
+        <img src="luz_portrait_bw_pal_badge.png" alt="Pâmela Luz" class="about-photo">
+        <div class="about-name">Pâmela Luz</div>
+        <div class="about-title">DIRECTOR & FOUNDER — P.A.L. PREMIUM ACTIVITIES & LIFESTYLE</div>
+        <hr class="about-divider">
+        <p class="about-text">With over 7 years of experience managing complex operations across technology and e-commerce companies, I built a career around one core skill: making systems run smoothly, efficiently, and without friction.</p>
+        <p class="about-text">I have led logistics and operations teams, managed multiple business units simultaneously, coordinated cross-functional projects, and developed processes from the ground up at companies including Uber, Insider Store, and Merama, working across Brazil and internationally.</p>
+        <p class="about-text">The years between 2024 and 2025 were a period of deliberate recalibration. After relocating to Sydney, I chose to work at ground level: in cleaning services, support work, and hands-on operational roles across different sectors. It was not a detour. It was research. I experienced firsthand what it means to manage a home, to show up reliably for someone else's daily life, and to understand the real value of time well spent.</p>
+        <p class="about-text">P.A.L. was born in early 2026, built on everything I had studied, led, and lived.</p>
+        <p class="about-text">I also co-host Airbnb properties in Sydney, consistently achieving top guest ratings through the same attention to detail and hands-on approach I bring to every client engagement.</p>
+        <hr class="about-divider">
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-value">7+</div>
+            <div class="about-stat-label">YEARS IN OPERATIONS & LOGISTICS</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">3</div>
+            <div class="about-stat-label">COUNTRIES LIVED & WORKED</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">★ TOP</div>
+            <div class="about-stat-label">RATED AIRBNB HOST IN SYDNEY</div>
+          </div>
+        </div>
+        <hr class="about-divider">
+        <p class="about-text" style="text-align: center; font-style: italic; color: #D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
       </div>
     </div>
 
@@ -359,6 +403,7 @@
       document.getElementById('tabMedia').style.display = tab === 'media' ? 'block' : 'none';
       document.getElementById('tabFeedback').style.display = tab === 'feedback' ? 'block' : 'none';
       document.getElementById('tabBook').style.display = tab === 'book' ? 'block' : 'none';
+      document.getElementById('tabAbout').style.display = tab === 'about' ? 'block' : 'none';
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
       el.classList.add('active-nav');
     }
