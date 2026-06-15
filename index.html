@@ -77,8 +77,9 @@
     .about-stat { background: #222; border: 1px solid #333; padding: 1rem 0.5rem; text-align: center; }
     .about-stat-value { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
     .about-stat-label { color: #666; font-size: 0.65rem; letter-spacing: 0.1em; line-height: 1.4; }
-
-    /* JOURNEY PAGE */
+    .about-links { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+    .about-link-btn { background: transparent; border: 1px solid #D4A574; color: #D4A574; padding: 0.8rem; text-align: center; text-decoration: none; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .about-link-btn:hover { background: #D4A574; color: #1A1A1A; }
     .journey-page { padding: 1.5rem; max-width: 600px; margin: 0 auto; }
     .journey-welcome { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.15em; text-align: center; margin-bottom: 0.3rem; }
     .journey-since { color: #666; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 1.5rem; }
@@ -189,7 +190,7 @@
         <div id="journeyContent" style="display:none">
           <div class="journey-welcome" id="journeyWelcome"></div>
           <div class="journey-since" id="journeySince"></div>
-          <img src="sabrina.jpeg" alt="Sabrina" class="journey-pet-photo" id="journeyPetPhoto" style="display:none">
+          <img src="" alt="" class="journey-pet-photo" id="journeyPetPhoto" style="display:none">
           <hr class="journey-divider">
           <div class="journey-section-label">OUR SERVICES TOGETHER</div>
           <div class="journey-services" id="journeyServices"></div>
@@ -234,6 +235,13 @@
         </div>
         <hr class="about-divider">
         <p class="about-text" style="text-align: center; font-style: italic; color: #D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
+        <hr class="about-divider">
+        <div class="about-stat-label" style="text-align: center; margin-bottom: 1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
+        <div class="about-links">
+          <a href="https://www.linkedin.com/in/p%C3%A2mela-l-55730bb8/" target="_blank" class="about-link-btn">LINKEDIN</a>
+          <a href="https://www.airbnb.com.au/users/profile/about?context=host" target="_blank" class="about-link-btn">AIRBNB CO-HOST</a>
+          <a href="https://app.mable.com.au/profile/worker/800859" target="_blank" class="about-link-btn">MABLE</a>
+        </div>
       </div>
     </div>
 
@@ -280,7 +288,7 @@
         let found = null;
         for (const row of rows) {
           const rowEmail = row.c[2]?.v?.toString().toLowerCase();
-          const rowPassword = row.c[6]?.v?.toString();
+          const rowPassword = row.c[6]?.v?.toString().trim();
           if (rowEmail === email && rowPassword === password) {
             found = { id: row.c[0]?.v, name: row.c[1]?.v };
             break;
