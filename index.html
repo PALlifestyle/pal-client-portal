@@ -11,7 +11,8 @@
     body { background-color: #1A1A1A; color: #FFFFFF; font-family: Georgia, serif; min-height: 100vh; }
     .screen { display: none; }
     #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
-    .logo { color: #D4A574; font-size: 2rem; letter-spacing: 0.3em; margin-bottom: 0.5rem; }
+    .logo-img { width: 160px; margin-bottom: 0.5rem; }
+    .logo-img-small { height: 40px; }
     .tagline { color: #888; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 3rem; }
     .login-box { background: #222; padding: 2.5rem; width: 90%; max-width: 400px; border: 1px solid #333; }
     .login-box h2 { color: #D4A574; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; text-align: center; }
@@ -24,7 +25,6 @@
     .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-    .top-bar .logo-small { color: #D4A574; font-size: 1.2rem; letter-spacing: 0.2em; }
     .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
     .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
     .nav-item { padding: 0.8rem 1.2rem; color: #666; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
@@ -72,7 +72,7 @@
 <body>
 
   <div id="loginScreen">
-    <div class="logo">P.A.L.</div>
+    <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
     <div class="login-box">
       <h2>CLIENT PORTAL</h2>
@@ -86,7 +86,7 @@
 
   <div id="dashboardScreen" class="screen">
     <div class="top-bar">
-      <div class="logo-small">P.A.L.</div>
+      <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img-small">
       <button class="btn" onclick="logout()">LOGOUT</button>
     </div>
     <div class="nav">
