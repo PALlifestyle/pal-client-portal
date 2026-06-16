@@ -169,12 +169,26 @@
         <span>Enable notifications from P.A.L.</span>
         <button onclick="enableNotifications()">ENABLE</button>
       </div>
+
+      <div class="section-title">ACCOUNT SUMMARY</div>
+      <div class="cards">
+        <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
+        <div class="card"><div class="card-label">TOTAL GST</div><div class="card-value" id="summaryTotalGST">$0</div><div class="card-sub">all time</div></div>
+        <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div class="card-sub">outstanding</div></div>
+        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">None</div><div class="card-sub">reward</div></div>
+      </div>
+      <div style="padding: 0 1rem 1rem;">
+        <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">None</div><div class="card-sub">applied</div></div>
+      </div>
+
+      <div class="section-title">THIS MONTH</div>
       <div class="cards">
         <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub" id="totalServicesMonth">this month</div></div>
         <div class="card"><div class="card-label">TOTAL COST</div><div class="card-value" id="totalCost">$0</div><div class="card-sub">this month</div></div>
         <div class="card"><div class="card-label">DAYS WORKED</div><div class="card-value" id="totalDays">0</div><div class="card-sub">this month</div></div>
         <div class="card"><div class="card-label">GST INCLUDED</div><div class="card-value" id="totalGST">$0</div><div class="card-sub">this month</div></div>
       </div>
+
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
     </div>
@@ -228,6 +242,8 @@
           <div class="success-msg" id="feedbackSuccess"></div>
           <div class="error" id="feedbackError"></div>
         </div>
+        <div class="section-title">YOUR FEEDBACK HISTORY</div>
+        <div id="feedbackHistory"></div>
       </div>
     </div>
 
@@ -355,7 +371,13 @@
           const rowEmail = row.c[2]?.v?.toString().toLowerCase();
           const rowPassword = row.c[6]?.v?.toString().trim();
           if (rowEmail === email && rowPassword === password) {
-            found = { id: row.c[0]?.v, name: row.c[1]?.v };
+            found = {
+              id: row.c[0]?.v,
+              name: row.c[1]?.v,
+              balanceDue: row.c[7]?.v || 0,
+              bonus: row.c[8]?.v || 0,
+              discount: row.c[9]?.v || 0
+            };
             break;
           }
         }
@@ -363,6 +385,9 @@
           loadingMsg.textContent = '';
           sessionStorage.setItem('clientId', found.id);
           sessionStorage.setItem('clientName', found.name);
+          sessionStorage.setItem('balanceDue', found.balanceDue);
+          sessionStorage.setItem('bonus', found.bonus);
+          sessionStorage.setItem('discount', found.discount);
           showDashboard(found.id, found.name);
         } else {
           loadingMsg.textContent = '';
@@ -405,6 +430,7 @@
         const services = await fetchSheet('Services');
 
         let totalServices = 0, totalCost = 0, totalGST = 0;
+        let allTimeCost = 0, allTimeGST = 0;
         let uniqueDays = new Set();
         let byMonth = {};
         clientServices = [];
@@ -422,6 +448,9 @@
             }
             const cost = row.c[6]?.v || 0;
             const gst = row.c[8]?.v || 0;
+
+            allTimeCost += cost;
+            allTimeGST += gst;
 
             if (isThisMonth) {
               totalServices++;
@@ -453,6 +482,16 @@
             }
           }
         }
+
+        const balanceDue = parseFloat(sessionStorage.getItem('balanceDue')) || 0;
+        const bonus = parseFloat(sessionStorage.getItem('bonus')) || 0;
+        const discount = parseFloat(sessionStorage.getItem('discount')) || 0;
+
+        document.getElementById('summaryTotalCost').textContent = '$' + allTimeCost.toFixed(0);
+        document.getElementById('summaryTotalGST').textContent = '$' + allTimeGST.toFixed(0);
+        document.getElementById('summaryBalanceDue').textContent = '$' + balanceDue.toFixed(0);
+        document.getElementById('summaryBonus').textContent = bonus > 0 ? '$' + bonus.toFixed(0) : 'None';
+        document.getElementById('summaryDiscount').textContent = discount > 0 ? '$' + discount.toFixed(0) : 'None';
 
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
         document.getElementById('totalServices').textContent = totalServices;
@@ -600,9 +639,35 @@
         document.getElementById('feedbackComment').value = '';
         document.getElementById('feedbackService').value = '';
         setRating(0);
+        loadFeedbackHistory(clientId);
       } catch(e) {
         errorEl.textContent = 'Error submitting feedback. Please try again.';
       }
+    }
+
+    async function loadFeedbackHistory(clientId) {
+      try {
+        const rows = await fetchSheet('Feedback');
+        const history = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) {
+            history.push({
+              service: row.c[2]?.v || '',
+              rating: row.c[3]?.v || 0,
+              comment: row.c[4]?.v || '',
+              date: row.c[5]?.f || row.c[5]?.v || ''
+            });
+          }
+        }
+        const container = document.getElementById('feedbackHistory');
+        if (!container) return;
+        container.innerHTML = history.length ? history.map(f => `
+          <div style="background:#1a1a1a; border:1px solid #333; padding:1rem; margin-top:0.8rem;">
+            <div style="color:#D4A574; font-size:0.75rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5 - f.rating)}</div>
+            <div style="color:#fff; font-size:0.85rem; margin-bottom:0.3rem;">${f.comment}</div>
+            <div style="color:#666; font-size:0.75rem;">${f.service} &middot; ${f.date}</div>
+          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
+      } catch(e) { console.log('Feedback history error:', e); }
     }
 
     async function loadMessages() {
@@ -661,6 +726,7 @@
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
       el.classList.add('active-nav');
       if (tab === 'messages') loadMessages();
+      if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
     }
 
     function logout() {
