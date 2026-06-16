@@ -312,7 +312,7 @@
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
-    const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_' };
+    const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_', 'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B', 'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW', 'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr' };
     const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg', 'C002': 'Adeline.escola.png' };
     let currentRating = 0;
     let clientServices = [];
@@ -448,6 +448,8 @@
             }
             const cost = row.c[6]?.v || 0;
             const gst = row.c[8]?.v || 0;
+            const invoice = row.c[7]?.v || '';
+            const invoiceFile = row.c[9]?.v || '';
 
             allTimeCost += cost;
             allTimeGST += gst;
@@ -463,7 +465,7 @@
               const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
               const label = rowDate.toLocaleString('en-AU', { month: 'long', year: 'numeric' }).toUpperCase();
               if (!byMonth[key]) byMonth[key] = { label, items: [], days: new Set(), cost: 0, hours: 0 };
-              byMonth[key].items.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed' });
+              byMonth[key].items.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed', invoice, invoiceFile, cost, gst });
               byMonth[key].days.add(rowDate.toDateString());
               byMonth[key].cost += cost;
             }
@@ -510,9 +512,17 @@
               <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
             </div>
             ${m.items.map(s => `
-            <div class="service-item">
-              <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
-              <div class="status">${s.status}</div>
+            <div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
+                <div class="status">${s.status}</div>
+              </div>
+              <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+                ${s.invoice ? `<span style="color:#D4A574;">${s.invoice}</span>` : ''}
+                ${s.cost ? `<span>$${s.cost.toFixed(0)}</span>` : ''}
+                ${s.gst ? `<span>GST $${s.gst.toFixed(0)}</span>` : ''}
+                ${s.invoiceFile ? `<a href="${s.invoiceFile}" target="_blank" style="color:#D4A574; font-size:0.75rem; letter-spacing:0.1em;">VIEW INVOICE</a>` : ''}
+              </div>
             </div>`).join('')}`;
         }).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
 
