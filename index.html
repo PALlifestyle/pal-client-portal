@@ -17,7 +17,7 @@
           slidedown: {
             prompts: [{
               type: "push",
-              autoPrompt: true,
+              autoPrompt: false,
               text: {
                 actionMessage: "P.A.L. would like to send you notifications about your services.",
                 acceptButton: "Allow",
@@ -54,6 +54,9 @@
     .nav-item.active-nav { color: #D4A574; border-bottom: 2px solid #D4A574; }
     .welcome { padding: 1.5rem; color: #888; font-size: 0.9rem; letter-spacing: 0.1em; }
     .welcome span { color: #D4A574; }
+    .notif-banner { background: #1a1a1a; border: 1px solid #333; margin: 0 1rem 0.5rem; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .notif-banner span { color: #888; font-size: 0.8rem; letter-spacing: 0.1em; }
+    .notif-banner button { background: #D4A574; color: #1A1A1A; border: none; padding: 0.4rem 0.8rem; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; cursor: pointer; }
     .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem 1rem; }
     .card { background: #222; border: 1px solid #333; padding: 1.2rem; }
     .card-label { color: #666; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
@@ -116,6 +119,18 @@
     .journey-reward-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
     .journey-reward-value { color: #fff; font-size: 1rem; letter-spacing: 0.1em; }
     .journey-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
+    .messages-page { display: flex; flex-direction: column; height: calc(100vh - 130px); }
+    .messages-list { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .msg-bubble { max-width: 80%; padding: 0.7rem 1rem; font-size: 0.9rem; line-height: 1.6; }
+    .msg-from-pal { background: #222; border: 1px solid #333; color: #fff; align-self: flex-start; border-left: 3px solid #D4A574; }
+    .msg-from-client { background: #D4A574; color: #1A1A1A; align-self: flex-end; }
+    .msg-meta { font-size: 0.7rem; margin-top: 0.3rem; }
+    .msg-from-pal .msg-meta { color: #666; }
+    .msg-from-client .msg-meta { color: #8a6a40; text-align: right; }
+    .messages-input-area { border-top: 1px solid #333; padding: 1rem; display: flex; gap: 0.8rem; background: #111; }
+    .messages-input-area input { flex: 1; margin-bottom: 0; }
+    .messages-input-area button { width: auto; margin-top: 0; padding: 0.8rem 1.2rem; white-space: nowrap; flex-shrink: 0; }
+    .messages-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
   </style>
 </head>
 <body>
@@ -140,6 +155,7 @@
     </div>
     <div class="nav">
       <div class="nav-item active-nav" onclick="showTab('dashboard', this)">DASHBOARD</div>
+      <div class="nav-item" onclick="showTab('messages', this)">MESSAGES</div>
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
       <div class="nav-item" onclick="showTab('book', this)">BOOK A SERVICE</div>
@@ -149,14 +165,30 @@
 
     <div id="tabDashboard">
       <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
+      <div id="notifBanner" class="notif-banner" style="display:none">
+        <span>Enable notifications from P.A.L.</span>
+        <button onclick="enableNotifications()">ENABLE</button>
+      </div>
       <div class="cards">
-        <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub">completed</div></div>
+        <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub" id="totalServicesMonth">this month</div></div>
         <div class="card"><div class="card-label">TOTAL COST</div><div class="card-value" id="totalCost">$0</div><div class="card-sub">this month</div></div>
-        <div class="card"><div class="card-label">HOURS LOGGED</div><div class="card-value" id="totalHours">0</div><div class="card-sub">this month</div></div>
-        <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="totalPurchases">$0</div><div class="card-sub">additional spend</div></div>
+        <div class="card"><div class="card-label">DAYS WORKED</div><div class="card-value" id="totalDays">0</div><div class="card-sub">this month</div></div>
+        <div class="card"><div class="card-label">GST INCLUDED</div><div class="card-value" id="totalGST">$0</div><div class="card-sub">this month</div></div>
       </div>
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
+    </div>
+
+    <div id="tabMessages" class="screen">
+      <div class="messages-page">
+        <div class="messages-list" id="messagesList">
+          <div class="messages-loading">Loading messages...</div>
+        </div>
+        <div class="messages-input-area">
+          <input type="text" placeholder="Type a message..." id="messageInput" onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="btn" onclick="sendMessage()">SEND</button>
+        </div>
+      </div>
     </div>
 
     <div id="tabMedia" class="screen">
@@ -184,11 +216,11 @@
           </select>
           <label>YOUR RATING</label>
           <div class="stars">
-            <span class="star" onclick="setRating(1)">★</span>
-            <span class="star" onclick="setRating(2)">★</span>
-            <span class="star" onclick="setRating(3)">★</span>
-            <span class="star" onclick="setRating(4)">★</span>
-            <span class="star" onclick="setRating(5)">★</span>
+            <span class="star" onclick="setRating(1)">&#9733;</span>
+            <span class="star" onclick="setRating(2)">&#9733;</span>
+            <span class="star" onclick="setRating(3)">&#9733;</span>
+            <span class="star" onclick="setRating(4)">&#9733;</span>
+            <span class="star" onclick="setRating(5)">&#9733;</span>
           </div>
           <label>YOUR COMMENTS</label>
           <textarea placeholder="Share your experience..." id="feedbackComment"></textarea>
@@ -218,12 +250,12 @@
           <div class="journey-section-label">OUR SERVICES TOGETHER</div>
           <div class="journey-services" id="journeyServices"></div>
           <hr class="journey-divider">
-          <div class="journey-section-label">A NOTE FROM PÂMELA</div>
+          <div class="journey-section-label">A NOTE FROM PAMELA</div>
           <div class="journey-note" id="journeyNote"></div>
           <hr class="journey-divider">
           <div class="journey-section-label">YOUR REWARD</div>
           <div class="journey-reward">
-            <div class="journey-reward-label">🎁 EXCLUSIVE FOR YOU</div>
+            <div class="journey-reward-label">EXCLUSIVE FOR YOU</div>
             <div class="journey-reward-value" id="journeyReward"></div>
           </div>
         </div>
@@ -232,8 +264,8 @@
 
     <div id="tabAbout" class="screen">
       <div class="about-page">
-        <img src="luz_portrait_bw_pal_badge.png" alt="Pâmela Luz" class="about-photo">
-        <div class="about-name">Pâmela Luz</div>
+        <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="about-photo">
+        <div class="about-name">Pamela Luz</div>
         <div class="about-title">DIRECTOR & FOUNDER — P.A.L. PREMIUM ACTIVITIES & LIFESTYLE</div>
         <hr class="about-divider">
         <p class="about-text">With over 7 years of experience managing complex operations across technology and e-commerce companies, I built a career around one core skill: making systems run smoothly, efficiently, and without friction.</p>
@@ -243,23 +275,14 @@
         <p class="about-text">I also co-host Airbnb properties in Sydney, consistently achieving top guest ratings through the same attention to detail and hands-on approach I bring to every client engagement.</p>
         <hr class="about-divider">
         <div class="about-stats">
-          <div class="about-stat">
-            <div class="about-stat-value">7+</div>
-            <div class="about-stat-label">YEARS IN OPERATIONS & LOGISTICS</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">3</div>
-            <div class="about-stat-label">COUNTRIES LIVED & WORKED</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-value">★ TOP</div>
-            <div class="about-stat-label">RATED AIRBNB HOST IN SYDNEY</div>
-          </div>
+          <div class="about-stat"><div class="about-stat-value">7+</div><div class="about-stat-label">YEARS IN OPERATIONS & LOGISTICS</div></div>
+          <div class="about-stat"><div class="about-stat-value">3</div><div class="about-stat-label">COUNTRIES LIVED & WORKED</div></div>
+          <div class="about-stat"><div class="about-stat-value">TOP</div><div class="about-stat-label">RATED AIRBNB HOST IN SYDNEY</div></div>
         </div>
         <hr class="about-divider">
-        <p class="about-text" style="text-align: center; font-style: italic; color: #D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
+        <p class="about-text" style="text-align:center; font-style:italic; color:#D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
         <hr class="about-divider">
-        <div class="about-stat-label" style="text-align: center; margin-bottom: 1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
+        <div class="about-stat-label" style="text-align:center; margin-bottom:1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
         <div class="about-links">
           <a href="https://www.linkedin.com/in/p%C3%A2mela-l-55730bb8/" target="_blank" class="about-link-btn">LINKEDIN</a>
           <a href="https://www.airbnb.com.au/users/profile/about?context=host" target="_blank" class="about-link-btn">AIRBNB CO-HOST</a>
@@ -269,7 +292,6 @@
     </div>
 
   </div>
-
   <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
@@ -292,8 +314,28 @@
       return dateVal;
     }
 
+    function getCurrentMonth() {
+      const now = new Date();
+      return { month: now.getMonth(), year: now.getFullYear() };
+    }
+
+    function parseRowDate(rawDate) {
+      if (!rawDate) return null;
+      const v = rawDate.v;
+      const f = rawDate.f;
+      if (v && typeof v === 'string' && v.includes('Date')) {
+        const parts = v.match(/\d+/g);
+        if (parts) return new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+      }
+      if (f) {
+        const d = new Date(f);
+        if (!isNaN(d)) return d;
+      }
+      return null;
+    }
+
     async function fetchSheet(sheet) {
-      const res = await fetch(`${API_URL}&sheet=${sheet}`);
+      const res = await fetch(`${API_URL}&sheet=${sheet}&t=${Date.now()}`);
       const text = await res.text();
       const json = JSON.parse(text.substring(47).slice(0, -2));
       return json.table.rows;
@@ -332,51 +374,88 @@
       }
     }
 
+    async function checkNotifStatus() {
+      try {
+        if (typeof OneSignal === 'undefined') return;
+        const permission = await OneSignal.Notifications.permission;
+        if (!permission) {
+          document.getElementById('notifBanner').style.display = 'flex';
+        }
+      } catch(e) {}
+    }
+
+    async function enableNotifications() {
+      try {
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+          await OneSignal.Slidedown.promptPush();
+          document.getElementById('notifBanner').style.display = 'none';
+        });
+      } catch(e) {}
+    }
+
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
       document.getElementById('clientName').textContent = clientName.toUpperCase();
+      checkNotifStatus();
+
       try {
+        const { month, year } = getCurrentMonth();
         const services = await fetchSheet('Services');
-        const timelog = await fetchSheet('Time Log');
         const purchases = await fetchSheet('Purchases');
-        let totalServices = 0, totalCost = 0, totalHours = 0, totalPurchases = 0;
+
+        let totalServices = 0, totalCost = 0, totalGST = 0;
+        let uniqueDays = new Set();
         let serviceItems = [];
         clientServices = [];
+
         for (const row of services) {
           if (row.c[1]?.v === clientId) {
-            totalServices++;
-            totalCost += row.c[6]?.v || 0;
+            const rowDate = parseRowDate(row.c[2]);
+            const isThisMonth = rowDate && rowDate.getMonth() === month && rowDate.getFullYear() === year;
             const sName = row.c[3]?.v || 'Service';
             const sId = row.c[0]?.v || '';
-            const rawDate = row.c[2];
             let dateStr = '';
-            if (rawDate) {
-              if (rawDate.v) dateStr = formatDate(rawDate.v.toString());
-              else if (rawDate.f) dateStr = rawDate.f;
+            if (row.c[2]) {
+              if (row.c[2].f) dateStr = row.c[2].f;
+              else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString());
             }
-            serviceItems.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed' });
+            const cost = row.c[6]?.v || 0;
+            const gst = row.c[8]?.v || 0;
+            if (isThisMonth) {
+              totalServices++;
+              totalCost += cost;
+              totalGST += gst;
+              if (rowDate) uniqueDays.add(rowDate.toDateString());
+            }
+            serviceItems.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed', isThisMonth });
             clientServices.push({ id: sId, name: sName });
           }
         }
-        for (const row of timelog) { if (row.c[1]?.v === clientId) totalHours += row.c[4]?.v || 0; }
-        for (const row of purchases) { if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0; }
+
+        const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
         document.getElementById('totalServices').textContent = totalServices;
+        document.getElementById('totalServicesMonth').textContent = monthName;
         document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(0);
-        document.getElementById('totalHours').textContent = totalHours;
-        document.getElementById('totalPurchases').textContent = '$' + totalPurchases.toFixed(0);
+        document.getElementById('totalDays').textContent = uniqueDays.size;
+        document.getElementById('totalGST').textContent = '$' + totalGST.toFixed(0);
+
+        const thisMonthServices = serviceItems.filter(s => s.isThisMonth);
         const list = document.getElementById('servicesList');
-        list.innerHTML = serviceItems.length ? serviceItems.map(s => `
+        list.innerHTML = thisMonthServices.length ? thisMonthServices.map(s => `
           <div class="service-item">
             <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
             <div class="status">${s.status}</div>
-          </div>`).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
+          </div>`).join('') : '<div style="padding:1rem;color:#666">No services this month yet.</div>';
+
         const select = document.getElementById('feedbackService');
         select.innerHTML = '<option value="">Select a service...</option>';
         clientServices.forEach(s => {
           select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
         });
       } catch(e) { console.log('Dashboard error:', e); }
+
       loadMedia(clientId);
       loadJourney(clientId);
     }
@@ -440,10 +519,7 @@
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
             <div class="media-card-info">
               <div class="media-card-caption">${item.caption}</div>
-              <div class="media-card-meta">
-                <span class="media-card-by-pal">P.A.L.</span>
-                <span>${item.date}</span>
-              </div>
+              <div class="media-card-meta"><span class="media-card-by-pal">P.A.L.</span><span>${item.date}</span></div>
             </div>
           </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
         clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
@@ -451,10 +527,7 @@
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
             <div class="media-card-info">
               <div class="media-card-caption">${item.caption}</div>
-              <div class="media-card-meta">
-                <span class="media-card-by-client">You</span>
-                <span>${item.date}</span>
-              </div>
+              <div class="media-card-meta"><span class="media-card-by-client">You</span><span>${item.date}</span></div>
             </div>
           </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
       } catch(e) { console.log('Media error:', e); }
@@ -504,15 +577,62 @@
       }
     }
 
+    async function loadMessages() {
+      const clientId = sessionStorage.getItem('clientId');
+      const list = document.getElementById('messagesList');
+      try {
+        const rows = await fetchSheet('Messages');
+        const msgs = [];
+        for (const row of rows) {
+          if (row.c[0]?.v === clientId) {
+            msgs.push({
+              from: row.c[1]?.v || '',
+              message: row.c[2]?.v || '',
+              date: row.c[3]?.f || row.c[3]?.v || ''
+            });
+          }
+        }
+        list.innerHTML = msgs.length ? msgs.map(m => `
+          <div class="msg-bubble ${m.from === 'PAL' ? 'msg-from-pal' : 'msg-from-client'}">
+            ${m.message}
+            <div class="msg-meta">${m.from === 'PAL' ? 'P.A.L.' : 'You'} &middot; ${m.date}</div>
+          </div>`).join('') : '<div class="messages-loading">No messages yet. Say hello!</div>';
+        list.scrollTop = list.scrollHeight;
+      } catch(e) {
+        list.innerHTML = '<div class="messages-loading">Could not load messages.</div>';
+      }
+    }
+
+    async function sendMessage() {
+      const clientId = sessionStorage.getItem('clientId');
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      const today = new Date().toLocaleDateString('en-AU');
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Messages', row: [clientId, 'Client', text, today] })
+        });
+        await loadMessages();
+      } catch(e) { console.log('Message send error:', e); }
+    }
+
     function showTab(tab, el) {
-      document.getElementById('tabDashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
-      document.getElementById('tabMedia').style.display = tab === 'media' ? 'block' : 'none';
-      document.getElementById('tabFeedback').style.display = tab === 'feedback' ? 'block' : 'none';
-      document.getElementById('tabBook').style.display = tab === 'book' ? 'block' : 'none';
-      document.getElementById('tabJourney').style.display = tab === 'journey' ? 'block' : 'none';
-      document.getElementById('tabAbout').style.display = tab === 'about' ? 'block' : 'none';
+      const tabs = ['dashboard','messages','media','feedback','book','journey','about'];
+      tabs.forEach(t => {
+        const el2 = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (el2) el2.style.display = 'none';
+      });
+      const active = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+      if (active) active.style.display = tab === 'messages' ? 'flex' : 'block';
+      if (tab === 'messages') active.style.flexDirection = 'column';
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
       el.classList.add('active-nav');
+      if (tab === 'messages') loadMessages();
     }
 
     function logout() {
