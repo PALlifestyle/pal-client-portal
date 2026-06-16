@@ -403,11 +403,10 @@
       try {
         const { month, year } = getCurrentMonth();
         const services = await fetchSheet('Services');
-        const purchases = await fetchSheet('Purchases');
 
         let totalServices = 0, totalCost = 0, totalGST = 0;
         let uniqueDays = new Set();
-        let serviceItems = [];
+        let byMonth = {};
         clientServices = [];
 
         for (const row of services) {
@@ -423,14 +422,35 @@
             }
             const cost = row.c[6]?.v || 0;
             const gst = row.c[8]?.v || 0;
+
             if (isThisMonth) {
               totalServices++;
               totalCost += cost;
               totalGST += gst;
               if (rowDate) uniqueDays.add(rowDate.toDateString());
             }
-            serviceItems.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed', isThisMonth });
+
+            if (rowDate) {
+              const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
+              const label = rowDate.toLocaleString('en-AU', { month: 'long', year: 'numeric' }).toUpperCase();
+              if (!byMonth[key]) byMonth[key] = { label, items: [], days: new Set(), cost: 0, hours: 0 };
+              byMonth[key].items.push({ name: sName, date: dateStr, status: row.c[5]?.v || 'Completed' });
+              byMonth[key].days.add(rowDate.toDateString());
+              byMonth[key].cost += cost;
+            }
+
             clientServices.push({ id: sId, name: sName });
+          }
+        }
+
+        const timelog = await fetchSheet('Time Log');
+        for (const row of timelog) {
+          if (row.c[1]?.v === clientId) {
+            const rowDate = parseRowDate(row.c[2]);
+            if (rowDate) {
+              const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
+              if (byMonth[key]) byMonth[key].hours += row.c[4]?.v || 0;
+            }
           }
         }
 
@@ -441,13 +461,21 @@
         document.getElementById('totalDays').textContent = uniqueDays.size;
         document.getElementById('totalGST').textContent = '$' + totalGST.toFixed(0);
 
-        const thisMonthServices = serviceItems.filter(s => s.isThisMonth);
+        const sortedKeys = Object.keys(byMonth).sort().reverse();
         const list = document.getElementById('servicesList');
-        list.innerHTML = thisMonthServices.length ? thisMonthServices.map(s => `
-          <div class="service-item">
-            <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
-            <div class="status">${s.status}</div>
-          </div>`).join('') : '<div style="padding:1rem;color:#666">No services this month yet.</div>';
+        list.innerHTML = sortedKeys.length ? sortedKeys.map(key => {
+          const m = byMonth[key];
+          return `
+            <div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
+              <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${m.label}</div>
+              <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
+            </div>
+            ${m.items.map(s => `
+            <div class="service-item">
+              <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
+              <div class="status">${s.status}</div>
+            </div>`).join('')}`;
+        }).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
 
         const select = document.getElementById('feedbackService');
         select.innerHTML = '<option value="">Select a service...</option>';
