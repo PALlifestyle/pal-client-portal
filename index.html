@@ -131,7 +131,6 @@
     .messages-input-area input { flex: 1; margin-bottom: 0; }
     .messages-input-area button { width: auto; margin-top: 0; padding: 0.8rem 1.2rem; white-space: nowrap; flex-shrink: 0; }
     .messages-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
-    /* Concierge */
     .concierge-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
     .concierge-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1rem; border: 2px solid #D4A574; }
     .concierge-name { color: #fff; font-size: 1.2rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.2rem; }
@@ -142,17 +141,13 @@
     .concierge-value { color: #aaa; font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; }
     .concierge-stars { color: #D4A574; font-size: 1.4rem; text-align: center; margin-top: 1rem; }
     .concierge-badge { display: inline-block; background: #222; border: 1px solid #333; color: #aaa; font-size: 0.75rem; padding: 0.3rem 0.8rem; margin: 0.2rem; letter-spacing: 0.1em; }
-    /* Process */
     .process-page { padding: 1rem; overflow-y: auto; }
-    .process-frame { width: 100%; border: none; min-height: 800px; background: #111; }
-    /* Invoices */
     .invoices-page { padding: 1rem; }
     .invoice-item { background: #222; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
     .invoice-item-left .inv-number { color: #D4A574; font-size: 0.9rem; margin-bottom: 0.2rem; }
     .invoice-item-left .inv-detail { color: #666; font-size: 0.75rem; }
     .invoice-link { background: #D4A574; color: #1A1A1A; padding: 0.4rem 0.8rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; white-space: nowrap; }
     .empty-invoices { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; }
-    /* Requests */
     .requests-page { padding: 1rem; }
     .request-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
     .request-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
@@ -162,6 +157,23 @@
     .priority-high { color: #ff6b6b; }
     .priority-medium { color: #D4A574; }
     .priority-low { color: #4caf50; }
+    /* Staff */
+    .staff-page { padding: 1rem; }
+    .staff-client-card { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-client-name { color: #D4A574; font-size: 1rem; margin-bottom: 0.3rem; }
+    .staff-client-address { color: #888; font-size: 0.8rem; margin-bottom: 0.8rem; }
+    .staff-status { font-size: 0.75rem; padding: 0.3rem 0.6rem; display: inline-block; margin-bottom: 0.8rem; }
+    .staff-status-active { background: #1a3a1a; color: #4caf50; }
+    .staff-status-inactive { background: #333; color: #888; }
+    .staff-btn-row { display: flex; gap: 0.8rem; }
+    .staff-btn { flex: 1; padding: 0.7rem; border: none; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; }
+    .staff-btn-checkin { background: #D4A574; color: #1A1A1A; }
+    .staff-btn-checkout { background: #ff6b6b; color: #1A1A1A; }
+    .staff-btn-disabled { background: #333; color: #666; cursor: not-allowed; }
+    .staff-location-msg { font-size: 0.75rem; margin-top: 0.6rem; padding: 0.5rem; }
+    .staff-location-near { background: #1a3a1a; color: #4caf50; }
+    .staff-location-far { background: #3a2a1a; color: #D4A574; }
+    .staff-active-timer { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; }
   </style>
 </head>
 <body>
@@ -184,7 +196,7 @@
       <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img-small">
       <button class="btn" onclick="logout()">LOGOUT</button>
     </div>
-    <div class="nav">
+    <div class="nav" id="mainNav">
       <div class="nav-item active-nav" onclick="showTab('dashboard', this)">DASHBOARD</div>
       <div class="nav-item" onclick="showTab('messages', this)">MESSAGES</div>
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
@@ -196,6 +208,7 @@
       <div class="nav-item" onclick="showTab('process', this)">OUR PROCESS</div>
       <div class="nav-item" onclick="showTab('concierge', this)">YOUR CONCIERGE</div>
       <div class="nav-item" onclick="showTab('about', this)">ABOUT</div>
+      <div class="nav-item" id="staffNavItem" onclick="showTab('staff', this)" style="display:none;">STAFF</div>
     </div>
 
     <div id="tabDashboard">
@@ -210,10 +223,10 @@
         <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">TOTAL GST</div><div class="card-value" id="summaryTotalGST">$0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div class="card-sub">outstanding</div></div>
-        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">None</div><div class="card-sub">reward</div></div>
+        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">$0</div><div class="card-sub">reward</div></div>
       </div>
       <div class="cards">
-        <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">None</div><div class="card-sub">applied</div></div>
+        <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">$0</div><div class="card-sub">applied</div></div>
         <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="summaryPurchases">$0</div><div class="card-sub">on your behalf</div></div>
         <div class="card"><div class="card-label">TOTAL HOURS</div><div class="card-value" id="summaryTotalHours">0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">TOTAL DAYS</div><div class="card-value" id="summaryTotalDays">0</div><div class="card-sub">all time</div></div>
@@ -346,7 +359,7 @@
 
     <div id="tabProcess" class="screen">
       <div class="process-page">
-        <p class="page-title" style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
+        <p style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
         <p style="color:#6B5A3E; font-size:0.7rem; letter-spacing:0.1em; text-align:center; margin-bottom:1.5rem;">Your Time is Precious. Invest in Your Lifestyle.</p>
         <div id="processFlow"></div>
       </div>
@@ -403,6 +416,13 @@
       </div>
     </div>
 
+    <div id="tabStaff" class="screen">
+      <div class="staff-page">
+        <div class="section-title" style="border-top:none; padding-top:0;">ACTIVE CLIENTS</div>
+        <div id="staffClientList"></div>
+      </div>
+    </div>
+
   </div>
   <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
@@ -410,8 +430,10 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_', 'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B', 'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW', 'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr' };
     const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg', 'C002': 'Adeline.escola.png' };
+    const STAFF_IDS = ['STAFF001'];
     let currentRating = 0;
     let clientServices = [];
+    let activeCheckIns = {};
 
     function formatDate(dateVal) {
       if (!dateVal) return '';
@@ -477,7 +499,8 @@
               name: row.c[1]?.v,
               balanceDue: row.c[7]?.v || 0,
               bonus: row.c[8]?.v || 0,
-              discount: row.c[9]?.v || 0
+              discount: row.c[9]?.v || 0,
+              address: row.c[10]?.v || ''
             };
             break;
           }
@@ -489,7 +512,11 @@
           sessionStorage.setItem('balanceDue', found.balanceDue);
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
-          showDashboard(found.id, found.name);
+          if (STAFF_IDS.includes(found.id)) {
+            showStaffDashboard(found.id, found.name);
+          } else {
+            showDashboard(found.id, found.name);
+          }
         } else {
           loadingMsg.textContent = '';
           errorMsg.textContent = 'Incorrect email or password.';
@@ -518,6 +545,106 @@
           document.getElementById('notifBanner').style.display = 'none';
         });
       } catch(e) {}
+    }
+
+    function showStaffDashboard(staffId, staffName) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboardScreen').style.display = 'block';
+      document.getElementById('clientName').textContent = staffName.toUpperCase();
+      document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'none');
+      document.getElementById('staffNavItem').style.display = 'block';
+      showTab('staff', document.getElementById('staffNavItem'));
+    }
+
+    async function loadStaffClients() {
+      const container = document.getElementById('staffClientList');
+      container.innerHTML = '<div style="color:#666; padding:1rem;">Loading clients...</div>';
+      try {
+        const rows = await fetchSheet('Clients');
+        const clients = [];
+        for (const row of rows) {
+          const id = row.c[0]?.v || '';
+          if (STAFF_IDS.includes(id)) continue;
+          clients.push({
+            id: id,
+            name: row.c[1]?.v || '',
+            address: row.c[10]?.v || 'No address on file'
+          });
+        }
+        container.innerHTML = clients.map(c => {
+          const active = activeCheckIns[c.id];
+          return `
+          <div class="staff-client-card">
+            <div class="staff-client-name">${c.name}</div>
+            <div class="staff-client-address">${c.address}</div>
+            <div class="staff-status ${active ? 'staff-status-active' : 'staff-status-inactive'}">${active ? 'CHECKED IN' : 'NOT CHECKED IN'}</div>
+            <div class="staff-btn-row">
+              <button class="staff-btn ${active ? 'staff-btn-disabled' : 'staff-btn-checkin'}" ${active ? 'disabled' : ''} onclick="staffCheckIn('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK IN</button>
+              <button class="staff-btn ${active ? 'staff-btn-checkout' : 'staff-btn-disabled'}" ${active ? '' : 'disabled'} onclick="staffCheckOut('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK OUT</button>
+            </div>
+            <div id="staffMsg-${c.id}"></div>
+          </div>`;
+        }).join('');
+      } catch(e) {
+        container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading clients.</div>';
+      }
+    }
+
+    function getLocation() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) { resolve(null); return; }
+        navigator.geolocation.getCurrentPosition(
+          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+          () => resolve(null),
+          { timeout: 8000 }
+        );
+      });
+    }
+
+    async function staffCheckIn(clientId, clientName) {
+      const msgEl = document.getElementById('staffMsg-' + clientId);
+      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Getting location...</div>';
+      const loc = await getLocation();
+      const now = new Date();
+      activeCheckIns[clientId] = { time: now, loc };
+      const timeStr = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+      if (loc) {
+        const mapLink = `https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
+        msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; <a href="${mapLink}" target="_blank" style="color:#D4A574;">View location</a></div>`;
+      } else {
+        msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; location unavailable</div>`;
+      }
+      loadStaffClients();
+    }
+
+    async function staffCheckOut(clientId, clientName) {
+      const checkInData = activeCheckIns[clientId];
+      if (!checkInData) return;
+      const msgEl = document.getElementById('staffMsg-' + clientId);
+      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Getting location...</div>';
+      const loc = await getLocation();
+      const checkOutTime = new Date();
+      const checkInTime = checkInData.time;
+      const durationMs = checkOutTime - checkInTime;
+      const durationHours = (durationMs / (1000 * 60 * 60)).toFixed(1);
+      const dateStr = checkOutTime.toLocaleDateString('en-AU');
+      const logId = 'L' + Date.now();
+      const inLoc = checkInData.loc ? `${checkInData.loc.lat.toFixed(5)},${checkInData.loc.lng.toFixed(5)}` : 'N/A';
+      const outLoc = loc ? `${loc.lat.toFixed(5)},${loc.lng.toFixed(5)}` : 'N/A';
+      const notes = `Check-in: ${inLoc} | Check-out: ${outLoc}`;
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, 'Staff Visit', parseFloat(durationHours), notes] })
+        });
+        delete activeCheckIns[clientId];
+        msgEl.innerHTML = `<div class="staff-location-msg staff-location-near">Checked out. Duration: ${durationHours}h logged to Time Log.</div>`;
+        loadStaffClients();
+      } catch(e) {
+        msgEl.innerHTML = '<div class="staff-location-msg" style="color:#ff6b6b;">Error saving check-out. Try again.</div>';
+      }
     }
 
     async function showDashboard(clientId, clientName) {
@@ -610,8 +737,8 @@
         document.getElementById('summaryTotalCost').textContent = '$' + allTimeCost.toFixed(0);
         document.getElementById('summaryTotalGST').textContent = '$' + allTimeGST.toFixed(0);
         document.getElementById('summaryBalanceDue').textContent = '$' + balanceDue.toFixed(0);
-        document.getElementById('summaryBonus').textContent = bonus > 0 ? '$' + bonus.toFixed(0) : 'None';
-        document.getElementById('summaryDiscount').textContent = discount > 0 ? '$' + discount.toFixed(0) : 'None';
+        document.getElementById('summaryBonus').textContent = '$' + bonus.toFixed(0);
+        document.getElementById('summaryDiscount').textContent = '$' + discount.toFixed(0);
         document.getElementById('summaryPurchases').textContent = '$' + totalPurchases.toFixed(0);
         document.getElementById('summaryTotalHours').textContent = allTimeHours;
         document.getElementById('summaryTotalDays').textContent = allTimeDays.size;
@@ -684,7 +811,7 @@
         { label: "Invoice sent", sub: "Full summary with all service details" },
       ];
       container.innerHTML = steps.map((s, i) => `
-        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center; margin-bottom:${i < steps.length - 1 ? '0' : '0'};">
+        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center;">
           <div style="color:#D4A574; font-size:0.9rem; font-weight:500; margin-bottom:0.3rem;">${s.label}</div>
           <div style="color:#7A6A4A; font-size:0.75rem;">${s.sub}</div>
         </div>
@@ -934,7 +1061,7 @@
     }
 
     function showTab(tab, el) {
-      const tabs = ['dashboard','messages','media','feedback','requests','invoices','book','journey','process','concierge','about'];
+      const tabs = ['dashboard','messages','media','feedback','requests','invoices','book','journey','process','concierge','about','staff'];
       tabs.forEach(t => {
         const el2 = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
         if (el2) el2.style.display = 'none';
@@ -947,10 +1074,14 @@
       if (tab === 'messages') loadMessages();
       if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
       if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
+      if (tab === 'staff') loadStaffClients();
     }
 
     function logout() {
       sessionStorage.clear();
+      activeCheckIns = {};
+      document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'block');
+      document.getElementById('staffNavItem').style.display = 'none';
       document.getElementById('loginScreen').style.display = 'flex';
       document.getElementById('dashboardScreen').style.display = 'none';
     }
