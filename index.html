@@ -131,6 +131,37 @@
     .messages-input-area input { flex: 1; margin-bottom: 0; }
     .messages-input-area button { width: auto; margin-top: 0; padding: 0.8rem 1.2rem; white-space: nowrap; flex-shrink: 0; }
     .messages-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
+    /* Concierge */
+    .concierge-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
+    .concierge-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1rem; border: 2px solid #D4A574; }
+    .concierge-name { color: #fff; font-size: 1.2rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.2rem; }
+    .concierge-role { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 0.2rem; }
+    .concierge-meta { color: #666; font-size: 0.75rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 1.5rem; }
+    .concierge-divider { border: none; border-top: 1px solid #333; margin: 1.2rem 0; }
+    .concierge-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+    .concierge-value { color: #aaa; font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; }
+    .concierge-stars { color: #D4A574; font-size: 1.4rem; text-align: center; margin-top: 1rem; }
+    .concierge-badge { display: inline-block; background: #222; border: 1px solid #333; color: #aaa; font-size: 0.75rem; padding: 0.3rem 0.8rem; margin: 0.2rem; letter-spacing: 0.1em; }
+    /* Process */
+    .process-page { padding: 1rem; overflow-y: auto; }
+    .process-frame { width: 100%; border: none; min-height: 800px; background: #111; }
+    /* Invoices */
+    .invoices-page { padding: 1rem; }
+    .invoice-item { background: #222; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+    .invoice-item-left .inv-number { color: #D4A574; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .invoice-item-left .inv-detail { color: #666; font-size: 0.75rem; }
+    .invoice-link { background: #D4A574; color: #1A1A1A; padding: 0.4rem 0.8rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; white-space: nowrap; }
+    .empty-invoices { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; }
+    /* Requests */
+    .requests-page { padding: 1rem; }
+    .request-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
+    .request-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .request-history-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
+    .request-history-item .req-text { color: #fff; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .request-history-item .req-meta { color: #666; font-size: 0.75rem; }
+    .priority-high { color: #ff6b6b; }
+    .priority-medium { color: #D4A574; }
+    .priority-low { color: #4caf50; }
   </style>
 </head>
 <body>
@@ -158,8 +189,12 @@
       <div class="nav-item" onclick="showTab('messages', this)">MESSAGES</div>
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
+      <div class="nav-item" onclick="showTab('requests', this)">REQUESTS</div>
+      <div class="nav-item" onclick="showTab('invoices', this)">INVOICES</div>
       <div class="nav-item" onclick="showTab('book', this)">BOOK A SERVICE</div>
       <div class="nav-item" onclick="showTab('journey', this)">OUR JOURNEY</div>
+      <div class="nav-item" onclick="showTab('process', this)">OUR PROCESS</div>
+      <div class="nav-item" onclick="showTab('concierge', this)">YOUR CONCIERGE</div>
       <div class="nav-item" onclick="showTab('about', this)">ABOUT</div>
     </div>
 
@@ -177,8 +212,11 @@
         <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div class="card-sub">outstanding</div></div>
         <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">None</div><div class="card-sub">reward</div></div>
       </div>
-      <div style="padding: 0 1rem 1rem;">
+      <div class="cards">
         <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">None</div><div class="card-sub">applied</div></div>
+        <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="summaryPurchases">$0</div><div class="card-sub">on your behalf</div></div>
+        <div class="card"><div class="card-label">TOTAL HOURS</div><div class="card-value" id="summaryTotalHours">0</div><div class="card-sub">all time</div></div>
+        <div class="card"><div class="card-label">TOTAL DAYS</div><div class="card-value" id="summaryTotalDays">0</div><div class="card-sub">all time</div></div>
       </div>
 
       <div class="section-title">THIS MONTH</div>
@@ -247,6 +285,34 @@
       </div>
     </div>
 
+    <div id="tabRequests" class="screen">
+      <div class="requests-page">
+        <div class="feedback-title">NEW REQUEST</div>
+        <div class="request-box">
+          <label>WHAT DO YOU NEED?</label>
+          <textarea placeholder="Describe your request..." id="requestText"></textarea>
+          <label>PRIORITY</label>
+          <select id="requestPriority">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+          <button class="btn" onclick="submitRequest()">SUBMIT REQUEST</button>
+          <div class="success-msg" id="requestSuccess"></div>
+          <div class="error" id="requestError"></div>
+        </div>
+        <div class="section-title">YOUR REQUEST HISTORY</div>
+        <div id="requestHistory"></div>
+      </div>
+    </div>
+
+    <div id="tabInvoices" class="screen">
+      <div class="invoices-page">
+        <div class="section-title" style="border-top:none; padding-top:0;">YOUR INVOICES</div>
+        <div id="invoicesList"></div>
+      </div>
+    </div>
+
     <div id="tabBook" class="screen">
       <div class="section-title">BOOK A SERVICE</div>
       <div class="book-page">
@@ -275,6 +341,36 @@
             <div class="journey-reward-value" id="journeyReward"></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="tabProcess" class="screen">
+      <div class="process-page">
+        <p class="page-title" style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
+        <p style="color:#6B5A3E; font-size:0.7rem; letter-spacing:0.1em; text-align:center; margin-bottom:1.5rem;">Your Time is Precious. Invest in Your Lifestyle.</p>
+        <div id="processFlow"></div>
+      </div>
+    </div>
+
+    <div id="tabConcierge" class="screen">
+      <div class="concierge-page">
+        <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="concierge-photo">
+        <div class="concierge-name">Pamela Luz</div>
+        <div class="concierge-role">PREMIUM CONCIERGE</div>
+        <div class="concierge-meta">PAL001 &middot; Brazilian &middot; Based in Sydney</div>
+        <hr class="concierge-divider">
+        <div class="concierge-label">WORKING WITH P.A.L. SINCE</div>
+        <div class="concierge-value">February 2026</div>
+        <div class="concierge-label">HOBBIES</div>
+        <div class="concierge-value">
+          <span class="concierge-badge">Swimming</span>
+          <span class="concierge-badge">Cooking</span>
+          <span class="concierge-badge">Gym</span>
+        </div>
+        <div class="concierge-label">BIO</div>
+        <div class="concierge-value">Obsessed with excellence and precision, I bring a corporate management background that has shaped my commitment to delivering premium service standards. My transition to Australia marked a new chapter dedicated to crafting bespoke lifestyle experiences with meticulous attention to detail. As a Premium Concierge, I specialise in curating moments that exceed expectations, combining strategic thinking with personalised care to ensure every aspect of your lifestyle reflects the highest standards of quality.</div>
+        <div class="concierge-label" style="text-align:center;">CLIENT RATING</div>
+        <div class="concierge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       </div>
     </div>
 
@@ -328,6 +424,11 @@
       }
       if (dateVal instanceof Date) return dateVal.toLocaleDateString('en-AU');
       return dateVal;
+    }
+
+    function formatDateTime() {
+      const now = new Date();
+      return now.toLocaleDateString('en-AU') + ' ' + now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
     }
 
     function getCurrentMonth() {
@@ -430,10 +531,12 @@
         const services = await fetchSheet('Services');
 
         let totalServices = 0, totalCost = 0, totalGST = 0;
-        let allTimeCost = 0, allTimeGST = 0;
+        let allTimeCost = 0, allTimeGST = 0, allTimeHours = 0;
         let uniqueDays = new Set();
+        let allTimeDays = new Set();
         let byMonth = {};
         clientServices = [];
+        let invoicesData = [];
 
         for (const row of services) {
           if (row.c[1]?.v === clientId) {
@@ -453,6 +556,11 @@
 
             allTimeCost += cost;
             allTimeGST += gst;
+            if (rowDate) allTimeDays.add(rowDate.toDateString());
+
+            if (invoice) {
+              invoicesData.push({ invoice, cost, gst, date: dateStr, service: sName, file: invoiceFile });
+            }
 
             if (isThisMonth) {
               totalServices++;
@@ -478,10 +586,20 @@
         for (const row of timelog) {
           if (row.c[1]?.v === clientId) {
             const rowDate = parseRowDate(row.c[2]);
+            const hrs = row.c[4]?.v || 0;
+            allTimeHours += hrs;
             if (rowDate) {
               const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
-              if (byMonth[key]) byMonth[key].hours += row.c[4]?.v || 0;
+              if (byMonth[key]) byMonth[key].hours += hrs;
             }
+          }
+        }
+
+        let totalPurchases = 0;
+        const purchases = await fetchSheet('Purchases');
+        for (const row of purchases) {
+          if (row.c[1]?.v === clientId) {
+            totalPurchases += row.c[5]?.v || 0;
           }
         }
 
@@ -494,6 +612,9 @@
         document.getElementById('summaryBalanceDue').textContent = '$' + balanceDue.toFixed(0);
         document.getElementById('summaryBonus').textContent = bonus > 0 ? '$' + bonus.toFixed(0) : 'None';
         document.getElementById('summaryDiscount').textContent = discount > 0 ? '$' + discount.toFixed(0) : 'None';
+        document.getElementById('summaryPurchases').textContent = '$' + totalPurchases.toFixed(0);
+        document.getElementById('summaryTotalHours').textContent = allTimeHours;
+        document.getElementById('summaryTotalDays').textContent = allTimeDays.size;
 
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
         document.getElementById('totalServices').textContent = totalServices;
@@ -521,10 +642,21 @@
                 ${s.invoice ? `<span style="color:#D4A574;">${s.invoice}</span>` : ''}
                 ${s.cost ? `<span>$${s.cost.toFixed(0)}</span>` : ''}
                 ${s.gst ? `<span>GST $${s.gst.toFixed(0)}</span>` : ''}
-                ${s.invoiceFile ? `<a href="${s.invoiceFile}" target="_blank" style="color:#D4A574; font-size:0.75rem; letter-spacing:0.1em;">VIEW INVOICE</a>` : ''}
               </div>
             </div>`).join('')}`;
         }).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
+
+        const invoicesList = document.getElementById('invoicesList');
+        if (invoicesList) {
+          invoicesList.innerHTML = invoicesData.length ? invoicesData.map(inv => `
+            <div class="invoice-item">
+              <div class="invoice-item-left">
+                <div class="inv-number">${inv.invoice}</div>
+                <div class="inv-detail">${inv.service} &middot; ${inv.date} &middot; $${inv.cost.toFixed(0)}${inv.gst ? ' (GST $' + inv.gst.toFixed(0) + ')' : ''}</div>
+              </div>
+              ${inv.file ? `<a href="${inv.file}" target="_blank" class="invoice-link">VIEW PDF</a>` : ''}
+            </div>`).join('') : '<div class="empty-invoices">No invoices yet.</div>';
+        }
 
         const select = document.getElementById('feedbackService');
         select.innerHTML = '<option value="">Select a service...</option>';
@@ -535,6 +667,29 @@
 
       loadMedia(clientId);
       loadJourney(clientId);
+      loadProcess();
+    }
+
+    function loadProcess() {
+      const container = document.getElementById('processFlow');
+      if (!container || container.dataset.loaded) return;
+      container.dataset.loaded = 'true';
+      const steps = [
+        { label: "Initial consultation", sub: "Understand needs · present options · client chooses" },
+        { label: "Proposal or payment link sent", sub: "Client reviews and confirms" },
+        { label: "Payment confirmed", sub: "PayPal · Apple Pay · Credit Card · Bank Transfer" },
+        { label: "Client portal access sent", sub: "Service details · insurance information · provider contacts" },
+        { label: "Service delivered", sub: "The PAL team takes care of everything" },
+        { label: "Feedback requested", sub: "Google review or private feedback" },
+        { label: "Invoice sent", sub: "Full summary with all service details" },
+      ];
+      container.innerHTML = steps.map((s, i) => `
+        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center; margin-bottom:${i < steps.length - 1 ? '0' : '0'};">
+          <div style="color:#D4A574; font-size:0.9rem; font-weight:500; margin-bottom:0.3rem;">${s.label}</div>
+          <div style="color:#7A6A4A; font-size:0.75rem;">${s.sub}</div>
+        </div>
+        ${i < steps.length - 1 ? '<div style="display:flex; justify-content:center; margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
+      `).join('');
     }
 
     async function loadJourney(clientId) {
@@ -638,12 +793,13 @@
       if (!serviceId) { errorEl.textContent = 'Please select a service.'; return; }
       if (!currentRating) { errorEl.textContent = 'Please select a rating.'; return; }
       const feedbackId = 'F' + Date.now();
+      const timestamp = formatDateTime();
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment] })
+          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment, timestamp] })
         });
         successEl.textContent = 'Thank you! Your feedback has been submitted.';
         document.getElementById('feedbackComment').value = '';
@@ -678,6 +834,59 @@
             <div style="color:#666; font-size:0.75rem;">${f.service} &middot; ${f.date}</div>
           </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
       } catch(e) { console.log('Feedback history error:', e); }
+    }
+
+    async function submitRequest() {
+      const clientId = sessionStorage.getItem('clientId');
+      const text = document.getElementById('requestText').value.trim();
+      const priority = document.getElementById('requestPriority').value;
+      const successEl = document.getElementById('requestSuccess');
+      const errorEl = document.getElementById('requestError');
+      successEl.textContent = '';
+      errorEl.textContent = '';
+      if (!text) { errorEl.textContent = 'Please describe your request.'; return; }
+      const requestId = 'R' + Date.now();
+      const timestamp = formatDateTime();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Requests', row: [requestId, clientId, text, priority, timestamp, 'New'] })
+        });
+        successEl.textContent = 'Request submitted! P.A.L. will be in touch.';
+        document.getElementById('requestText').value = '';
+        document.getElementById('requestPriority').value = 'Medium';
+        loadRequestHistory(clientId);
+      } catch(e) {
+        errorEl.textContent = 'Error submitting request. Please try again.';
+      }
+    }
+
+    async function loadRequestHistory(clientId) {
+      try {
+        const rows = await fetchSheet('Requests');
+        const history = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) {
+            history.push({
+              text: row.c[2]?.v || '',
+              priority: row.c[3]?.v || 'Medium',
+              date: row.c[4]?.v || '',
+              status: row.c[5]?.v || 'New'
+            });
+          }
+        }
+        const container = document.getElementById('requestHistory');
+        if (!container) return;
+        container.innerHTML = history.length ? history.slice().reverse().map(r => `
+          <div class="request-history-item">
+            <div class="req-text">${r.text}</div>
+            <div class="req-meta">
+              <span class="priority-${r.priority.toLowerCase()}">${r.priority} priority</span> &middot; ${r.date} &middot; ${r.status}
+            </div>
+          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No requests submitted yet.</div>';
+      } catch(e) { console.log('Request history error:', e); }
     }
 
     async function loadMessages() {
@@ -725,7 +934,7 @@
     }
 
     function showTab(tab, el) {
-      const tabs = ['dashboard','messages','media','feedback','book','journey','about'];
+      const tabs = ['dashboard','messages','media','feedback','requests','invoices','book','journey','process','concierge','about'];
       tabs.forEach(t => {
         const el2 = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
         if (el2) el2.style.display = 'none';
@@ -737,6 +946,7 @@
       el.classList.add('active-nav');
       if (tab === 'messages') loadMessages();
       if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
+      if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
     }
 
     function logout() {
