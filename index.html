@@ -6,6 +6,7 @@
   <title>PAL Client Portal</title>
   <meta name="theme-color" content="#1A1A1A">
   <link rel="manifest" href="manifest.json">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -47,6 +48,12 @@
     .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
     .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .login-divider { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0; }
+    .login-divider span { color: #555; font-size: 0.8rem; letter-spacing: 0.1em; white-space: nowrap; }
+    .login-divider::before, .login-divider::after { content: ''; flex: 1; border-top: 1px solid #444; }
+    .google-btn { width: 100%; background: #fff; color: #1A1A1A; border: none; padding: 0.75rem; font-family: Georgia, serif; font-size: 0.85rem; letter-spacing: 0.1em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0; }
+    .google-btn:hover { background: #f0f0f0; }
+    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
     .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
     .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
@@ -62,6 +69,9 @@
     .card-label { color: #666; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
     .card-value { color: #D4A574; font-size: 1.5rem; }
     .card-sub { color: #888; font-size: 0.75rem; margin-top: 0.3rem; }
+    .card-status-ok { color: #4caf50; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
+    .card-status-overdue { color: #ff6b6b; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
+    .card-status-pending { color: #D4A574; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
     .section-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; padding: 1rem 1rem 0.5rem; border-top: 1px solid #333; margin-top: 0.5rem; }
     .service-item { padding: 0.8rem 1rem; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
     .service-item .name { color: #fff; font-size: 0.9rem; }
@@ -173,6 +183,12 @@
     .staff-location-near { background: #1a3a1a; color: #4caf50; }
     .staff-location-far { background: #3a2a1a; color: #D4A574; }
     .staff-active-timer { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; }
+    .payment-history-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+    .payment-history-item .pay-amount { color: #D4A574; font-size: 1rem; }
+    .payment-history-item .pay-meta { color: #666; font-size: 0.75rem; margin-top: 0.2rem; }
+    .pay-status-paid { color: #4caf50; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-pending { color: #D4A574; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-overdue { color: #ff6b6b; font-size: 0.75rem; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -184,6 +200,17 @@
       <input type="email" placeholder="Email address" id="email">
       <input type="password" placeholder="Password" id="password">
       <button class="btn" onclick="login()">ACCESS MY PORTAL</button>
+      <div class="login-divider"><span>OR</span></div>
+      <button class="google-btn" onclick="triggerGoogleLogin()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        CONTINUE WITH GOOGLE
+      </button>
+      <div id="googleOneTap" style="margin-top:0.5rem;"></div>
       <div class="error" id="errorMsg"></div>
       <div class="loading" id="loadingMsg"></div>
     </div>
@@ -220,13 +247,16 @@
       <div class="cards">
         <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">TOTAL GST</div><div class="card-value" id="summaryTotalGST">$0</div><div class="card-sub">all time</div></div>
-        <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div class="card-sub">outstanding</div></div>
-        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">$0</div><div class="card-sub">reward</div></div>
+        <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div id="summaryPaymentStatus" class="card-sub">outstanding</div></div>
+        <div class="card"><div class="card-label">NEXT PAYMENT DUE</div><div class="card-value" id="summaryNextDue">-</div><div id="summaryPaymentStatusBadge" class="card-sub">-</div></div>
       </div>
       <div class="cards">
+        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">$0</div><div class="card-sub">reward</div></div>
         <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">$0</div><div class="card-sub">applied</div></div>
         <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="summaryPurchases">$0</div><div class="card-sub">on your behalf</div></div>
         <div class="card"><div class="card-label">TOTAL HOURS</div><div class="card-value" id="summaryTotalHours">0</div><div class="card-sub">all time</div></div>
+      </div>
+      <div class="cards">
         <div class="card"><div class="card-label">TOTAL DAYS</div><div class="card-value" id="summaryTotalDays">0</div><div class="card-sub">all time</div></div>
       </div>
 
@@ -238,13 +268,15 @@
         <div class="card"><div class="card-label">GST INCLUDED</div><div class="card-value" id="totalGST">$0</div><div class="card-sub">this month</div></div>
       </div>
 
+      <div class="section-title">PAYMENT HISTORY</div>
+      <div id="paymentHistoryList"></div>
+
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
 
       <div class="section-title">VISIT HISTORY</div>
       <div id="visitHistoryList"></div>
     </div>
-
     <div id="tabMessages" class="screen">
       <div class="messages-page">
         <div class="messages-list" id="messagesList">
@@ -430,6 +462,7 @@
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
+    const GOOGLE_CLIENT_ID = '522173354924-08p22smruftspr15qrm3slnqmsfodejj.apps.googleusercontent.com';
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_', 'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B', 'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW', 'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr' };
     const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg', 'C002': 'Adeline.escola.png' };
     const STAFF_IDS = ['STAFF001'];
@@ -437,6 +470,71 @@
     let clientServices = [];
     let activeCheckIns = {};
 
+    // ── GOOGLE OAUTH ──────────────────────────────────────────────
+    window.addEventListener('load', () => {
+      if (typeof google === 'undefined') return;
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true
+      });
+    });
+
+    function triggerGoogleLogin() {
+      if (typeof google === 'undefined') {
+        document.getElementById('errorMsg').textContent = 'Google login unavailable. Please use email/password.';
+        return;
+      }
+      google.accounts.id.prompt();
+    }
+
+    async function handleGoogleCredential(response) {
+      const loadingMsg = document.getElementById('loadingMsg');
+      const errorMsg = document.getElementById('errorMsg');
+      loadingMsg.textContent = 'Verifying with Google...';
+      errorMsg.textContent = '';
+      try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        const googleEmail = payload.email.toLowerCase().trim();
+        const rows = await fetchSheet('Clients');
+        let found = null;
+        for (const row of rows) {
+          const rowEmail = row.c[2]?.v?.toString().toLowerCase().trim();
+          if (rowEmail === googleEmail) {
+            found = {
+              id: row.c[0]?.v,
+              name: row.c[1]?.v,
+              balanceDue: row.c[7]?.v || 0,
+              bonus: row.c[8]?.v || 0,
+              discount: row.c[9]?.v || 0,
+              address: row.c[10]?.v || ''
+            };
+            break;
+          }
+        }
+        loadingMsg.textContent = '';
+        if (found) {
+          sessionStorage.setItem('clientId', found.id);
+          sessionStorage.setItem('clientName', found.name);
+          sessionStorage.setItem('balanceDue', found.balanceDue);
+          sessionStorage.setItem('bonus', found.bonus);
+          sessionStorage.setItem('discount', found.discount);
+          if (STAFF_IDS.includes(found.id)) {
+            showStaffDashboard(found.id, found.name);
+          } else {
+            showDashboard(found.id, found.name);
+          }
+        } else {
+          errorMsg.textContent = 'This Google account is not registered as a P.A.L. client.';
+        }
+      } catch(e) {
+        loadingMsg.textContent = '';
+        errorMsg.textContent = 'Google login failed. Please try email/password.';
+      }
+    }
+
+    // ── HELPERS ───────────────────────────────────────────────────
     function formatDate(dateVal) {
       if (!dateVal) return '';
       if (typeof dateVal === 'string' && dateVal.includes('Date')) {
@@ -453,6 +551,10 @@
     function formatDateTime() {
       const now = new Date();
       return now.toLocaleDateString('en-AU') + ' ' + now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatTimeOnly(date) {
+      return date.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
     }
 
     function getCurrentMonth() {
@@ -482,6 +584,7 @@
       return json.table.rows;
     }
 
+    // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
@@ -529,13 +632,12 @@
       }
     }
 
+    // ── NOTIFICATIONS ─────────────────────────────────────────────
     async function checkNotifStatus() {
       try {
         if (typeof OneSignal === 'undefined') return;
         const permission = await OneSignal.Notifications.permission;
-        if (!permission) {
-          document.getElementById('notifBanner').style.display = 'flex';
-        }
+        if (!permission) document.getElementById('notifBanner').style.display = 'flex';
       } catch(e) {}
     }
 
@@ -549,6 +651,7 @@
       } catch(e) {}
     }
 
+    // ── STAFF ─────────────────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
@@ -556,6 +659,25 @@
       document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'none');
       document.getElementById('staffNavItem').style.display = 'block';
       showTab('staff', document.getElementById('staffNavItem'));
+      restoreCheckInState();
+    }
+
+    function saveCheckInState() {
+      localStorage.setItem('activeCheckIns', JSON.stringify(
+        Object.fromEntries(Object.entries(activeCheckIns).map(([k, v]) => [k, { ...v, time: v.time.toISOString() }]))
+      ));
+    }
+
+    function restoreCheckInState() {
+      try {
+        const saved = localStorage.getItem('activeCheckIns');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          activeCheckIns = Object.fromEntries(
+            Object.entries(parsed).map(([k, v]) => [k, { ...v, time: new Date(v.time) }])
+          );
+        }
+      } catch(e) { activeCheckIns = {}; }
     }
 
     async function loadStaffClients() {
@@ -567,19 +689,16 @@
         for (const row of rows) {
           const id = row.c[0]?.v || '';
           if (STAFF_IDS.includes(id)) continue;
-          clients.push({
-            id: id,
-            name: row.c[1]?.v || '',
-            address: row.c[10]?.v || 'No address on file'
-          });
+          clients.push({ id, name: row.c[1]?.v || '', address: row.c[10]?.v || 'No address on file' });
         }
         container.innerHTML = clients.map(c => {
           const active = activeCheckIns[c.id];
+          const checkedInSince = active ? formatTimeOnly(active.time) : '';
           return `
           <div class="staff-client-card">
             <div class="staff-client-name">${c.name}</div>
             <div class="staff-client-address">${c.address}</div>
-            <div class="staff-status ${active ? 'staff-status-active' : 'staff-status-inactive'}">${active ? 'CHECKED IN' : 'NOT CHECKED IN'}</div>
+            <div class="staff-status ${active ? 'staff-status-active' : 'staff-status-inactive'}">${active ? 'CHECKED IN since ' + checkedInSince : 'NOT CHECKED IN'}</div>
             <div class="staff-btn-row">
               <button class="staff-btn ${active ? 'staff-btn-disabled' : 'staff-btn-checkin'}" ${active ? 'disabled' : ''} onclick="staffCheckIn('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK IN</button>
               <button class="staff-btn ${active ? 'staff-btn-checkout' : 'staff-btn-disabled'}" ${active ? '' : 'disabled'} onclick="staffCheckOut('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK OUT</button>
@@ -609,13 +728,10 @@
       const loc = await getLocation();
       const now = new Date();
       activeCheckIns[clientId] = { time: now, loc };
-      const timeStr = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-      if (loc) {
-        const mapLink = `https://www.google.com/maps?q=${loc.lat},${loc.lng}`;
-        msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; <a href="${mapLink}" target="_blank" style="color:#D4A574;">View location</a></div>`;
-      } else {
-        msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; location unavailable</div>`;
-      }
+      saveCheckInState();
+      const timeStr = formatTimeOnly(now);
+      const locNote = loc ? `<a href="https://www.google.com/maps?q=${loc.lat},${loc.lng}" target="_blank" style="color:#D4A574;">View location</a>` : 'location unavailable';
+      msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; ${locNote}</div>`;
       loadStaffClients();
     }
 
@@ -623,32 +739,39 @@
       const checkInData = activeCheckIns[clientId];
       if (!checkInData) return;
       const msgEl = document.getElementById('staffMsg-' + clientId);
-      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Getting location...</div>';
+      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Saving check-out...</div>';
       const loc = await getLocation();
       const checkOutTime = new Date();
       const checkInTime = checkInData.time;
       const durationMs = checkOutTime - checkInTime;
-      const durationHours = (durationMs / (1000 * 60 * 60)).toFixed(1);
+      const durationHours = parseFloat((durationMs / (1000 * 60 * 60)).toFixed(2));
       const dateStr = checkOutTime.toLocaleDateString('en-AU');
-      const checkInTimeStr = checkInTime.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-      const checkOutTimeStr = checkOutTime.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+      const checkInTimeStr = formatTimeOnly(checkInTime);
+      const checkOutTimeStr = formatTimeOnly(checkOutTime);
+      const checkInLoc = checkInData.loc;
       const logId = 'L' + Date.now();
-      const notes = `CheckIn:${checkInTimeStr}|CheckOut:${checkOutTimeStr}`;
+
+      let notes = `CheckIn:${checkInTimeStr}|CheckOut:${checkOutTimeStr}`;
+      if (checkInLoc) notes += `|CheckInGPS:${checkInLoc.lat},${checkInLoc.lng}`;
+      if (loc) notes += `|CheckOutGPS:${loc.lat},${loc.lng}`;
+
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, 'Staff Visit', parseFloat(durationHours), notes] })
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, 'Staff Visit', durationHours, notes] })
         });
         delete activeCheckIns[clientId];
-        msgEl.innerHTML = `<div class="staff-location-msg staff-location-near">Checked out. Duration: ${durationHours}h logged to Time Log.</div>`;
+        saveCheckInState();
+        msgEl.innerHTML = `<div class="staff-location-msg staff-location-near">Checked out at ${checkOutTimeStr}. Duration: ${durationHours}h logged.</div>`;
         loadStaffClients();
       } catch(e) {
-        msgEl.innerHTML = '<div class="staff-location-msg" style="color:#ff6b6b;">Error saving check-out. Try again.</div>';
+        msgEl.innerHTML = '<div class="staff-location-msg" style="color:#ff6b6b;">Error saving. Try again.</div>';
       }
     }
 
+    // ── DASHBOARD ─────────────────────────────────────────────────
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
@@ -706,7 +829,6 @@
               byMonth[key].days.add(rowDate.toDateString());
               byMonth[key].cost += cost;
             }
-
             clientServices.push({ id: sId, name: sName });
           }
         }
@@ -722,7 +844,6 @@
               const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
               if (byMonth[key]) byMonth[key].hours += hrs;
             }
-
             const serviceType = row.c[3]?.v || '';
             const notes = row.c[5]?.v || '';
             if (serviceType === 'Staff Visit' && notes.includes('CheckIn:')) {
@@ -748,23 +869,76 @@
         let totalPurchases = 0;
         const purchases = await fetchSheet('Purchases');
         for (const row of purchases) {
-          if (row.c[1]?.v === clientId) {
-            totalPurchases += row.c[5]?.v || 0;
-          }
+          if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
 
-        const balanceDue = parseFloat(sessionStorage.getItem('balanceDue')) || 0;
+        // ── PAYMENTS ──────────────────────────────────────────────
+        let balanceDue = 0, nextDueDate = '', nextDueAmount = 0, paymentStatus = '';
+        let paymentHistory = [];
+        try {
+          const payments = await fetchSheet('Payments');
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          for (const row of payments) {
+            if (row.c[1]?.v === clientId) {
+              const amount = row.c[2]?.v || 0;
+              const dueDateRaw = row.c[3]?.f || row.c[3]?.v || '';
+              const paidDateRaw = row.c[4]?.f || row.c[4]?.v || '';
+              const status = row.c[5]?.v || 'Pending';
+              paymentHistory.push({ amount, dueDate: dueDateRaw, paidDate: paidDateRaw, status });
+              if (status === 'Pending' || status === 'Overdue') {
+                balanceDue += amount;
+                const dueDate = new Date(dueDateRaw);
+                if (!nextDueDate || dueDate < new Date(nextDueDate)) {
+                  nextDueDate = dueDateRaw;
+                  nextDueAmount = amount;
+                  paymentStatus = dueDate < today ? 'OVERDUE' : 'DUE';
+                }
+              }
+            }
+          }
+        } catch(e) { console.log('Payments error:', e); }
+
         const bonus = parseFloat(sessionStorage.getItem('bonus')) || 0;
         const discount = parseFloat(sessionStorage.getItem('discount')) || 0;
 
         document.getElementById('summaryTotalCost').textContent = '$' + allTimeCost.toFixed(0);
         document.getElementById('summaryTotalGST').textContent = '$' + allTimeGST.toFixed(0);
         document.getElementById('summaryBalanceDue').textContent = '$' + balanceDue.toFixed(0);
+        document.getElementById('summaryNextDue').textContent = nextDueDate || '-';
         document.getElementById('summaryBonus').textContent = '$' + bonus.toFixed(0);
         document.getElementById('summaryDiscount').textContent = '$' + discount.toFixed(0);
         document.getElementById('summaryPurchases').textContent = '$' + totalPurchases.toFixed(0);
         document.getElementById('summaryTotalHours').textContent = allTimeHours;
         document.getElementById('summaryTotalDays').textContent = allTimeDays.size;
+
+        const statusEl = document.getElementById('summaryPaymentStatus');
+        const badgeEl = document.getElementById('summaryPaymentStatusBadge');
+        if (balanceDue === 0) {
+          statusEl.className = 'card-status-ok'; statusEl.textContent = 'UP TO DATE';
+          badgeEl.className = 'card-status-ok'; badgeEl.textContent = 'ALL CLEAR';
+        } else if (paymentStatus === 'OVERDUE') {
+          statusEl.className = 'card-status-overdue'; statusEl.textContent = 'OVERDUE';
+          badgeEl.className = 'card-status-overdue'; badgeEl.textContent = 'OVERDUE';
+        } else {
+          statusEl.className = 'card-status-pending'; statusEl.textContent = 'PENDING';
+          badgeEl.className = 'card-status-pending'; badgeEl.textContent = 'PENDING';
+        }
+
+        const paymentHistoryEl = document.getElementById('paymentHistoryList');
+        if (paymentHistoryEl) {
+          paymentHistoryEl.innerHTML = paymentHistory.length ? paymentHistory.map(p => {
+            const cls = p.status === 'Paid' ? 'pay-status-paid' : p.status === 'Overdue' ? 'pay-status-overdue' : 'pay-status-pending';
+            return `
+            <div class="payment-history-item">
+              <div>
+                <div class="pay-amount">$${parseFloat(p.amount).toFixed(0)}</div>
+                <div class="pay-meta">Due: ${p.dueDate}${p.paidDate ? ' &middot; Paid: ' + p.paidDate : ''}</div>
+              </div>
+              <div class="${cls}">${p.status.toUpperCase()}</div>
+            </div>`;
+          }).join('') : '<div style="padding:1rem;color:#666;">No payment records yet.</div>';
+        }
 
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
         document.getElementById('totalServices').textContent = totalServices;
@@ -842,6 +1016,7 @@
       loadProcess();
     }
 
+    // ── PROCESS ───────────────────────────────────────────────────
     function loadProcess() {
       const container = document.getElementById('processFlow');
       if (!container || container.dataset.loaded) return;
@@ -864,19 +1039,14 @@
       `).join('');
     }
 
+    // ── JOURNEY ───────────────────────────────────────────────────
     async function loadJourney(clientId) {
       try {
         const rows = await fetchSheet('Relationship');
         let found = null;
         for (const row of rows) {
           if (row.c[0]?.v === clientId) {
-            found = {
-              welcome: row.c[1]?.v || '',
-              since: row.c[2]?.v || '',
-              services: row.c[3]?.v || '',
-              note: row.c[4]?.v || '',
-              reward: row.c[5]?.v || ''
-            };
+            found = { welcome: row.c[1]?.v || '', since: row.c[2]?.v || '', services: row.c[3]?.v || '', note: row.c[4]?.v || '', reward: row.c[5]?.v || '' };
             break;
           }
         }
@@ -888,8 +1058,7 @@
           document.getElementById('journeyNote').textContent = found.note;
           document.getElementById('journeyReward').textContent = found.reward;
           const servicesList = found.services.split(',').map(s => s.trim());
-          document.getElementById('journeyServices').innerHTML = servicesList.map(s =>
-            `<div class="journey-service-tag">${s}</div>`).join('');
+          document.getElementById('journeyServices').innerHTML = servicesList.map(s => `<div class="journey-service-tag">${s}</div>`).join('');
           const petPhoto = PET_PHOTO_MAP[clientId];
           if (petPhoto) {
             const img = document.getElementById('journeyPetPhoto');
@@ -900,6 +1069,7 @@
       } catch(e) { console.log('Journey error:', e); }
     }
 
+    // ── MEDIA ─────────────────────────────────────────────────────
     async function loadMedia(clientId) {
       try {
         const rows = await fetchSheet('Media');
@@ -908,12 +1078,7 @@
         let palItems = [], clientItems = [];
         for (const row of rows) {
           if (row.c[1]?.v === clientId) {
-            const item = {
-              fileId: row.c[0]?.v || '',
-              caption: row.c[2]?.v || '',
-              uploadedBy: row.c[3]?.v || '',
-              date: formatDate(row.c[4]?.v || ''),
-            };
+            const item = { fileId: row.c[0]?.v || '', caption: row.c[2]?.v || '', uploadedBy: row.c[3]?.v || '', date: formatDate(row.c[4]?.v || '') };
             if (item.uploadedBy === 'PAL') palItems.push(item);
             else clientItems.push(item);
           }
@@ -921,18 +1086,14 @@
         palGrid.innerHTML = palItems.length ? palItems.map(item => `
           <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
-            <div class="media-card-info">
-              <div class="media-card-caption">${item.caption}</div>
-              <div class="media-card-meta"><span class="media-card-by-pal">P.A.L.</span><span>${item.date}</span></div>
-            </div>
+            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
+            <div class="media-card-meta"><span class="media-card-by-pal">P.A.L.</span><span>${item.date}</span></div></div>
           </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
         clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
           <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
-            <div class="media-card-info">
-              <div class="media-card-caption">${item.caption}</div>
-              <div class="media-card-meta"><span class="media-card-by-client">You</span><span>${item.date}</span></div>
-            </div>
+            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
+            <div class="media-card-meta"><span class="media-card-by-client">You</span><span>${item.date}</span></div></div>
           </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
       } catch(e) { console.log('Media error:', e); }
     }
@@ -947,11 +1108,10 @@
       }
     }
 
+    // ── FEEDBACK ──────────────────────────────────────────────────
     function setRating(rating) {
       currentRating = rating;
-      document.querySelectorAll('.star').forEach((star, i) => {
-        star.classList.toggle('active', i < rating);
-      });
+      document.querySelectorAll('.star').forEach((star, i) => star.classList.toggle('active', i < rating));
     }
 
     async function submitFeedback() {
@@ -960,27 +1120,20 @@
       const comment = document.getElementById('feedbackComment').value.trim();
       const successEl = document.getElementById('feedbackSuccess');
       const errorEl = document.getElementById('feedbackError');
-      successEl.textContent = '';
-      errorEl.textContent = '';
+      successEl.textContent = ''; errorEl.textContent = '';
       if (!serviceId) { errorEl.textContent = 'Please select a service.'; return; }
       if (!currentRating) { errorEl.textContent = 'Please select a rating.'; return; }
       const feedbackId = 'F' + Date.now();
       const timestamp = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment, timestamp] })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment, timestamp] }) });
         successEl.textContent = 'Thank you! Your feedback has been submitted.';
         document.getElementById('feedbackComment').value = '';
         document.getElementById('feedbackService').value = '';
         setRating(0);
         loadFeedbackHistory(clientId);
-      } catch(e) {
-        errorEl.textContent = 'Error submitting feedback. Please try again.';
-      }
+      } catch(e) { errorEl.textContent = 'Error submitting feedback. Please try again.'; }
     }
 
     async function loadFeedbackHistory(clientId) {
@@ -989,50 +1142,39 @@
         const history = [];
         for (const row of rows) {
           if (row.c[1]?.v === clientId) {
-            history.push({
-              service: row.c[2]?.v || '',
-              rating: row.c[3]?.v || 0,
-              comment: row.c[4]?.v || '',
-              date: row.c[5]?.f || row.c[5]?.v || ''
-            });
+            history.push({ service: row.c[2]?.v || '', rating: row.c[3]?.v || 0, comment: row.c[4]?.v || '', date: row.c[5]?.v || '' });
           }
         }
         const container = document.getElementById('feedbackHistory');
         if (!container) return;
         container.innerHTML = history.length ? history.map(f => `
           <div style="background:#1a1a1a; border:1px solid #333; padding:1rem; margin-top:0.8rem;">
-            <div style="color:#D4A574; font-size:0.75rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5 - f.rating)}</div>
+            <div style="color:#D4A574; font-size:0.75rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
             <div style="color:#fff; font-size:0.85rem; margin-bottom:0.3rem;">${f.comment}</div>
             <div style="color:#666; font-size:0.75rem;">${f.service} &middot; ${f.date}</div>
           </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
       } catch(e) { console.log('Feedback history error:', e); }
     }
 
+    // ── REQUESTS ──────────────────────────────────────────────────
     async function submitRequest() {
       const clientId = sessionStorage.getItem('clientId');
       const text = document.getElementById('requestText').value.trim();
       const priority = document.getElementById('requestPriority').value;
       const successEl = document.getElementById('requestSuccess');
       const errorEl = document.getElementById('requestError');
-      successEl.textContent = '';
-      errorEl.textContent = '';
+      successEl.textContent = ''; errorEl.textContent = '';
       if (!text) { errorEl.textContent = 'Please describe your request.'; return; }
       const requestId = 'R' + Date.now();
       const timestamp = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Requests', row: [requestId, clientId, text, priority, timestamp, 'New'] })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Requests', row: [requestId, clientId, text, priority, timestamp, 'New'] }) });
         successEl.textContent = 'Request submitted! P.A.L. will be in touch.';
         document.getElementById('requestText').value = '';
         document.getElementById('requestPriority').value = 'Medium';
         loadRequestHistory(clientId);
-      } catch(e) {
-        errorEl.textContent = 'Error submitting request. Please try again.';
-      }
+      } catch(e) { errorEl.textContent = 'Error submitting request. Please try again.'; }
     }
 
     async function loadRequestHistory(clientId) {
@@ -1041,12 +1183,7 @@
         const history = [];
         for (const row of rows) {
           if (row.c[1]?.v === clientId) {
-            history.push({
-              text: row.c[2]?.v || '',
-              priority: row.c[3]?.v || 'Medium',
-              date: row.c[4]?.v || '',
-              status: row.c[5]?.v || 'New'
-            });
+            history.push({ text: row.c[2]?.v || '', priority: row.c[3]?.v || 'Medium', date: row.c[4]?.v || '', status: row.c[5]?.v || 'New' });
           }
         }
         const container = document.getElementById('requestHistory');
@@ -1061,6 +1198,7 @@
       } catch(e) { console.log('Request history error:', e); }
     }
 
+    // ── MESSAGES ──────────────────────────────────────────────────
     async function loadMessages() {
       const clientId = sessionStorage.getItem('clientId');
       const list = document.getElementById('messagesList');
@@ -1069,11 +1207,7 @@
         const msgs = [];
         for (const row of rows) {
           if (row.c[0]?.v === clientId) {
-            msgs.push({
-              from: row.c[1]?.v || '',
-              message: row.c[2]?.v || '',
-              date: row.c[3]?.f || row.c[3]?.v || ''
-            });
+            msgs.push({ from: row.c[1]?.v || '', message: row.c[2]?.v || '', date: row.c[3]?.v || '' });
           }
         }
         list.innerHTML = msgs.length ? msgs.map(m => `
@@ -1082,9 +1216,7 @@
             <div class="msg-meta">${m.from === 'PAL' ? 'P.A.L.' : 'You'} &middot; ${m.date}</div>
           </div>`).join('') : '<div class="messages-loading">No messages yet. Say hello!</div>';
         list.scrollTop = list.scrollHeight;
-      } catch(e) {
-        list.innerHTML = '<div class="messages-loading">Could not load messages.</div>';
-      }
+      } catch(e) { list.innerHTML = '<div class="messages-loading">Could not load messages.</div>'; }
     }
 
     async function sendMessage() {
@@ -1093,18 +1225,15 @@
       const text = input.value.trim();
       if (!text) return;
       input.value = '';
-      const today = new Date().toLocaleDateString('en-AU');
+      const timestamp = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Messages', row: [clientId, 'Client', text, today] })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Messages', row: [clientId, 'Client', text, timestamp] }) });
         await loadMessages();
       } catch(e) { console.log('Message send error:', e); }
     }
 
+    // ── TABS & LOGOUT ─────────────────────────────────────────────
     function showTab(tab, el) {
       const tabs = ['dashboard','messages','media','feedback','requests','invoices','book','journey','process','concierge','about','staff'];
       tabs.forEach(t => {
@@ -1125,14 +1254,15 @@
     function logout() {
       sessionStorage.clear();
       activeCheckIns = {};
+      localStorage.removeItem('activeCheckIns');
       document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'block');
       document.getElementById('staffNavItem').style.display = 'none';
       document.getElementById('loginScreen').style.display = 'flex';
       document.getElementById('dashboardScreen').style.display = 'none';
+      if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
     }
 
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
   </script>
 </body>
 </html>
-  
