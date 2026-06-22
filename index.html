@@ -210,7 +210,6 @@
         </svg>
         CONTINUE WITH GOOGLE
       </button>
-      <div id="googleOneTap" style="margin-top:0.5rem;"></div>
       <div class="error" id="errorMsg"></div>
       <div class="loading" id="loadingMsg"></div>
     </div>
@@ -248,7 +247,7 @@
         <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">TOTAL GST</div><div class="card-value" id="summaryTotalGST">$0</div><div class="card-sub">all time</div></div>
         <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div id="summaryPaymentStatus" class="card-sub">outstanding</div></div>
-        <div class="card"><div class="card-label">NEXT PAYMENT DUE</div><div class="card-value" id="summaryNextDue">-</div><div id="summaryPaymentStatusBadge" class="card-sub">-</div></div>
+        <div class="card"><div class="card-label">NEXT PAYMENT DUE</div><div class="card-value" id="summaryNextDue" style="font-size:1rem;">-</div><div id="summaryPaymentStatusBadge" class="card-sub">-</div></div>
       </div>
       <div class="cards">
         <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">$0</div><div class="card-sub">reward</div></div>
@@ -269,7 +268,7 @@
       </div>
 
       <div class="section-title">PAYMENT HISTORY</div>
-      <div id="paymentHistoryList"></div>
+      <div id="paymentHistoryList" style="padding:0 1rem;"></div>
 
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
@@ -577,6 +576,21 @@
       return null;
     }
 
+    function parseAUDate(dateStr) {
+      if (!dateStr) return null;
+      const str = dateStr.toString().trim();
+      const parts = str.split('/');
+      if (parts.length === 3) {
+        const day = parseInt(parts[0]);
+        const month = parseInt(parts[1]) - 1;
+        const year = parseInt(parts[2]);
+        const d = new Date(year, month, day);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      const d = new Date(str);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}&t=${Date.now()}`);
       const text = await res.text();
@@ -750,16 +764,12 @@
       const checkOutTimeStr = formatTimeOnly(checkOutTime);
       const checkInLoc = checkInData.loc;
       const logId = 'L' + Date.now();
-
       let notes = `CheckIn:${checkInTimeStr}|CheckOut:${checkOutTimeStr}`;
       if (checkInLoc) notes += `|CheckInGPS:${checkInLoc.lat},${checkInLoc.lng}`;
       if (loc) notes += `|CheckOutGPS:${loc.lat},${loc.lng}`;
-
       try {
         await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, 'Staff Visit', durationHours, notes] })
         });
         delete activeCheckIns[clientId];
@@ -781,7 +791,6 @@
       try {
         const { month, year } = getCurrentMonth();
         const services = await fetchSheet('Services');
-
         let totalServices = 0, totalCost = 0, totalGST = 0;
         let allTimeCost = 0, allTimeGST = 0, allTimeHours = 0;
         let uniqueDays = new Set();
@@ -805,22 +814,16 @@
             const gst = row.c[8]?.v || 0;
             const invoice = row.c[7]?.v || '';
             const invoiceFile = row.c[9]?.v || '';
-
             allTimeCost += cost;
             allTimeGST += gst;
             if (rowDate) allTimeDays.add(rowDate.toDateString());
-
-            if (invoice) {
-              invoicesData.push({ invoice, cost, gst, date: dateStr, service: sName, file: invoiceFile });
-            }
-
+            if (invoice) invoicesData.push({ invoice, cost, gst, date: dateStr, service: sName, file: invoiceFile });
             if (isThisMonth) {
               totalServices++;
               totalCost += cost;
               totalGST += gst;
               if (rowDate) uniqueDays.add(rowDate.toDateString());
             }
-
             if (rowDate) {
               const key = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
               const label = rowDate.toLocaleString('en-AU', { month: 'long', year: 'numeric' }).toUpperCase();
@@ -872,13 +875,13 @@
           if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
 
-        // ── PAYMENTS ──────────────────────────────────────────────
-        let balanceDue = 0, nextDueDate = '', nextDueAmount = 0, paymentStatus = '';
+        // ── PAYMENTS ─────────────────────────────────────────────
+        let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
         try {
           const payments = await fetchSheet('Payments');
           const today = new Date();
-          today.setHours(0,0,0,0);
+          today.setHours(0, 0, 0, 0);
           for (const row of payments) {
             if (row.c[1]?.v === clientId) {
               const amount = row.c[2]?.v || 0;
@@ -888,11 +891,10 @@
               paymentHistory.push({ amount, dueDate: dueDateRaw, paidDate: paidDateRaw, status });
               if (status === 'Pending' || status === 'Overdue') {
                 balanceDue += amount;
-                const dueDate = new Date(dueDateRaw);
-                if (!nextDueDate || dueDate < new Date(nextDueDate)) {
+                const parsedDue = parseAUDate(dueDateRaw.toString());
+                if (!nextDueDate || (parsedDue && parsedDue < parseAUDate(nextDueDate.toString()))) {
                   nextDueDate = dueDateRaw;
-                  nextDueAmount = amount;
-                  paymentStatus = dueDate < today ? 'OVERDUE' : 'DUE';
+                  paymentStatus = parsedDue && parsedDue < today ? 'OVERDUE' : 'DUE';
                 }
               }
             }
@@ -937,7 +939,7 @@
               </div>
               <div class="${cls}">${p.status.toUpperCase()}</div>
             </div>`;
-          }).join('') : '<div style="padding:1rem;color:#666;">No payment records yet.</div>';
+          }).join('') : '<div style="padding:1rem 0;color:#666;">No payment records yet.</div>';
         }
 
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
