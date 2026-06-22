@@ -461,6 +461,7 @@
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
+    const PAYMENTS_GID = '513708818';
     const GOOGLE_CLIENT_ID = '522173354924-08p22smruftspr15qrm3slnqmsfodejj.apps.googleusercontent.com';
     const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_', 'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B', 'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW', 'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr' };
     const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg', 'C002': 'Adeline.escola.png' };
@@ -598,10 +599,23 @@
 
     async function fetchPayments(clientId) {
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getPayments&t=${Date.now()}`);
-        const json = await res.json();
-        if (!json.success) return [];
-        return json.data.filter(p => p.ClientID && p.ClientID.toString().trim() === clientId);
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PAYMENTS_GID}&t=${Date.now()}`);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        const payments = [];
+        for (const row of rows) {
+          const rowClientId = row.c[1]?.v?.toString().replace("'", "").trim();
+          if (rowClientId === clientId) {
+            payments.push({
+              Amount: row.c[2]?.v || 0,
+              DueDate: row.c[3]?.f || row.c[3]?.v?.toString() || '',
+              PaidDate: row.c[4]?.f || row.c[4]?.v?.toString() || '',
+              Status: row.c[5]?.v?.toString() || 'Pending'
+            });
+          }
+        }
+        return payments;
       } catch(e) {
         console.log('Payments fetch error:', e);
         return [];
@@ -883,7 +897,7 @@
           if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
 
-        // ── PAYMENTS via Apps Script ──────────────────────────────
+        // ── PAYMENTS via GID ──────────────────────────────────────
         let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
         const paymentsData = await fetchPayments(clientId);
