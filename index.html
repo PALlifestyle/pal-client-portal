@@ -504,7 +504,6 @@
             found = {
               id: row.c[0]?.v,
               name: row.c[1]?.v,
-              balanceDue: row.c[7]?.v || 0,
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
               address: row.c[10]?.v || ''
@@ -516,7 +515,6 @@
         if (found) {
           sessionStorage.setItem('clientId', found.id);
           sessionStorage.setItem('clientName', found.name);
-          sessionStorage.setItem('balanceDue', found.balanceDue);
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
           if (STAFF_IDS.includes(found.id)) {
@@ -598,6 +596,18 @@
       return json.table.rows;
     }
 
+    async function fetchPayments(clientId) {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getPayments&t=${Date.now()}`);
+        const json = await res.json();
+        if (!json.success) return [];
+        return json.data.filter(p => p.ClientID && p.ClientID.toString().trim() === clientId);
+      } catch(e) {
+        console.log('Payments fetch error:', e);
+        return [];
+      }
+    }
+
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -616,7 +626,6 @@
             found = {
               id: row.c[0]?.v,
               name: row.c[1]?.v,
-              balanceDue: row.c[7]?.v || 0,
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
               address: row.c[10]?.v || ''
@@ -628,7 +637,6 @@
           loadingMsg.textContent = '';
           sessionStorage.setItem('clientId', found.id);
           sessionStorage.setItem('clientName', found.name);
-          sessionStorage.setItem('balanceDue', found.balanceDue);
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
           if (STAFF_IDS.includes(found.id)) {
@@ -875,31 +883,28 @@
           if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
 
-        // ── PAYMENTS ─────────────────────────────────────────────
+        // ── PAYMENTS via Apps Script ──────────────────────────────
         let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
-        try {
-          const payments = await fetchSheet('Payments');
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          for (const row of payments) {
-            if (row.c[1]?.v === clientId) {
-              const amount = row.c[2]?.v || 0;
-              const dueDateRaw = row.c[3]?.f || row.c[3]?.v || '';
-              const paidDateRaw = row.c[4]?.f || row.c[4]?.v || '';
-              const status = row.c[5]?.v || 'Pending';
-              paymentHistory.push({ amount, dueDate: dueDateRaw, paidDate: paidDateRaw, status });
-              if (status === 'Pending' || status === 'Overdue') {
-                balanceDue += amount;
-                const parsedDue = parseAUDate(dueDateRaw.toString());
-                if (!nextDueDate || (parsedDue && parsedDue < parseAUDate(nextDueDate.toString()))) {
-                  nextDueDate = dueDateRaw;
-                  paymentStatus = parsedDue && parsedDue < today ? 'OVERDUE' : 'DUE';
-                }
-              }
+        const paymentsData = await fetchPayments(clientId);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (const p of paymentsData) {
+          const amount = parseFloat(p.Amount) || 0;
+          const dueDateRaw = p.DueDate ? p.DueDate.toString().trim() : '';
+          const paidDateRaw = p.PaidDate ? p.PaidDate.toString().trim() : '';
+          const status = p.Status ? p.Status.toString().trim() : 'Pending';
+          paymentHistory.push({ amount, dueDate: dueDateRaw, paidDate: paidDateRaw, status });
+          if (status === 'Pending' || status === 'Overdue') {
+            balanceDue += amount;
+            const parsedDue = parseAUDate(dueDateRaw);
+            if (!nextDueDate || (parsedDue && parsedDue < parseAUDate(nextDueDate))) {
+              nextDueDate = dueDateRaw;
+              paymentStatus = parsedDue && parsedDue < today ? 'OVERDUE' : 'DUE';
             }
           }
-        } catch(e) { console.log('Payments error:', e); }
+        }
 
         const bonus = parseFloat(sessionStorage.getItem('bonus')) || 0;
         const discount = parseFloat(sessionStorage.getItem('discount')) || 0;
