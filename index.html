@@ -61,6 +61,12 @@
     .nav-item.active-nav { color: #D4A574; border-bottom: 2px solid #D4A574; }
     .welcome { padding: 1.5rem; color: #888; font-size: 0.9rem; letter-spacing: 0.1em; }
     .welcome span { color: #D4A574; }
+    .profile-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem 0; }
+    .profile-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #D4A574; background: #333; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar-placeholder { color: #D4A574; font-size: 1.5rem; }
+    .profile-upload-btn { background: transparent; border: 1px solid #444; color: #888; padding: 0.3rem 0.7rem; font-family: Georgia, serif; font-size: 0.7rem; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap; }
+    .profile-upload-btn:hover { border-color: #D4A574; color: #D4A574; }
     .notif-banner { background: #1a1a1a; border: 1px solid #333; margin: 0 1rem 0.5rem; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
     .notif-banner span { color: #888; font-size: 0.8rem; letter-spacing: 0.1em; }
     .notif-banner button { background: #D4A574; color: #1A1A1A; border: none; padding: 0.4rem 0.8rem; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; cursor: pointer; }
@@ -189,6 +195,29 @@
     .pay-status-paid { color: #4caf50; font-size: 0.75rem; font-weight: bold; }
     .pay-status-pending { color: #D4A574; font-size: 0.75rem; font-weight: bold; }
     .pay-status-overdue { color: #ff6b6b; font-size: 0.75rem; font-weight: bold; }
+    .action-plan-page { padding: 1rem; }
+    .task-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
+    .task-title { color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; font-weight: bold; }
+    .task-description { color: #aaa; font-size: 0.85rem; margin-bottom: 0.5rem; line-height: 1.6; }
+    .task-meta { color: #666; font-size: 0.75rem; margin-bottom: 0.5rem; }
+    .task-comment { background: #222; border-left: 3px solid #D4A574; padding: 0.5rem 0.8rem; color: #aaa; font-size: 0.8rem; margin-top: 0.5rem; font-style: italic; }
+    .task-status-badge { display: inline-block; padding: 0.25rem 0.7rem; font-size: 0.7rem; letter-spacing: 0.1em; font-weight: bold; border-radius: 2px; }
+    .task-status-todo { background: #FF4444; color: #fff; }
+    .task-status-ongoing { background: #2196F3; color: #fff; }
+    .task-status-waiting { background: #FF9800; color: #fff; }
+    .task-status-skip { background: #9C27B0; color: #fff; }
+    .task-status-done { background: #4CAF50; color: #fff; }
+    .task-update-box { background: #222; border: 1px solid #333; padding: 1rem; margin-top: 0.5rem; }
+    .task-update-box label { color: #888; font-size: 0.75rem; letter-spacing: 0.1em; display: block; margin-bottom: 0.4rem; }
+    .task-update-box select { margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.5rem; }
+    .task-update-box textarea { height: 60px; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .task-update-btn { background: #D4A574; color: #1A1A1A; border: none; padding: 0.5rem 1rem; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; width: 100%; }
+    .staff-notif-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-notif-box label { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-notif-box input { margin-bottom: 0.5rem; }
+    .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
+    .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
   </style>
 </head>
 <body>
@@ -226,6 +255,7 @@
       <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
       <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
       <div class="nav-item" onclick="showTab('requests', this)">REQUESTS</div>
+      <div class="nav-item" onclick="showTab('actionplan', this)">ACTION PLAN</div>
       <div class="nav-item" onclick="showTab('invoices', this)">INVOICES</div>
       <div class="nav-item" onclick="showTab('book', this)">CLIENT SCHEDULING</div>
       <div class="nav-item" onclick="showTab('journey', this)">OUR JOURNEY</div>
@@ -236,7 +266,16 @@
     </div>
 
     <div id="tabDashboard">
-      <div class="welcome">WELCOME BACK, <span id="clientName"></span></div>
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatarContainer">
+          <span class="profile-avatar-placeholder" id="profileAvatarPlaceholder">P</span>
+          <img id="profileAvatarImg" src="" alt="Profile" style="display:none;">
+        </div>
+        <div>
+          <div class="welcome" style="padding:0;">WELCOME BACK, <span id="clientName"></span></div>
+          <button class="profile-upload-btn" onclick="uploadProfilePhoto()">CHANGE PHOTO</button>
+        </div>
+      </div>
       <div id="notifBanner" class="notif-banner" style="display:none">
         <span>Enable notifications from P.A.L.</span>
         <button onclick="enableNotifications()">ENABLE</button>
@@ -276,195 +315,344 @@
       <div class="section-title">VISIT HISTORY</div>
       <div id="visitHistoryList"></div>
     </div>
-    <div id="tabMessages" class="screen">
-      <div class="messages-page">
-        <div class="messages-list" id="messagesList">
-          <div class="messages-loading">Loading messages...</div>
-        </div>
-        <div class="messages-input-area">
-          <input type="text" placeholder="Type a message..." id="messageInput" onkeydown="if(event.key==='Enter')sendMessage()">
-          <button class="btn" onclick="sendMessage()">SEND</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="tabMedia" class="screen">
-      <div class="media-page">
-        <div class="media-section-title">FROM P.A.L.</div>
-        <div class="media-grid" id="mediaFromPAL"><div class="empty-media">No media yet.</div></div>
-        <div class="media-section-title">FROM CLIENT</div>
-        <div class="media-grid" id="mediaFromClient"><div class="empty-media">No media yet.</div></div>
-        <div class="upload-section">
-          <label>SHARE A PHOTO OR VIDEO WITH P.A.L.</label>
-          <input type="text" placeholder="Add a caption..." id="uploadCaption">
-          <button class="btn" onclick="uploadMedia()">+ UPLOAD PHOTO OR VIDEO</button>
-          <div class="success-msg" id="uploadSuccess"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="tabFeedback" class="screen">
-      <div class="feedback-page">
-        <div class="feedback-title">LEAVE FEEDBACK</div>
-        <div class="feedback-box">
-          <label>SELECT SERVICE</label>
-          <select id="feedbackService">
-            <option value="">Select a service...</option>
-          </select>
-          <label>YOUR RATING</label>
-          <div class="stars">
-            <span class="star" onclick="setRating(1)">&#9733;</span>
-            <span class="star" onclick="setRating(2)">&#9733;</span>
-            <span class="star" onclick="setRating(3)">&#9733;</span>
-            <span class="star" onclick="setRating(4)">&#9733;</span>
-            <span class="star" onclick="setRating(5)">&#9733;</span>
-          </div>
-          <label>YOUR COMMENTS</label>
-          <textarea placeholder="Share your experience..." id="feedbackComment"></textarea>
-          <button class="btn" onclick="submitFeedback()">SUBMIT FEEDBACK</button>
-          <div class="success-msg" id="feedbackSuccess"></div>
-          <div class="error" id="feedbackError"></div>
-        </div>
-        <div class="section-title">YOUR FEEDBACK HISTORY</div>
-        <div id="feedbackHistory"></div>
-      </div>
-    </div>
-
-    <div id="tabRequests" class="screen">
-      <div class="requests-page">
-        <div class="feedback-title">NEW REQUEST</div>
-        <div class="request-box">
-          <label>WHAT DO YOU NEED?</label>
-          <textarea placeholder="Describe your request..." id="requestText"></textarea>
-          <label>PRIORITY</label>
-          <select id="requestPriority">
-            <option value="Low">Low</option>
-            <option value="Medium" selected>Medium</option>
-            <option value="High">High</option>
-          </select>
-          <button class="btn" onclick="submitRequest()">SUBMIT REQUEST</button>
-          <div class="success-msg" id="requestSuccess"></div>
-          <div class="error" id="requestError"></div>
-        </div>
-        <div class="section-title">YOUR REQUEST HISTORY</div>
-        <div id="requestHistory"></div>
-      </div>
-    </div>
-
-    <div id="tabInvoices" class="screen">
-      <div class="invoices-page">
-        <div class="section-title" style="border-top:none; padding-top:0;">YOUR INVOICES</div>
-        <div id="invoicesList"></div>
-      </div>
-    </div>
-
-    <div id="tabBook" class="screen">
-      <div class="section-title">CLIENT SCHEDULING</div>
-      <div class="book-page">
-        <p>As a valued P.A.L. client, simply select a time that works for you to schedule your included service. No payment required. This service takes place at the location you choose. Need to make a change? You can reschedule or cancel anytime.</p>
-        <a class="book-btn" href="https://pallifestyle.com.au/products/client-scheduling" target="_blank">CLIENT SCHEDULING</a>
-      </div>
-    </div>
-
-    <div id="tabJourney" class="screen">
-      <div class="journey-page">
-        <div class="journey-loading" id="journeyLoading">Loading your journey...</div>
-        <div id="journeyContent" style="display:none">
-          <div class="journey-welcome" id="journeyWelcome"></div>
-          <div class="journey-since" id="journeySince"></div>
-          <img src="" alt="" class="journey-pet-photo" id="journeyPetPhoto" style="display:none">
-          <hr class="journey-divider">
-          <div class="journey-section-label">OUR SERVICES TOGETHER</div>
-          <div class="journey-services" id="journeyServices"></div>
-          <hr class="journey-divider">
-          <div class="journey-section-label">A NOTE FROM PAMELA</div>
-          <div class="journey-note" id="journeyNote"></div>
-          <hr class="journey-divider">
-          <div class="journey-section-label">YOUR REWARD</div>
-          <div class="journey-reward">
-            <div class="journey-reward-label">EXCLUSIVE FOR YOU</div>
-            <div class="journey-reward-value" id="journeyReward"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="tabProcess" class="screen">
-      <div class="process-page">
-        <p style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
-        <p style="color:#6B5A3E; font-size:0.7rem; letter-spacing:0.1em; text-align:center; margin-bottom:1.5rem;">Your Time is Precious. Invest in Your Lifestyle.</p>
-        <div id="processFlow"></div>
-      </div>
-    </div>
-
-    <div id="tabConcierge" class="screen">
-      <div class="concierge-page">
-        <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="concierge-photo">
-        <div class="concierge-name">Pamela Luz</div>
-        <div class="concierge-role">PREMIUM CONCIERGE</div>
-        <div class="concierge-meta">PAL001 &middot; Brazilian &middot; Based in Sydney</div>
-        <hr class="concierge-divider">
-        <div class="concierge-label">WORKING WITH P.A.L. SINCE</div>
-        <div class="concierge-value">February 2026</div>
-        <div class="concierge-label">HOBBIES</div>
-        <div class="concierge-value">
-          <span class="concierge-badge">Swimming</span>
-          <span class="concierge-badge">Cooking</span>
-          <span class="concierge-badge">Gym</span>
-        </div>
-        <div class="concierge-label">BIO</div>
-        <div class="concierge-value">Obsessed with excellence and precision, I bring a corporate management background that has shaped my commitment to delivering premium service standards. My transition to Australia marked a new chapter dedicated to crafting bespoke lifestyle experiences with meticulous attention to detail. As a Premium Concierge, I specialise in curating moments that exceed expectations, combining strategic thinking with personalised care to ensure every aspect of your lifestyle reflects the highest standards of quality.</div>
-        <div class="concierge-label" style="text-align:center;">CLIENT RATING</div>
-        <div class="concierge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-      </div>
-    </div>
-
-    <div id="tabAbout" class="screen">
-      <div class="about-page">
-        <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="about-photo">
-        <div class="about-name">Pamela Luz</div>
-        <div class="about-title">OWNER &amp; FOUNDER &middot; P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</div>
-        <hr class="about-divider">
-        <p class="about-text">With over 7 years of experience managing complex operations across technology and e-commerce companies, I built a career around one core skill: making systems run smoothly, efficiently, and without friction.</p>
-        <p class="about-text">I have led logistics and operations teams, managed multiple business units simultaneously, coordinated cross-functional projects, and developed processes from the ground up at companies including Uber, Insider Store, and Merama, working across Brazil and internationally.</p>
-        <p class="about-text">The years between 2024 and 2025 were a period of recalibration. New challenges, limited working hours, and the language barrier guided me toward frontline roles, which turned out to be incredibly valuable. I gained hands-on experience across a wide range of everyday tasks, building a practical understanding of what it truly takes to keep a home, a schedule, and a life running smoothly.</p>
-        <p class="about-text">I know what it feels like to be a busy professional myself. For years, I worked long hours doing what I loved, often with little time left to care for the things that mattered most to me personally, or to give attention to my own projects and goals. That experience shaped the way I see this work today. I believe I can now help give that time back to others, the same time I once wished I had more of.</p>
-        <p class="about-text">P.A.L. was born in early 2026, built on everything I had studied, led, and lived.</p>
-        <p class="about-text">I also co-host Airbnb properties in Sydney, consistently achieving top guest ratings through the same attention to detail and hands-on approach I bring to every client engagement.</p>
-        <hr class="about-divider">
-        <div class="about-stats">
-          <div class="about-stat"><div class="about-stat-value">Management</div><div class="about-stat-label">OPERATIONS &amp; TEAM LEADERSHIP</div></div>
-          <div class="about-stat"><div class="about-stat-value">Projects</div><div class="about-stat-label">PROJECT MANAGEMENT</div></div>
-          <div class="about-stat"><div class="about-stat-value">Lifestyle</div><div class="about-stat-label">PERSONAL ORGANISATION</div></div>
-        </div>
-        <hr class="about-divider">
-        <p class="about-text" style="text-align:center; font-style:italic; color:#D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
-        <hr class="about-divider">
-        <div class="about-stat-label" style="text-align:center; margin-bottom:1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
-        <div class="about-links">
-          <a href="https://www.linkedin.com/in/p%C3%A2mela-l-55730bb8/" target="_blank" class="about-link-btn">LINKEDIN</a>
-          <a href="https://www.airbnb.com.au/users/profile/about?context=host" target="_blank" class="about-link-btn">AIRBNB CO-HOST</a>
-          <a href="https://app.mable.com.au/profile/worker/800859" target="_blank" class="about-link-btn">MABLE</a>
-        </div>
-      </div>
-    </div>
-
-    <div id="tabStaff" class="screen">
-      <div class="staff-page">
-        <div class="section-title" style="border-top:none; padding-top:0;">ACTIVE CLIENTS</div>
-        <div id="staffClientList"></div>
-      </div>
-    </div>
-
-  </div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAL Client Portal</title>
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "e806ea20-ebbf-4764-83af-ef5770bfad1c",
+        notifyButton: { enable: false },
+        promptOptions: {
+          slidedown: {
+            prompts: [{
+              type: "push",
+              autoPrompt: false,
+              text: {
+                actionMessage: "P.A.L. would like to send you notifications about your services.",
+                acceptButton: "Allow",
+                cancelButton: "No Thanks"
+              }
+            }]
+          }
+        }
+      });
+    });
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #1A1A1A; color: #FFFFFF; font-family: Georgia, serif; min-height: 100vh; }
+    .screen { display: none; }
+    #loginScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+    .logo-img { width: 160px; margin-bottom: 0.5rem; }
+    .logo-img-small { height: 40px; }
+    .tagline { color: #888; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 3rem; }
+    .login-box { background: #222; padding: 2.5rem; width: 90%; max-width: 400px; border: 1px solid #333; }
+    .login-box h2 { color: #D4A574; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; text-align: center; }
+    input, textarea { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
+    input::placeholder, textarea::placeholder { color: #666; }
+    textarea { height: 100px; resize: vertical; }
+    .btn { width: 100%; background: #D4A574; color: #1A1A1A; border: none; padding: 0.9rem; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.15em; cursor: pointer; margin-top: 0.5rem; }
+    .btn:hover { background: #c49060; }
+    .error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .loading { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 0.5rem; text-align: center; }
+    .login-divider { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0; }
+    .login-divider span { color: #555; font-size: 0.8rem; letter-spacing: 0.1em; white-space: nowrap; }
+    .login-divider::before, .login-divider::after { content: ''; flex: 1; border-top: 1px solid #444; }
+    .google-btn { width: 100%; background: #fff; color: #1A1A1A; border: none; padding: 0.75rem; font-family: Georgia, serif; font-size: 0.85rem; letter-spacing: 0.1em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0; }
+    .google-btn:hover { background: #f0f0f0; }
+    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+    .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
+    .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
+    .nav-item { padding: 0.8rem 1.2rem; color: #666; font-size: 0.75rem; letter-spacing: 0.15em; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
+    .nav-item.active-nav { color: #D4A574; border-bottom: 2px solid #D4A574; }
+    .welcome { padding: 1.5rem; color: #888; font-size: 0.9rem; letter-spacing: 0.1em; }
+    .welcome span { color: #D4A574; }
+    .profile-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem 0; }
+    .profile-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #D4A574; background: #333; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar-placeholder { color: #D4A574; font-size: 1.5rem; }
+    .profile-upload-btn { background: transparent; border: 1px solid #444; color: #888; padding: 0.3rem 0.7rem; font-family: Georgia, serif; font-size: 0.7rem; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap; }
+    .profile-upload-btn:hover { border-color: #D4A574; color: #D4A574; }
+    .notif-banner { background: #1a1a1a; border: 1px solid #333; margin: 0 1rem 0.5rem; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .notif-banner span { color: #888; font-size: 0.8rem; letter-spacing: 0.1em; }
+    .notif-banner button { background: #D4A574; color: #1A1A1A; border: none; padding: 0.4rem 0.8rem; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; cursor: pointer; }
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 0 1rem 1rem; }
+    .card { background: #222; border: 1px solid #333; padding: 1.2rem; }
+    .card-label { color: #666; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+    .card-value { color: #D4A574; font-size: 1.5rem; }
+    .card-sub { color: #888; font-size: 0.75rem; margin-top: 0.3rem; }
+    .card-status-ok { color: #4caf50; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
+    .card-status-overdue { color: #ff6b6b; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
+    .card-status-pending { color: #D4A574; font-size: 0.75rem; margin-top: 0.3rem; font-weight: bold; }
+    .section-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; padding: 1rem 1rem 0.5rem; border-top: 1px solid #333; margin-top: 0.5rem; }
+    .service-item { padding: 0.8rem 1rem; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+    .service-item .name { color: #fff; font-size: 0.9rem; }
+    .service-item .date { color: #666; font-size: 0.8rem; }
+    .service-item .status { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: #1a3a1a; color: #4caf50; }
+    .media-page { padding: 1rem; }
+    .media-section-title { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; margin: 1rem 0 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #333; }
+    .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+    .media-card { background: #222; border: 1px solid #333; overflow: hidden; cursor: pointer; }
+    .media-card img { width: 100%; height: 140px; object-fit: cover; display: block; }
+    .media-card-info { padding: 0.6rem; }
+    .media-card-caption { color: #fff; font-size: 0.8rem; margin-bottom: 0.3rem; }
+    .media-card-meta { color: #666; font-size: 0.7rem; display: flex; justify-content: space-between; }
+    .media-card-by-pal { color: #D4A574; }
+    .media-card-by-client { color: #888; }
+    .upload-section { background: #222; border: 1px solid #333; padding: 1.2rem; margin-top: 1rem; }
+    .upload-section label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.8rem; }
+    .upload-section input[type="text"] { margin-bottom: 0.8rem; }
+    .empty-media { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; grid-column: span 2; }
+    .feedback-page { padding: 1rem; }
+    .feedback-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+    .stars { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .star { font-size: 2rem; cursor: pointer; color: #444; transition: color 0.2s; }
+    .star.active { color: #D4A574; }
+    .feedback-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
+    .feedback-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    select { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
+    .book-page { padding: 2rem 1rem; text-align: center; }
+    .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
+    .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
+    .book-btn:hover { background: #c49060; }
+    .about-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
+    .about-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1.5rem; border: 2px solid #D4A574; }
+    .about-name { color: #fff; font-size: 1.3rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.3rem; }
+    .about-title { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 1.5rem; }
+    .about-divider { border: none; border-top: 1px solid #D4A574; margin: 1.5rem 0; opacity: 0.4; }
+    .about-text { color: #aaa; font-size: 0.9rem; line-height: 1.9; margin-bottom: 1.2rem; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+    .about-stat { background: #222; border: 1px solid #333; padding: 1rem 0.5rem; text-align: center; }
+    .about-stat-value { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .about-stat-label { color: #666; font-size: 0.65rem; letter-spacing: 0.1em; line-height: 1.4; }
+    .about-links { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+    .about-link-btn { background: transparent; border: 1px solid #D4A574; color: #D4A574; padding: 0.8rem; text-align: center; text-decoration: none; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .about-link-btn:hover { background: #D4A574; color: #1A1A1A; }
+    .journey-page { padding: 1.5rem; max-width: 600px; margin: 0 auto; }
+    .journey-welcome { color: #D4A574; font-size: 1.1rem; letter-spacing: 0.15em; text-align: center; margin-bottom: 0.3rem; }
+    .journey-since { color: #666; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 1.5rem; }
+    .journey-pet-photo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 1.5rem; border: 2px solid #D4A574; }
+    .journey-divider { border: none; border-top: 1px solid #333; margin: 1.5rem 0; }
+    .journey-section-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.8rem; }
+    .journey-services { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .journey-service-tag { background: #222; border: 1px solid #333; color: #aaa; font-size: 0.75rem; padding: 0.4rem 0.8rem; letter-spacing: 0.1em; }
+    .journey-note { background: #222; border-left: 3px solid #D4A574; padding: 1rem 1.2rem; color: #aaa; font-size: 0.9rem; line-height: 1.8; font-style: italic; margin-bottom: 1rem; }
+    .journey-reward { background: #1a1a1a; border: 1px solid #D4A574; padding: 1.2rem; text-align: center; margin-top: 1rem; }
+    .journey-reward-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+    .journey-reward-value { color: #fff; font-size: 1rem; letter-spacing: 0.1em; }
+    .journey-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
+    .messages-page { display: flex; flex-direction: column; height: calc(100vh - 130px); }
+    .messages-list { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .msg-bubble { max-width: 80%; padding: 0.7rem 1rem; font-size: 0.9rem; line-height: 1.6; }
+    .msg-from-pal { background: #222; border: 1px solid #333; color: #fff; align-self: flex-start; border-left: 3px solid #D4A574; }
+    .msg-from-client { background: #D4A574; color: #1A1A1A; align-self: flex-end; }
+    .msg-meta { font-size: 0.7rem; margin-top: 0.3rem; }
+    .msg-from-pal .msg-meta { color: #666; }
+    .msg-from-client .msg-meta { color: #8a6a40; text-align: right; }
+    .messages-input-area { border-top: 1px solid #333; padding: 1rem; display: flex; gap: 0.8rem; background: #111; }
+    .messages-input-area input { flex: 1; margin-bottom: 0; }
+    .messages-input-area button { width: auto; margin-top: 0; padding: 0.8rem 1.2rem; white-space: nowrap; flex-shrink: 0; }
+    .messages-loading { color: #666; font-size: 0.85rem; text-align: center; padding: 2rem; }
+    .concierge-page { padding: 2rem 1.5rem; max-width: 600px; margin: 0 auto; }
+    .concierge-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; object-position: top; display: block; margin: 0 auto 1rem; border: 2px solid #D4A574; }
+    .concierge-name { color: #fff; font-size: 1.2rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 0.2rem; }
+    .concierge-role { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; text-align: center; margin-bottom: 0.2rem; }
+    .concierge-meta { color: #666; font-size: 0.75rem; letter-spacing: 0.1em; text-align: center; margin-bottom: 1.5rem; }
+    .concierge-divider { border: none; border-top: 1px solid #333; margin: 1.2rem 0; }
+    .concierge-label { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+    .concierge-value { color: #aaa; font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; }
+    .concierge-stars { color: #D4A574; font-size: 1.4rem; text-align: center; margin-top: 1rem; }
+    .concierge-badge { display: inline-block; background: #222; border: 1px solid #333; color: #aaa; font-size: 0.75rem; padding: 0.3rem 0.8rem; margin: 0.2rem; letter-spacing: 0.1em; }
+    .process-page { padding: 1rem; overflow-y: auto; }
+    .invoices-page { padding: 1rem; }
+    .invoice-item { background: #222; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+    .invoice-item-left .inv-number { color: #D4A574; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .invoice-item-left .inv-detail { color: #666; font-size: 0.75rem; }
+    .invoice-link { background: #D4A574; color: #1A1A1A; padding: 0.4rem 0.8rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; white-space: nowrap; }
+    .empty-invoices { color: #666; font-size: 0.85rem; padding: 2rem; text-align: center; }
+    .requests-page { padding: 1rem; }
+    .request-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
+    .request-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .request-history-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
+    .request-history-item .req-text { color: #fff; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .request-history-item .req-meta { color: #666; font-size: 0.75rem; }
+    .priority-high { color: #ff6b6b; }
+    .priority-medium { color: #D4A574; }
+    .priority-low { color: #4caf50; }
+    .staff-page { padding: 1rem; }
+    .staff-client-card { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-client-name { color: #D4A574; font-size: 1rem; margin-bottom: 0.3rem; }
+    .staff-client-address { color: #888; font-size: 0.8rem; margin-bottom: 0.8rem; }
+    .staff-status { font-size: 0.75rem; padding: 0.3rem 0.6rem; display: inline-block; margin-bottom: 0.8rem; }
+    .staff-status-active { background: #1a3a1a; color: #4caf50; }
+    .staff-status-inactive { background: #333; color: #888; }
+    .staff-btn-row { display: flex; gap: 0.8rem; }
+    .staff-btn { flex: 1; padding: 0.7rem; border: none; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; }
+    .staff-btn-checkin { background: #D4A574; color: #1A1A1A; }
+    .staff-btn-checkout { background: #ff6b6b; color: #1A1A1A; }
+    .staff-btn-disabled { background: #333; color: #666; cursor: not-allowed; }
+    .staff-location-msg { font-size: 0.75rem; margin-top: 0.6rem; padding: 0.5rem; }
+    .staff-location-near { background: #1a3a1a; color: #4caf50; }
+    .staff-location-far { background: #3a2a1a; color: #D4A574; }
+    .staff-active-timer { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; }
+    .payment-history-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+    .payment-history-item .pay-amount { color: #D4A574; font-size: 1rem; }
+    .payment-history-item .pay-meta { color: #666; font-size: 0.75rem; margin-top: 0.2rem; }
+    .pay-status-paid { color: #4caf50; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-pending { color: #D4A574; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-overdue { color: #ff6b6b; font-size: 0.75rem; font-weight: bold; }
+    .action-plan-page { padding: 1rem; }
+    .task-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
+    .task-title { color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; font-weight: bold; }
+    .task-description { color: #aaa; font-size: 0.85rem; margin-bottom: 0.5rem; line-height: 1.6; }
+    .task-meta { color: #666; font-size: 0.75rem; margin-bottom: 0.5rem; }
+    .task-comment { background: #222; border-left: 3px solid #D4A574; padding: 0.5rem 0.8rem; color: #aaa; font-size: 0.8rem; margin-top: 0.5rem; font-style: italic; }
+    .task-status-badge { display: inline-block; padding: 0.25rem 0.7rem; font-size: 0.7rem; letter-spacing: 0.1em; font-weight: bold; border-radius: 2px; }
+    .task-status-todo { background: #FF4444; color: #fff; }
+    .task-status-ongoing { background: #2196F3; color: #fff; }
+    .task-status-waiting { background: #FF9800; color: #fff; }
+    .task-status-skip { background: #9C27B0; color: #fff; }
+    .task-status-done { background: #4CAF50; color: #fff; }
+    .task-update-box { background: #222; border: 1px solid #333; padding: 1rem; margin-top: 0.5rem; }
+    .task-update-box label { color: #888; font-size: 0.75rem; letter-spacing: 0.1em; display: block; margin-bottom: 0.4rem; }
+    .task-update-box select { margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.5rem; }
+    .task-update-box textarea { height: 60px; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .task-update-btn { background: #D4A574; color: #1A1A1A; border: none; padding: 0.5rem 1rem; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; width: 100%; }
+    .staff-notif-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-notif-box label { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-notif-box input { margin-bottom: 0.5rem; }
+    .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
+    .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div id="loginScreen">
+    <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img">
+    <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
+    <div class="login-box">
+      <h2>CLIENT PORTAL</h2>
+      <input type="email" placeholder="Email address" id="email">
+      <input type="password" placeholder="Password" id="password">
+      <button class="btn" onclick="login()">ACCESS MY PORTAL</button>
+      <div class="login-divider"><span>OR</span></div>
+      <button class="google-btn" onclick="triggerGoogleLogin()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        CONTINUE WITH GOOGLE
+      </button>
+      <div class="error" id="errorMsg"></div>
+      <div class="loading" id="loadingMsg"></div>
+    </div>
+  </div>
+
+  <div id="dashboardScreen" class="screen">
+    <div class="top-bar">
+      <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img-small">
+      <button class="btn" onclick="logout()">LOGOUT</button>
+    </div>
+    <div class="nav" id="mainNav">
+      <div class="nav-item active-nav" onclick="showTab('dashboard', this)">DASHBOARD</div>
+      <div class="nav-item" onclick="showTab('messages', this)">MESSAGES</div>
+      <div class="nav-item" onclick="showTab('media', this)">PHOTOS & VIDEOS</div>
+      <div class="nav-item" onclick="showTab('feedback', this)">FEEDBACK</div>
+      <div class="nav-item" onclick="showTab('requests', this)">REQUESTS</div>
+      <div class="nav-item" onclick="showTab('actionplan', this)">ACTION PLAN</div>
+      <div class="nav-item" onclick="showTab('invoices', this)">INVOICES</div>
+      <div class="nav-item" onclick="showTab('book', this)">CLIENT SCHEDULING</div>
+      <div class="nav-item" onclick="showTab('journey', this)">OUR JOURNEY</div>
+      <div class="nav-item" onclick="showTab('process', this)">OUR PROCESS</div>
+      <div class="nav-item" onclick="showTab('concierge', this)">YOUR CONCIERGE</div>
+      <div class="nav-item" onclick="showTab('about', this)">MEET THE FOUNDER</div>
+      <div class="nav-item" id="staffNavItem" onclick="showTab('staff', this)" style="display:none;">STAFF</div>
+    </div>
+
+    <div id="tabDashboard">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profileAvatarContainer">
+          <span class="profile-avatar-placeholder" id="profileAvatarPlaceholder">P</span>
+          <img id="profileAvatarImg" src="" alt="Profile" style="display:none;">
+        </div>
+        <div>
+          <div class="welcome" style="padding:0;">WELCOME BACK, <span id="clientName"></span></div>
+          <button class="profile-upload-btn" onclick="uploadProfilePhoto()">CHANGE PHOTO</button>
+        </div>
+      </div>
+      <div id="notifBanner" class="notif-banner" style="display:none">
+        <span>Enable notifications from P.A.L.</span>
+        <button onclick="enableNotifications()">ENABLE</button>
+      </div>
+
+      <div class="section-title">ACCOUNT SUMMARY</div>
+      <div class="cards">
+        <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
+        <div class="card"><div class="card-label">TOTAL GST</div><div class="card-value" id="summaryTotalGST">$0</div><div class="card-sub">all time</div></div>
+        <div class="card"><div class="card-label">BALANCE DUE</div><div class="card-value" id="summaryBalanceDue">$0</div><div id="summaryPaymentStatus" class="card-sub">outstanding</div></div>
+        <div class="card"><div class="card-label">NEXT PAYMENT DUE</div><div class="card-value" id="summaryNextDue" style="font-size:1rem;">-</div><div id="summaryPaymentStatusBadge" class="card-sub">-</div></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="card-label">BONUS EARNED</div><div class="card-value" id="summaryBonus">$0</div><div class="card-sub">reward</div></div>
+        <div class="card"><div class="card-label">DISCOUNTS</div><div class="card-value" id="summaryDiscount">$0</div><div class="card-sub">applied</div></div>
+        <div class="card"><div class="card-label">PURCHASES</div><div class="card-value" id="summaryPurchases">$0</div><div class="card-sub">on your behalf</div></div>
+        <div class="card"><div class="card-label">TOTAL HOURS</div><div class="card-value" id="summaryTotalHours">0</div><div class="card-sub">all time</div></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="card-label">TOTAL DAYS</div><div class="card-value" id="summaryTotalDays">0</div><div class="card-sub">all time</div></div>
+      </div>
+
+      <div class="section-title">THIS MONTH</div>
+      <div class="cards">
+        <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub" id="totalServicesMonth">this month</div></div>
+        <div class="card"><div class="card-label">TOTAL COST</div><div class="card-value" id="totalCost">$0</div><div class="card-sub">this month</div></div>
+        <div class="card"><div class="card-label">DAYS WORKED</div><div class="card-value" id="totalDays">0</div><div class="card-sub">this month</div></div>
+        <div class="card"><div class="card-label">GST INCLUDED</div><div class="card-value" id="totalGST">$0</div><div class="card-sub">this month</div></div>
+      </div>
+
+      <div class="section-title">PAYMENT HISTORY</div>
+      <div id="paymentHistoryList" style="padding:0 1rem;"></div>
+
+      <div class="section-title">RECENT SERVICES</div>
+      <div id="servicesList"></div>
+
+      <div class="section-title">VISIT HISTORY</div>
+      <div id="visitHistoryList"></div>
+    </div>
+    <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
     const PAYMENTS_GID = '513708818';
+    const TASKS_GID = '2118966663';
+    const ONESIGNAL_APP_ID = 'e806ea20-ebbf-4764-83af-ef5770bfad1c';
     const GOOGLE_CLIENT_ID = '522173354924-08p22smruftspr15qrm3slnqmsfodejj.apps.googleusercontent.com';
-    const FOLDER_MAP = { 'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE', 'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_', 'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B', 'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW', 'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr' };
-    const PET_PHOTO_MAP = { 'C001': 'sabrina.jpeg', 'C002': 'Adeline.escola.png' };
+    const FOLDER_MAP = {
+      'C001': '1pa5vvM4bDQis26E3_jdZBG55CI_NCqGE',
+      'C002': '1bQnRj6HS-NOmeSP7LhGGR2n7dYTwmNc_',
+      'C003': '1Dylc8Y4V_idaqfuBOakwhMwndgq7-n5B',
+      'C004': '1zmppglNkw_1bCDdfymTbxghC610K3DSW',
+      'C005': '1lOjoG9jefiaSmJ5U5vY4MEMnSdPTRkAr',
+      'C006': '1ZmPBRBUkcttF0T214jCmLAgcVkiB4eLT'
+    };
+    const PET_PHOTO_MAP = {
+      'C001': 'sabrina.jpeg',
+      'C002': 'Adeline.escola.png',
+      'C006': 'https://drive.google.com/thumbnail?id=1_vLm2zv8AF_3W45pqfIX09miQ-JVq6eI&sz=w400'
+    };
     const STAFF_IDS = ['STAFF001'];
     let currentRating = 0;
     let clientServices = [];
@@ -507,7 +695,8 @@
               name: row.c[1]?.v,
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
-              address: row.c[10]?.v || ''
+              address: row.c[10]?.v || '',
+              profilePhoto: row.c[11]?.v || ''
             };
             break;
           }
@@ -518,6 +707,7 @@
           sessionStorage.setItem('clientName', found.name);
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
+          sessionStorage.setItem('profilePhoto', found.profilePhoto);
           if (STAFF_IDS.includes(found.id)) {
             showStaffDashboard(found.id, found.name);
           } else {
@@ -590,6 +780,17 @@
       return isNaN(d.getTime()) ? null : d;
     }
 
+    function getTaskStatusClass(status) {
+      const map = {
+        'To Do': 'task-status-todo',
+        'Ongoing': 'task-status-ongoing',
+        'Waiting': 'task-status-waiting',
+        'Skip': 'task-status-skip',
+        'Done': 'task-status-done'
+      };
+      return map[status] || 'task-status-todo';
+    }
+
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}&t=${Date.now()}`);
       const text = await res.text();
@@ -622,6 +823,60 @@
       }
     }
 
+    async function fetchTasks(clientId) {
+      try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${TASKS_GID}&t=${Date.now()}`);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        const tasks = [];
+        for (const row of rows) {
+          const rowClientId = row.c[1]?.v?.toString().trim();
+          if (rowClientId === clientId) {
+            tasks.push({
+              taskId: row.c[0]?.v?.toString() || '',
+              clientId: rowClientId,
+              title: row.c[2]?.v?.toString() || '',
+              description: row.c[3]?.v?.toString() || '',
+              status: row.c[4]?.v?.toString() || 'To Do',
+              comment: row.c[5]?.v?.toString() || '',
+              dueDate: row.c[6]?.f || row.c[6]?.v?.toString() || '',
+              createdBy: row.c[7]?.v?.toString() || '',
+              createdAt: row.c[8]?.v?.toString() || '',
+              updatedAt: row.c[9]?.v?.toString() || ''
+            });
+          }
+        }
+        return tasks;
+      } catch(e) {
+        console.log('Tasks fetch error:', e);
+        return [];
+      }
+    }
+
+    // ── PROFILE PHOTO ─────────────────────────────────────────────
+    function loadProfilePhoto() {
+      const profilePhoto = sessionStorage.getItem('profilePhoto');
+      const clientName = sessionStorage.getItem('clientName') || 'P';
+      const placeholder = document.getElementById('profileAvatarPlaceholder');
+      const img = document.getElementById('profileAvatarImg');
+      if (placeholder) placeholder.textContent = clientName.charAt(0).toUpperCase();
+      if (profilePhoto && img) {
+        img.src = `https://drive.google.com/thumbnail?id=${profilePhoto}&sz=w200`;
+        img.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+      }
+    }
+
+    function uploadProfilePhoto() {
+      const clientId = sessionStorage.getItem('clientId');
+      const folderId = FOLDER_MAP[clientId];
+      if (folderId) {
+        window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
+        alert('Upload your profile photo to Google Drive, then send the photo link to P.A.L. to update your profile.');
+      }
+    }
+
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -642,7 +897,8 @@
               name: row.c[1]?.v,
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
-              address: row.c[10]?.v || ''
+              address: row.c[10]?.v || '',
+              profilePhoto: row.c[11]?.v || ''
             };
             break;
           }
@@ -653,6 +909,7 @@
           sessionStorage.setItem('clientName', found.name);
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
+          sessionStorage.setItem('profilePhoto', found.profilePhoto);
           if (STAFF_IDS.includes(found.id)) {
             showStaffDashboard(found.id, found.name);
           } else {
@@ -687,6 +944,24 @@
       } catch(e) {}
     }
 
+    async function sendPushNotification() {
+      const title = document.getElementById('notifTitle').value.trim();
+      const message = document.getElementById('notifMessage').value.trim();
+      const successEl = document.getElementById('notifSuccess');
+      const errorEl = document.getElementById('notifError');
+      successEl.textContent = ''; errorEl.textContent = '';
+      if (!title || !message) { errorEl.textContent = 'Please fill in title and message.'; return; }
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'sendNotification', appId: ONESIGNAL_APP_ID, title, message })
+        });
+        successEl.textContent = 'Notification sent to all clients!';
+        document.getElementById('notifTitle').value = '';
+        document.getElementById('notifMessage').value = '';
+      } catch(e) { errorEl.textContent = 'Error sending notification. Try again.'; }
+    }
+
     // ── STAFF ─────────────────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
@@ -714,6 +989,31 @@
           );
         }
       } catch(e) { activeCheckIns = {}; }
+    }
+
+    async function createTask() {
+      const clientId = document.getElementById('taskClientId').value;
+      const title = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDescription').value.trim();
+      const dueDate = document.getElementById('taskDueDate').value.trim();
+      const successEl = document.getElementById('taskSuccess');
+      const errorEl = document.getElementById('taskError');
+      successEl.textContent = ''; errorEl.textContent = '';
+      if (!clientId) { errorEl.textContent = 'Please select a client.'; return; }
+      if (!title) { errorEl.textContent = 'Please enter a task title.'; return; }
+      const taskId = 'T' + Date.now();
+      const timestamp = formatDateTime();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Task', row: [taskId, clientId, title, description, 'To Do', '', dueDate, 'PAL', timestamp, ''] })
+        });
+        successEl.textContent = 'Task created successfully!';
+        document.getElementById('taskClientId').value = '';
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskDescription').value = '';
+        document.getElementById('taskDueDate').value = '';
+      } catch(e) { errorEl.textContent = 'Error creating task. Try again.'; }
     }
 
     async function loadStaffClients() {
@@ -808,6 +1108,7 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
       document.getElementById('clientName').textContent = clientName.toUpperCase();
+      loadProfilePhoto();
       checkNotifStatus();
 
       try {
@@ -897,7 +1198,7 @@
           if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
 
-        // ── PAYMENTS via GID ──────────────────────────────────────
+        // ── PAYMENTS ─────────────────────────────────────────────
         let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
         const paymentsData = await fetchPayments(clientId);
@@ -1037,6 +1338,64 @@
       loadProcess();
     }
 
+    // ── ACTION PLAN ───────────────────────────────────────────────
+    async function loadActionPlan(clientId) {
+      const container = document.getElementById('taskList');
+      container.innerHTML = '<div class="messages-loading">Loading tasks...</div>';
+      try {
+        const tasks = await fetchTasks(clientId);
+        if (!tasks.length) {
+          container.innerHTML = '<div style="padding:1rem;color:#666;">No tasks yet. Your P.A.L. concierge will add tasks here for you.</div>';
+          return;
+        }
+        const order = ['To Do', 'Ongoing', 'Waiting', 'Skip', 'Done'];
+        tasks.sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status));
+        container.innerHTML = tasks.map(t => `
+          <div class="task-item">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+              <div class="task-title">${t.title}</div>
+              <span class="task-status-badge ${getTaskStatusClass(t.status)}">${t.status.toUpperCase()}</span>
+            </div>
+            ${t.description ? `<div class="task-description">${t.description}</div>` : ''}
+            <div class="task-meta">
+              ${t.dueDate ? `Due: ${t.dueDate} &nbsp;|&nbsp;` : ''}
+              Created by ${t.createdBy} ${t.createdAt ? 'on ' + t.createdAt : ''}
+            </div>
+            ${t.comment ? `<div class="task-comment">"${t.comment}"</div>` : ''}
+            <div class="task-update-box">
+              <label>UPDATE STATUS & ADD COMMENT</label>
+              <select id="statusSelect-${t.taskId}">
+                <option value="To Do" ${t.status === 'To Do' ? 'selected' : ''}>To Do</option>
+                <option value="Ongoing" ${t.status === 'Ongoing' ? 'selected' : ''}>Ongoing</option>
+                <option value="Waiting" ${t.status === 'Waiting' ? 'selected' : ''}>Waiting</option>
+                <option value="Skip" ${t.status === 'Skip' ? 'selected' : ''}>Skip</option>
+                <option value="Done" ${t.status === 'Done' ? 'selected' : ''}>Done</option>
+              </select>
+              <textarea id="commentInput-${t.taskId}" placeholder="Add a comment...">${t.comment}</textarea>
+              <button class="task-update-btn" onclick="updateTask('${t.taskId}', '${clientId}')">UPDATE</button>
+              <div class="success-msg" id="taskUpdateSuccess-${t.taskId}"></div>
+            </div>
+          </div>`).join('');
+      } catch(e) {
+        container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading tasks.</div>';
+      }
+    }
+
+    async function updateTask(taskId, clientId) {
+      const status = document.getElementById('statusSelect-' + taskId).value;
+      const comment = document.getElementById('commentInput-' + taskId).value.trim();
+      const successEl = document.getElementById('taskUpdateSuccess-' + taskId);
+      const timestamp = formatDateTime();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'updateTask', taskId, status, comment, updatedAt: timestamp })
+        });
+        successEl.textContent = 'Updated successfully!';
+        setTimeout(() => { loadActionPlan(clientId); }, 1500);
+      } catch(e) { successEl.textContent = 'Error updating. Try again.'; }
+    }
+
     // ── PROCESS ───────────────────────────────────────────────────
     function loadProcess() {
       const container = document.getElementById('processFlow');
@@ -1083,7 +1442,11 @@
           const petPhoto = PET_PHOTO_MAP[clientId];
           if (petPhoto) {
             const img = document.getElementById('journeyPetPhoto');
-            img.src = petPhoto;
+            if (petPhoto.startsWith('http')) {
+              img.src = petPhoto;
+            } else {
+              img.src = petPhoto;
+            }
             img.style.display = 'block';
           }
         }
@@ -1256,7 +1619,7 @@
 
     // ── TABS & LOGOUT ─────────────────────────────────────────────
     function showTab(tab, el) {
-      const tabs = ['dashboard','messages','media','feedback','requests','invoices','book','journey','process','concierge','about','staff'];
+      const tabs = ['dashboard','messages','media','feedback','requests','actionplan','invoices','book','journey','process','concierge','about','staff'];
       tabs.forEach(t => {
         const el2 = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
         if (el2) el2.style.display = 'none';
@@ -1269,6 +1632,7 @@
       if (tab === 'messages') loadMessages();
       if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
       if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
+      if (tab === 'actionplan') loadActionPlan(sessionStorage.getItem('clientId'));
       if (tab === 'staff') loadStaffClients();
     }
 
