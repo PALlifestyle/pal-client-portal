@@ -20,7 +20,7 @@
               type: "push",
               autoPrompt: false,
               text: {
-                actionMessage: "P.A.L. would like to send you notifications about your services.",
+                actionMessage: "PAL would like to send you notifications about your services.",
                 acceptButton: "Allow",
                 cancelButton: "No Thanks"
               }
@@ -218,11 +218,44 @@
     .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
     .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
     .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    /* Project Tracker & Gantt */
+    .gantt-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #2a2a2a; margin-top:0.5rem; }
+    .gantt-inner { display:inline-block; min-width:100%; }
+    .gantt-header-row { display:flex; background:#111; border-bottom:1px solid #2a2a2a; position:sticky; top:0; z-index:2; }
+    .gantt-label-header { flex-shrink:0; padding:0.4rem 0.8rem; background:#111; position:sticky; left:0; z-index:3; border-right:1px solid #2a2a2a; }
+    .gantt-week-header { flex-shrink:0; text-align:center; padding:0.4rem 0; border-right:1px solid #222; }
+    .gantt-phase-row { display:flex; border-bottom:1px solid #1a1a1a; min-height:52px; }
+    .gantt-phase-label { flex-shrink:0; padding:0.6rem 0.8rem; background:#1c1c1c; position:sticky; left:0; z-index:1; border-right:1px solid #2a2a2a; display:flex; flex-direction:column; justify-content:center; }
+    .gantt-phase-timeline { flex:1; position:relative; }
+    .gantt-bar { position:absolute; top:8px; bottom:8px; border-radius:2px; min-width:6px; overflow:hidden; }
+    .gantt-bar-label { font-size:0.6rem; padding:0.15rem 0.4rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.6; }
+    .gantt-actual-line { position:absolute; top:0; bottom:0; width:2px; opacity:0.9; }
+    .project-block { background:#222; border:1px solid #2a2a2a; margin:1rem; }
+    .project-block-header { padding:1.2rem 1.5rem; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #2a2a2a; }
+    .project-status-badge { font-size:0.65rem; letter-spacing:0.15em; padding:0.2rem 0.7rem; border:1px solid; flex-shrink:0; margin-left:1rem; }
+    .project-body { padding:1.2rem 1.5rem; }
+    .gantt-legend { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.8rem; }
+    .gantt-legend-item { display:flex; align-items:center; gap:0.35rem; }
+    .gantt-legend-dot { width:10px; height:10px; flex-shrink:0; }
+    .phase-status-select { background:#1A1A1A; border:1px solid #333; color:#aaa; padding:0.2rem 0.3rem; font-family:Georgia,serif; font-size:0.65rem; margin-top:0.3rem; width:100%; cursor:pointer; }
+    .report-grid { display:grid; grid-template-columns:1fr auto auto auto; gap:0.5rem; }
+    .report-header-cell { color:#555; font-size:0.65rem; letter-spacing:0.1em; padding-bottom:0.4rem; }
+    .report-cell { color:#aaa; font-size:0.75rem; padding:0.4rem 0; border-bottom:1px solid #1a1a1a; }
+    .variance-early { color:#4CAF50; }
+    .variance-ontime { color:#4CAF50; }
+    .variance-late { color:#ff6b6b; }
+    .modal-field-label { color:#888; font-size:0.75rem; letter-spacing:0.15em; display:block; margin:0.8rem 0 0.3rem; }
+    .modal-title { color:#D4A574; font-size:0.85rem; letter-spacing:0.2em; margin-bottom:1.2rem; }
+    /* Action Plan compact */
+    .task-update-row { display:flex; gap:0.5rem; margin-top:0.7rem; align-items:center; flex-wrap:wrap; }
+    .task-inline-select { flex:0 0 110px; background:#1A1A1A; border:1px solid #444; color:#aaa; padding:0.4rem 0.5rem; font-family:Georgia,serif; font-size:0.75rem; }
+    .task-inline-input { flex:1; min-width:120px; background:#1A1A1A; border:1px solid #444; color:#fff; padding:0.4rem 0.6rem; font-family:Georgia,serif; font-size:0.8rem; margin-bottom:0; }
+    .task-inline-btn { background:#D4A574; color:#1A1A1A; border:none; padding:0.4rem 0.8rem; font-family:Georgia,serif; font-size:0.75rem; letter-spacing:0.1em; cursor:pointer; white-space:nowrap; margin-top:0; }
   </style>
 </head>
 <body>
-  <div id="loginScreen">
-    <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img">
+<div id="loginScreen">
+    <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
     <div class="login-box">
       <h2>CLIENT PORTAL</h2>
@@ -243,10 +276,9 @@
       <div class="loading" id="loadingMsg"></div>
     </div>
   </div>
-
   <div id="dashboardScreen" class="screen">
     <div class="top-bar">
-      <img src="pal-logo-black.jpeg" alt="P.A.L." class="logo-img-small">
+      <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img-small">
       <button class="btn" onclick="logout()">LOGOUT</button>
     </div>
     <div class="nav" id="mainNav">
@@ -262,9 +294,9 @@
       <div class="nav-item" onclick="showTab('process', this)">OUR PROCESS</div>
       <div class="nav-item" onclick="showTab('concierge', this)">YOUR CONCIERGE</div>
       <div class="nav-item" onclick="showTab('about', this)">MEET THE FOUNDER</div>
+      <div class="nav-item" onclick="showTab('projects', this)">PROJECTS</div>
       <div class="nav-item" id="staffNavItem" onclick="showTab('staff', this)" style="display:none;">STAFF</div>
     </div>
-
     <div id="tabDashboard">
       <div class="profile-header">
         <div class="profile-avatar" id="profileAvatarContainer">
@@ -280,7 +312,6 @@
         <span>Enable notifications from P.A.L.</span>
         <button onclick="enableNotifications()">ENABLE</button>
       </div>
-
       <div class="section-title">ACCOUNT SUMMARY</div>
       <div class="cards">
         <div class="card"><div class="card-label">TOTAL SERVICES VALUE</div><div class="card-value" id="summaryTotalCost">$0</div><div class="card-sub">all time</div></div>
@@ -297,7 +328,6 @@
       <div class="cards">
         <div class="card"><div class="card-label">TOTAL DAYS</div><div class="card-value" id="summaryTotalDays">0</div><div class="card-sub">all time</div></div>
       </div>
-
       <div class="section-title">THIS MONTH</div>
       <div class="cards">
         <div class="card"><div class="card-label">SERVICES THIS MONTH</div><div class="card-value" id="totalServices">0</div><div class="card-sub" id="totalServicesMonth">this month</div></div>
@@ -305,13 +335,10 @@
         <div class="card"><div class="card-label">DAYS WORKED</div><div class="card-value" id="totalDays">0</div><div class="card-sub">this month</div></div>
         <div class="card"><div class="card-label">GST INCLUDED</div><div class="card-value" id="totalGST">$0</div><div class="card-sub">this month</div></div>
       </div>
-
       <div class="section-title">PAYMENT HISTORY</div>
       <div id="paymentHistoryList" style="padding:0 1rem;"></div>
-
       <div class="section-title">RECENT SERVICES</div>
       <div id="servicesList"></div>
-
       <div class="section-title">VISIT HISTORY</div>
       <div id="visitHistoryList"></div>
     </div>
@@ -326,7 +353,6 @@
         </div>
       </div>
     </div>
-
     <div id="tabMedia" class="screen">
       <div class="media-page">
         <div class="media-section-title">FROM P.A.L.</div>
@@ -341,7 +367,6 @@
         </div>
       </div>
     </div>
-
     <div id="tabFeedback" class="screen">
       <div class="feedback-page">
         <div class="feedback-title">LEAVE FEEDBACK</div>
@@ -368,7 +393,6 @@
         <div id="feedbackHistory"></div>
       </div>
     </div>
-
     <div id="tabRequests" class="screen">
       <div class="requests-page">
         <div class="feedback-title">NEW REQUEST</div>
@@ -389,21 +413,18 @@
         <div id="requestHistory"></div>
       </div>
     </div>
-
     <div id="tabActionplan" class="screen">
       <div class="action-plan-page">
         <div class="feedback-title">ACTION PLAN</div>
         <div id="taskList"><div class="messages-loading">Loading tasks...</div></div>
       </div>
     </div>
-
     <div id="tabInvoices" class="screen">
       <div class="invoices-page">
         <div class="section-title" style="border-top:none; padding-top:0;">YOUR INVOICES</div>
         <div id="invoicesList"></div>
       </div>
     </div>
-
     <div id="tabBook" class="screen">
       <div class="section-title">CLIENT SCHEDULING</div>
       <div class="book-page">
@@ -411,7 +432,6 @@
         <a class="book-btn" href="https://pallifestyle.com.au/products/client-scheduling" target="_blank">CLIENT SCHEDULING</a>
       </div>
     </div>
-
     <div id="tabJourney" class="screen">
       <div class="journey-page">
         <div class="journey-loading" id="journeyLoading">Loading your journey...</div>
@@ -434,7 +454,6 @@
         </div>
       </div>
     </div>
-
     <div id="tabProcess" class="screen">
       <div class="process-page">
         <p style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
@@ -442,7 +461,6 @@
         <div id="processFlow"></div>
       </div>
     </div>
-
     <div id="tabConcierge" class="screen">
       <div class="concierge-page">
         <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="concierge-photo">
@@ -464,7 +482,6 @@
         <div class="concierge-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       </div>
     </div>
-
     <div id="tabAbout" class="screen">
       <div class="about-page">
         <img src="luz_portrait_bw_pal_badge.png" alt="Pamela Luz" class="about-photo">
@@ -494,7 +511,6 @@
         </div>
       </div>
     </div>
-
     <div id="tabStaff" class="screen">
       <div class="staff-page">
         <div class="section-title" style="border-top:none; padding-top:0;">SEND NOTIFICATION</div>
@@ -507,7 +523,6 @@
           <div class="success-msg" id="notifSuccess"></div>
           <div class="error" id="notifError"></div>
         </div>
-
         <div class="section-title">CREATE TASK FOR CLIENT</div>
         <div class="staff-task-box">
           <label>CLIENT</label>
@@ -540,19 +555,33 @@
           <div class="success-msg" id="taskSuccess"></div>
           <div class="error" id="taskError"></div>
         </div>
-
         <div class="section-title">ACTIVE CLIENTS</div>
         <div id="staffClientList"></div>
       </div>
     </div>
-
   </div>
-  <script>
+
+    <div id="tabProjects" class="screen">
+      <div style="padding:0;">
+        <div id="palProjectModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;">
+          <div style="background:#222;border:1px solid #D4A574;padding:2rem;width:92%;max-width:420px;max-height:90vh;overflow-y:auto;position:relative;">
+            <button onclick="closePalModal()" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#666;font-size:1.2rem;cursor:pointer;">&#10005;</button>
+            <div id="palModalBody"></div>
+          </div>
+        </div>
+        <div id="projectsContent">
+          <div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;letter-spacing:0.1em;">Loading projects...</div>
+        </div>
+      </div>
+    </div>
+    <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
     const PAYMENTS_GID = '513708818';
     const TASKS_GID = '2118966663';
+    const PROJECTS_GID = '983063477';
+    const PHASES_GID = '181904619';
     const ONESIGNAL_APP_ID = 'e806ea20-ebbf-4764-83af-ef5770bfad1c';
     const GOOGLE_CLIENT_ID = '522173354924-08p22smruftspr15qrm3slnqmsfodejj.apps.googleusercontent.com';
     const FOLDER_MAP = {
@@ -582,12 +611,12 @@
       'process': 'tabProcess',
       'concierge': 'tabConcierge',
       'about': 'tabAbout',
-      'staff': 'tabStaff'
+      'staff': 'tabStaff',
+      'projects': 'tabProjects'
     };
     let currentRating = 0;
     let clientServices = [];
     let activeCheckIns = {};
-
     // ── GOOGLE OAUTH ──────────────────────────────────────────────
     window.addEventListener('load', () => {
       if (typeof google === 'undefined') return;
@@ -598,7 +627,6 @@
         cancel_on_tap_outside: true
       });
     });
-
     function triggerGoogleLogin() {
       if (typeof google === 'undefined') {
         document.getElementById('errorMsg').textContent = 'Google login unavailable. Please use email/password.';
@@ -606,7 +634,6 @@
       }
       google.accounts.id.prompt();
     }
-
     async function handleGoogleCredential(response) {
       const loadingMsg = document.getElementById('loadingMsg');
       const errorMsg = document.getElementById('errorMsg');
@@ -651,7 +678,6 @@
         errorMsg.textContent = 'Google login failed. Please try email/password.';
       }
     }
-
     // ── HELPERS ───────────────────────────────────────────────────
     function formatDate(dateVal) {
       if (!dateVal) return '';
@@ -665,21 +691,17 @@
       if (dateVal instanceof Date) return dateVal.toLocaleDateString('en-AU');
       return dateVal;
     }
-
     function formatDateTime() {
       const now = new Date();
       return now.toLocaleDateString('en-AU') + ' ' + now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
     }
-
     function formatTimeOnly(date) {
       return date.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
     }
-
     function getCurrentMonth() {
       const now = new Date();
       return { month: now.getMonth(), year: now.getFullYear() };
     }
-
     function parseRowDate(rawDate) {
       if (!rawDate) return null;
       const v = rawDate.v;
@@ -694,7 +716,6 @@
       }
       return null;
     }
-
     function parseAUDate(dateStr) {
       if (!dateStr) return null;
       const str = dateStr.toString().trim();
@@ -709,7 +730,6 @@
       const d = new Date(str);
       return isNaN(d.getTime()) ? null : d;
     }
-
     function getTaskStatusClass(status) {
       const map = {
         'To Do': 'task-status-todo',
@@ -720,14 +740,12 @@
       };
       return map[status] || 'task-status-todo';
     }
-
     async function fetchSheet(sheet) {
       const res = await fetch(`${API_URL}&sheet=${sheet}&t=${Date.now()}`);
       const text = await res.text();
       const json = JSON.parse(text.substring(47).slice(0, -2));
       return json.table.rows;
     }
-
     async function fetchPayments(clientId) {
       try {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PAYMENTS_GID}&t=${Date.now()}`);
@@ -752,7 +770,6 @@
         return [];
       }
     }
-
     async function fetchTasks(clientId) {
       try {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${TASKS_GID}&t=${Date.now()}`);
@@ -785,7 +802,6 @@
         return [];
       }
     }
-
     // ── PROFILE PHOTO ─────────────────────────────────────────────
     function loadProfilePhoto() {
       const profilePhoto = sessionStorage.getItem('profilePhoto');
@@ -799,7 +815,6 @@
         if (placeholder) placeholder.style.display = 'none';
       }
     }
-
     function uploadProfilePhoto() {
       const clientId = sessionStorage.getItem('clientId');
       const folderId = FOLDER_MAP[clientId];
@@ -808,7 +823,6 @@
         alert('Upload your profile photo to Google Drive, then send the photo link to P.A.L. to update your profile.');
       }
     }
-
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -829,6 +843,7 @@
               name: row.c[1]?.v,
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
+              address: row.c[10]?.v || '',
               address: row.c[10]?.v || '',
               profilePhoto: row.c[11]?.v || ''
             };
@@ -856,7 +871,6 @@
         errorMsg.textContent = 'Connection error. Please try again.';
       }
     }
-
     // ── NOTIFICATIONS ─────────────────────────────────────────────
     async function checkNotifStatus() {
       try {
@@ -865,7 +879,6 @@
         if (!permission) document.getElementById('notifBanner').style.display = 'flex';
       } catch(e) {}
     }
-
     async function enableNotifications() {
       try {
         window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -875,7 +888,6 @@
         });
       } catch(e) {}
     }
-
     async function sendPushNotification() {
       const title = document.getElementById('notifTitle').value.trim();
       const message = document.getElementById('notifMessage').value.trim();
@@ -893,7 +905,6 @@
         document.getElementById('notifMessage').value = '';
       } catch(e) { errorEl.textContent = 'Error sending notification. Try again.'; }
     }
-
     // ── STAFF ─────────────────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
@@ -904,13 +915,11 @@
       showTab('staff', document.getElementById('staffNavItem'));
       restoreCheckInState();
     }
-
     function saveCheckInState() {
       localStorage.setItem('activeCheckIns', JSON.stringify(
         Object.fromEntries(Object.entries(activeCheckIns).map(([k, v]) => [k, { ...v, time: v.time.toISOString() }]))
       ));
     }
-
     function restoreCheckInState() {
       try {
         const saved = localStorage.getItem('activeCheckIns');
@@ -922,7 +931,6 @@
         }
       } catch(e) { activeCheckIns = {}; }
     }
-
     async function createTask() {
       const clientId = document.getElementById('taskClientId').value;
       const title = document.getElementById('taskTitle').value.trim();
@@ -951,7 +959,6 @@
         document.getElementById('taskRequestedBy').value = 'PAL';
       } catch(e) { errorEl.textContent = 'Error creating task. Try again.'; }
     }
-
     async function loadStaffClients() {
       const container = document.getElementById('staffClientList');
       container.innerHTML = '<div style="color:#666; padding:1rem;">Loading clients...</div>';
@@ -982,7 +989,6 @@
         container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading clients.</div>';
       }
     }
-
     function getLocation() {
       return new Promise((resolve) => {
         if (!navigator.geolocation) { resolve(null); return; }
@@ -993,7 +999,6 @@
         );
       });
     }
-
     async function staffCheckIn(clientId, clientName) {
       const msgEl = document.getElementById('staffMsg-' + clientId);
       msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Getting location...</div>';
@@ -1006,7 +1011,6 @@
       msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; ${locNote}</div>`;
       loadStaffClients();
     }
-
     async function staffCheckOut(clientId, clientName) {
       const checkInData = activeCheckIns[clientId];
       if (!checkInData) return;
@@ -1038,7 +1042,6 @@
         msgEl.innerHTML = '<div class="staff-location-msg" style="color:#ff6b6b;">Error saving. Try again.</div>';
       }
     }
-
     // ── DASHBOARD ─────────────────────────────────────────────────
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
@@ -1046,7 +1049,6 @@
       document.getElementById('clientName').textContent = clientName.toUpperCase();
       loadProfilePhoto();
       checkNotifStatus();
-
       try {
         const { month, year } = getCurrentMonth();
         const services = await fetchSheet('Services');
@@ -1057,7 +1059,6 @@
         let byMonth = {};
         clientServices = [];
         let invoicesData = [];
-
         for (const row of services) {
           if (row.c[1]?.v === clientId) {
             const rowDate = parseRowDate(row.c[2]);
@@ -1094,7 +1095,6 @@
             clientServices.push({ id: sId, name: sName });
           }
         }
-
         const timelog = await fetchSheet('Time Log');
         let visitsByMonth = {};
         for (const row of timelog) {
@@ -1114,6 +1114,7 @@
               const checkInTime = checkInMatch ? checkInMatch[1].trim() : '';
               const checkOutTime = checkOutMatch ? checkOutMatch[1].trim() : '';
               let dateStr = '';
+              let dateStr = '';
               if (row.c[2]) {
                 if (row.c[2].f) dateStr = row.c[2].f;
                 else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString());
@@ -1127,20 +1128,17 @@
             }
           }
         }
-
         let totalPurchases = 0;
         const purchases = await fetchSheet('Purchases');
         for (const row of purchases) {
           if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
         }
-
         // ── PAYMENTS ─────────────────────────────────────────────
         let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
         const paymentsData = await fetchPayments(clientId);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
         for (const p of paymentsData) {
           const amount = parseFloat(p.Amount) || 0;
           const dueDateRaw = p.DueDate ? p.DueDate.toString().trim() : '';
@@ -1156,10 +1154,8 @@
             }
           }
         }
-
         const bonus = parseFloat(sessionStorage.getItem('bonus')) || 0;
         const discount = parseFloat(sessionStorage.getItem('discount')) || 0;
-
         document.getElementById('summaryTotalCost').textContent = '$' + allTimeCost.toFixed(0);
         document.getElementById('summaryTotalGST').textContent = '$' + allTimeGST.toFixed(0);
         document.getElementById('summaryBalanceDue').textContent = '$' + balanceDue.toFixed(0);
@@ -1169,7 +1165,6 @@
         document.getElementById('summaryPurchases').textContent = '$' + totalPurchases.toFixed(0);
         document.getElementById('summaryTotalHours').textContent = allTimeHours;
         document.getElementById('summaryTotalDays').textContent = allTimeDays.size;
-
         const statusEl = document.getElementById('summaryPaymentStatus');
         const badgeEl = document.getElementById('summaryPaymentStatusBadge');
         if (balanceDue === 0) {
@@ -1182,7 +1177,6 @@
           statusEl.className = 'card-status-pending'; statusEl.textContent = 'PENDING';
           badgeEl.className = 'card-status-pending'; badgeEl.textContent = 'PENDING';
         }
-
         const paymentHistoryEl = document.getElementById('paymentHistoryList');
         if (paymentHistoryEl) {
           paymentHistoryEl.innerHTML = paymentHistory.length ? paymentHistory.map(p => {
@@ -1197,14 +1191,12 @@
             </div>`;
           }).join('') : '<div style="padding:1rem 0;color:#666;">No payment records yet.</div>';
         }
-
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
         document.getElementById('totalServices').textContent = totalServices;
         document.getElementById('totalServicesMonth').textContent = monthName;
         document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(0);
         document.getElementById('totalDays').textContent = uniqueDays.size;
         document.getElementById('totalGST').textContent = '$' + totalGST.toFixed(0);
-
         const sortedKeys = Object.keys(byMonth).sort().reverse();
         const list = document.getElementById('servicesList');
         list.innerHTML = sortedKeys.length ? sortedKeys.map(key => {
@@ -1227,7 +1219,6 @@
               </div>
             </div>`).join('')}`;
         }).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
-
         const sortedVisitKeys = Object.keys(visitsByMonth).sort().reverse();
         const visitList = document.getElementById('visitHistoryList');
         if (visitList) {
@@ -1249,7 +1240,6 @@
               </div>`).join('')}`;
           }).join('') : '<div style="padding:1rem;color:#666">No visits recorded yet.</div>';
         }
-
         const invoicesList = document.getElementById('invoicesList');
         if (invoicesList) {
           invoicesList.innerHTML = invoicesData.length ? invoicesData.map(inv => `
@@ -1261,19 +1251,16 @@
               ${inv.file ? `<a href="${inv.file}" target="_blank" class="invoice-link">VIEW PDF</a>` : ''}
             </div>`).join('') : '<div class="empty-invoices">No invoices yet.</div>';
         }
-
         const select = document.getElementById('feedbackService');
         select.innerHTML = '<option value="">Select a service...</option>';
         clientServices.forEach(s => {
           select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
         });
       } catch(e) { console.log('Dashboard error:', e); }
-
       loadMedia(clientId);
       loadJourney(clientId);
       loadProcess();
     }
-
     // ── ACTION PLAN ───────────────────────────────────────────────
     async function loadActionPlan(clientId) {
       const container = document.getElementById('taskList');
@@ -1282,43 +1269,43 @@
       try {
         const tasks = await fetchTasks(clientId);
         if (!tasks.length) {
-          container.innerHTML = '<div style="padding:1rem;color:#666;">No tasks yet. Your P.A.L. concierge will add tasks here for you.</div>';
+          container.innerHTML = '<div style="padding:1rem;color:#666;">No tasks yet. Your PAL concierge will add tasks here for you.</div>';
           return;
         }
         const order = ['To Do', 'Ongoing', 'Waiting', 'Skip', 'Done'];
         tasks.sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status));
         container.innerHTML = tasks.map(t => `
           <div class="task-item">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
-              <div class="task-title">${t.title}</div>
-              <span class="task-status-badge ${getTaskStatusClass(t.status)}">${t.status.toUpperCase()}</span>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.8rem;">
+              <div style="flex:1;min-width:0;">
+                <div class="task-title">${t.title}</div>
+                <div class="task-meta">
+                  ${t.dueDate ? `Due: ${t.dueDate}` : ''}
+                  ${t.assignedTo ? ` &middot; <span style="color:#D4A574;">${t.assignedTo}</span>` : ''}
+                  ${t.requestedBy ? ` &middot; by ${t.requestedBy}` : ''}
+                </div>
+                ${t.description ? `<div class="task-description">${t.description}</div>` : ''}
+                ${t.comment ? `<div class="task-comment">"${t.comment}"</div>` : ''}
+              </div>
+              <span class="task-status-badge ${getTaskStatusClass(t.status)}" style="flex-shrink:0;">${t.status.toUpperCase()}</span>
             </div>
-            ${t.description ? `<div class="task-description">${t.description}</div>` : ''}
-            <div class="task-meta">
-              ${t.dueDate ? `Due: ${t.dueDate} &nbsp;&middot;&nbsp;` : ''}
-              ${t.assignedTo ? `<span style="color:#D4A574;">Assigned to: ${t.assignedTo}</span>` : ''}
-              ${t.requestedBy ? ` &nbsp;&middot;&nbsp; Requested by: ${t.requestedBy}` : ''}
-            </div>
-            ${t.comment ? `<div class="task-comment">"${t.comment}"</div>` : ''}
-            <div class="task-update-box">
-              <label>UPDATE STATUS & ADD COMMENT</label>
-              <select id="statusSelect-${t.taskId}">
-                <option value="To Do" ${t.status === 'To Do' ? 'selected' : ''}>To Do</option>
-                <option value="Ongoing" ${t.status === 'Ongoing' ? 'selected' : ''}>Ongoing</option>
-                <option value="Waiting" ${t.status === 'Waiting' ? 'selected' : ''}>Waiting</option>
-                <option value="Skip" ${t.status === 'Skip' ? 'selected' : ''}>Skip</option>
-                <option value="Done" ${t.status === 'Done' ? 'selected' : ''}>Done</option>
+            <div class="task-update-row">
+              <select id="statusSelect-${t.taskId}" class="task-inline-select">
+                <option value="To Do" ${t.status==='To Do'?'selected':''}>To Do</option>
+                <option value="Ongoing" ${t.status==='Ongoing'?'selected':''}>Ongoing</option>
+                <option value="Waiting" ${t.status==='Waiting'?'selected':''}>Waiting</option>
+                <option value="Skip" ${t.status==='Skip'?'selected':''}>Skip</option>
+                <option value="Done" ${t.status==='Done'?'selected':''}>Done</option>
               </select>
-              <textarea id="commentInput-${t.taskId}" placeholder="Add a comment...">${t.comment}</textarea>
-              <button class="task-update-btn" onclick="updateTask('${t.taskId}', '${clientId}')">UPDATE</button>
-              <div class="success-msg" id="taskUpdateSuccess-${t.taskId}"></div>
+              <input type="text" id="commentInput-${t.taskId}" class="task-inline-input" placeholder="Add comment..." value="${t.comment || ''}">
+              <button class="task-inline-btn" onclick="updateTask('${t.taskId}','${clientId}')">UPDATE</button>
             </div>
+            <div class="success-msg" id="taskUpdateSuccess-${t.taskId}"></div>
           </div>`).join('');
       } catch(e) {
         container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading tasks.</div>';
       }
     }
-
     async function updateTask(taskId, clientId) {
       const status = document.getElementById('statusSelect-' + taskId).value;
       const comment = document.getElementById('commentInput-' + taskId).value.trim();
@@ -1333,7 +1320,6 @@
         setTimeout(() => { loadActionPlan(clientId); }, 1500);
       } catch(e) { successEl.textContent = 'Error updating. Try again.'; }
     }
-
     // ── PROCESS ───────────────────────────────────────────────────
     function loadProcess() {
       const container = document.getElementById('processFlow');
@@ -1356,7 +1342,6 @@
         ${i < steps.length - 1 ? '<div style="display:flex; justify-content:center; margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
       `).join('');
     }
-
     // ── JOURNEY ───────────────────────────────────────────────────
     async function loadJourney(clientId) {
       try {
@@ -1386,7 +1371,6 @@
         }
       } catch(e) { console.log('Journey error:', e); }
     }
-
     // ── MEDIA ─────────────────────────────────────────────────────
     async function loadMedia(clientId) {
       try {
@@ -1400,12 +1384,12 @@
             if (item.uploadedBy === 'PAL') palItems.push(item);
             else clientItems.push(item);
           }
-        }
+         }
         palGrid.innerHTML = palItems.length ? palItems.map(item => `
           <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
             <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
-            <div class="media-card-meta"><span class="media-card-by-pal">P.A.L.</span><span>${item.date}</span></div></div>
+            <div class="media-card-meta"><span class="media-card-by-pal">PAL</span><span>${item.date}</span></div></div>
           </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
         clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
           <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
@@ -1415,7 +1399,6 @@
           </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
       } catch(e) { console.log('Media error:', e); }
     }
-
     function uploadMedia() {
       const clientId = sessionStorage.getItem('clientId');
       const caption = document.getElementById('uploadCaption').value.trim();
@@ -1425,13 +1408,11 @@
         document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
       }
     }
-
     // ── FEEDBACK ──────────────────────────────────────────────────
     function setRating(rating) {
       currentRating = rating;
       document.querySelectorAll('.star').forEach((star, i) => star.classList.toggle('active', i < rating));
     }
-
     async function submitFeedback() {
       const clientId = sessionStorage.getItem('clientId');
       const serviceId = document.getElementById('feedbackService').value;
@@ -1453,7 +1434,6 @@
         loadFeedbackHistory(clientId);
       } catch(e) { errorEl.textContent = 'Error submitting feedback. Please try again.'; }
     }
-
     async function loadFeedbackHistory(clientId) {
       try {
         const rows = await fetchSheet('Feedback');
@@ -1473,7 +1453,6 @@
           </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
       } catch(e) { console.log('Feedback history error:', e); }
     }
-
     // ── REQUESTS ──────────────────────────────────────────────────
     async function submitRequest() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1494,7 +1473,6 @@
         loadRequestHistory(clientId);
       } catch(e) { errorEl.textContent = 'Error submitting request. Please try again.'; }
     }
-
     async function loadRequestHistory(clientId) {
       try {
         const rows = await fetchSheet('Requests');
@@ -1515,7 +1493,6 @@
           </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No requests submitted yet.</div>';
       } catch(e) { console.log('Request history error:', e); }
     }
-
     // ── MESSAGES ──────────────────────────────────────────────────
     async function loadMessages() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1531,12 +1508,11 @@
         list.innerHTML = msgs.length ? msgs.map(m => `
           <div class="msg-bubble ${m.from === 'PAL' ? 'msg-from-pal' : 'msg-from-client'}">
             ${m.message}
-            <div class="msg-meta">${m.from === 'PAL' ? 'P.A.L.' : 'You'} &middot; ${m.date}</div>
+            <div class="msg-meta">${m.from === 'PAL' ? 'PAL' : 'You'} &middot; ${m.date}</div>
           </div>`).join('') : '<div class="messages-loading">No messages yet. Say hello!</div>';
         list.scrollTop = list.scrollHeight;
       } catch(e) { list.innerHTML = '<div class="messages-loading">Could not load messages.</div>'; }
     }
-
     async function sendMessage() {
       const clientId = sessionStorage.getItem('clientId');
       const input = document.getElementById('messageInput');
@@ -1550,7 +1526,6 @@
         await loadMessages();
       } catch(e) { console.log('Message send error:', e); }
     }
-
     // ── TABS & LOGOUT ─────────────────────────────────────────────
     function showTab(tab, el) {
       Object.values(TAB_ID_MAP).forEach(id => {
@@ -1570,8 +1545,8 @@
       if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
       if (tab === 'actionplan') loadActionPlan(sessionStorage.getItem('clientId'));
       if (tab === 'staff') loadStaffClients();
+      if (tab === 'projects') loadProjectTracker(sessionStorage.getItem('clientId'));
     }
-
     function logout() {
       sessionStorage.clear();
       activeCheckIns = {};
@@ -1582,8 +1557,380 @@
       document.getElementById('dashboardScreen').style.display = 'none';
       if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
     }
-
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+  
+    // ============================================================
+    // PROJECT TRACKER
+    // ============================================================
+    const PHASE_STATUS_CONFIG = {
+      'Scheduled':   { bar: '#555',    text: '#999',    dark: false },
+      'In Progress': { bar: '#D4A574', text: '#1A1A1A', dark: true  },
+      'Waiting':     { bar: '#E8A000', text: '#1A1A1A', dark: true  },
+      'Completed':   { bar: '#4CAF50', text: '#1A1A1A', dark: true  },
+      'Cancelled':   { bar: '#333',    text: '#666',    dark: false }
+    };
+    const PROJECT_STATUS_COLORS = {
+      'Active':    '#4CAF50',
+      'Paused':    '#E8A000',
+      'Completed': '#888',
+      'Cancelled': '#555'
+    };
+    async function fetchAllProjects(clientIdFilter) {
+      try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PROJECTS_GID}&t=${Date.now()}`);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        return (json.table.rows || [])
+          .map(row => ({
+            projectId:   (row.c[0]?.v || '').toString(),
+            clientId:    (row.c[1]?.v || '').toString().trim(),
+            name:        (row.c[2]?.v || '').toString(),
+            description: (row.c[3]?.v || '').toString(),
+            plannedStart:(row.c[4]?.f || row.c[4]?.v || '').toString(),
+            plannedEnd:  (row.c[5]?.f || row.c[5]?.v || '').toString(),
+            status:      (row.c[6]?.v || 'Active').toString(),
+            createdDate: (row.c[7]?.v || '').toString()
+          }))
+          .filter(p => !clientIdFilter || p.clientId === clientIdFilter);
+      } catch (e) { return []; }
+    }
+    async function fetchAllPhases(clientIdFilter) {
+      try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PHASES_GID}&t=${Date.now()}`);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        return (json.table.rows || [])
+          .map(row => ({
+            phaseId:     (row.c[0]?.v || '').toString(),
+            projectId:   (row.c[1]?.v || '').toString(),
+            clientId:    (row.c[2]?.v || '').toString().trim(),
+            name:        (row.c[3]?.v || '').toString(),
+            description: (row.c[4]?.v || '').toString(),
+            status:      (row.c[5]?.v || 'Scheduled').toString(),
+            plannedStart:(row.c[6]?.f || row.c[6]?.v || '').toString(),
+            plannedEnd:  (row.c[7]?.f || row.c[7]?.v || '').toString(),
+            actualEnd:   (row.c[8]?.f || row.c[8]?.v || '').toString(),
+            notes:       (row.c[9]?.v || '').toString(),
+            updatedDate: (row.c[10]?.v || '').toString(),
+            updatedBy:   (row.c[11]?.v || '').toString()
+          }))
+          .filter(p => !clientIdFilter || p.clientId === clientIdFilter);
+      } catch (e) { return []; }
+    }
+    async function loadProjectTracker(currentClientId) {
+      const container = document.getElementById('projectsContent');
+      if (!container) return;
+      container.innerHTML = '<div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;letter-spacing:0.1em;">Loading projects...</div>';
+      const isStaff = STAFF_IDS.includes(currentClientId);
+      const clientFilter = isStaff ? null : currentClientId;
+      try {
+        const [projects, phases] = await Promise.all([
+          fetchAllProjects(clientFilter),
+          fetchAllPhases(clientFilter)
+        ]);
+        if (!projects.length) {
+          container.innerHTML = `
+            <div style="text-align:center;padding:3rem 2rem;">
+              <div style="color:#D4A574;font-size:0.8rem;letter-spacing:0.2em;margin-bottom:0.5rem;">NO PROJECTS YET</div>
+              <div style="color:#666;font-size:0.85rem;line-height:1.8;">Projects will appear here once created.</div>
+              ${isStaff ? `<button class="btn" style="margin-top:1.5rem;width:auto;padding:0.7rem 1.5rem;font-size:0.8rem;" onclick="openAddProjectModal()">+ NEW PROJECT</button>` : ''}
+            </div>`;
+          return;
+        }
+        let html2 = '';
+        if (isStaff) {
+          html2 += `<div style="padding:1rem 1rem 0;display:flex;gap:0.8rem;flex-wrap:wrap;">
+            <button class="btn" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem;" onclick="openAddProjectModal()">+ NEW PROJECT</button>
+          </div>`;
+        }
+        for (const project of projects) {
+          const projectPhases = phases.filter(p => p.projectId === project.projectId);
+          html2 += buildProjectBlock(project, projectPhases, isStaff);
+        }
+        container.innerHTML = html2;
+      } catch (e) {
+        container.innerHTML = '<div style="color:#ff6b6b;text-align:center;padding:2rem;font-size:0.85rem;">Error loading projects. Please try again.</div>';
+      }
+    }
+    function buildProjectBlock(project, phases, isStaff) {
+    function buildProjectBlock(project, phases, isStaff) {
+      const sColor = PROJECT_STATUS_COLORS[project.status] || '#888';
+      const ganttHtml = buildGantt(phases, isStaff, project.clientId);
+      const reportHtml = buildReport(phases);
+      return `
+        <div class="project-block">
+          <div class="project-block-header">
+            <div style="flex:1;min-width:0;">
+              <div style="color:#666;font-size:0.65rem;letter-spacing:0.2em;margin-bottom:0.3rem;">PROJECT</div>
+              <div style="color:#fff;font-size:1rem;letter-spacing:0.08em;line-height:1.3;">${project.name}</div>
+              ${project.clientId && isStaff ? `<div style="color:#D4A574;font-size:0.7rem;margin-top:0.2rem;letter-spacing:0.1em;">CLIENT: ${project.clientId}</div>` : ''}
+              ${project.description ? `<div style="color:#888;font-size:0.8rem;margin-top:0.4rem;line-height:1.6;">${project.description}</div>` : ''}
+              ${(project.plannedStart || project.plannedEnd) ? `
+                <div style="display:flex;gap:1.5rem;margin-top:0.6rem;">
+                  ${project.plannedStart ? `<div><div style="color:#555;font-size:0.6rem;letter-spacing:0.12em;">START</div><div style="color:#aaa;font-size:0.78rem;">${project.plannedStart}</div></div>` : ''}
+                  ${project.plannedEnd   ? `<div><div style="color:#555;font-size:0.6rem;letter-spacing:0.12em;">END</div><div style="color:#aaa;font-size:0.78rem;">${project.plannedEnd}</div></div>` : ''}
+                </div>` : ''}
+            </div>
+            <div class="project-status-badge" style="color:${sColor};border-color:${sColor};">${project.status.toUpperCase()}</div>
+          </div>
+          <div class="project-body">
+            <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">TIMELINE</div>
+            ${ganttHtml}
+            ${isStaff ? `<button onclick="openAddPhaseModal('${project.projectId}','${project.clientId}')" style="background:transparent;border:1px solid #444;color:#888;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
+            ${reportHtml ? `
+              <div style="margin-top:1.2rem;border-top:1px solid #2a2a2a;padding-top:1.2rem;">
+                <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.8rem;">PLANNED vs ACTUAL</div>
+                ${reportHtml}
+              </div>` : ''}
+          </div>
+        </div>`;
+    }
+    function buildGantt(phases, isStaff, clientId) {
+      if (!phases.length) return '<div style="color:#555;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
+      const parsed = phases.map(p => ({
+        ...p,
+        startDate: parseAUDate(p.plannedStart),
+        endDate:   parseAUDate(p.plannedEnd),
+        actualEndDate: parseAUDate(p.actualEnd)
+      })).filter(p => p.startDate && p.endDate);
+      if (!parsed.length) return buildPhaseListOnly(phases, isStaff, clientId);
+      const allDates = parsed.flatMap(p => [p.startDate, p.endDate]);
+      let minDate = new Date(Math.min(...allDates.map(d => d.getTime())));
+      let maxDate = new Date(Math.max(...allDates.map(d => d.getTime())));
+      const dow = minDate.getDay();
+      minDate.setDate(minDate.getDate() - (dow === 0 ? 6 : dow - 1));
+      minDate.setDate(minDate.getDate() - 7);
+      maxDate.setDate(maxDate.getDate() + 14);
+      const weeks = [];
+      const cur = new Date(minDate);
+      while (cur <= maxDate) { weeks.push(new Date(cur)); cur.setDate(cur.getDate() + 7); }
+      const totalDays = Math.max((maxDate - minDate) / 86400000, 1);
+      const WEEK_W = 60, LABEL_W = 148;
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const weekHeaders = weeks.map(w =>
+        `<div class="gantt-week-header" style="width:${WEEK_W}px;font-size:0.58rem;color:#555;letter-spacing:0.03em;">${w.getDate()} ${monthNames[w.getMonth()]}</div>`
+      ).join('');
+      const phaseRows = parsed.map(p => {
+        const cfg = PHASE_STATUS_CONFIG[p.status] || PHASE_STATUS_CONFIG['Scheduled'];
+        const offsetDays = (p.startDate - minDate) / 86400000;
+        const durationDays = Math.max((p.endDate - p.startDate) / 86400000, 0.5);
+        const leftPct = (offsetDays / totalDays) * 100;
+        const widthPct = Math.max((durationDays / totalDays) * 100, 1.5);
+        let actualMarker = '';
+        if (p.actualEndDate && p.endDate) {
+          const actualOffsetDays = (p.actualEndDate - minDate) / 86400000;
+          const actualLeftPct = (actualOffsetDays / totalDays) * 100;
+          const color = p.actualEndDate <= p.endDate ? '#4CAF50' : '#ff6b6b';
+          actualMarker = `<div class="gantt-actual-line" style="left:${actualLeftPct}%;background:${color};" title="Actual: ${p.actualEnd}"></div>`;
+        }
+        const statusSelector = isStaff ? `
+          <select class="phase-status-select" onchange="updatePhaseStatus('${p.phaseId}', this.value, '${clientId}')">
+            <option ${p.status==='Scheduled'  ?'selected':''}>Scheduled</option>
+            <option ${p.status==='In Progress'?'selected':''}>In Progress</option>
+            <option ${p.status==='Waiting'    ?'selected':''}>Waiting</option>
+            <option ${p.status==='Completed'  ?'selected':''}>Completed</option>
+            <option ${p.status==='Cancelled'  ?'selected':''}>Cancelled</option>
+          </select>` : '';
+        const notesHtml = p.notes ? `<div style="color:#555;font-size:0.65rem;margin-top:0.15rem;font-style:italic;line-height:1.4;">${p.notes}</div>` : '';
+        const actualEndHtml = p.actualEnd ? `<div style="color:#4CAF50;font-size:0.62rem;margin-top:0.15rem;">Done: ${p.actualEnd}</div>` : '';
+        return `
+          <div class="gantt-phase-row">
+            <div class="gantt-phase-label" style="width:${LABEL_W}px;">
+              <div style="color:#ddd;font-size:0.75rem;line-height:1.3;">${p.name}</div>
+              <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.55rem;padding:0.1rem 0.35rem;letter-spacing:0.04em;">${p.status.toUpperCase()}</span>
+              ${statusSelector}${notesHtml}${actualEndHtml}
+            </div>
+            <div class="gantt-phase-timeline">
+              <div class="gantt-bar" style="left:${leftPct}%;width:${widthPct}%;background:${cfg.bar};opacity:${p.status==='Cancelled'?'0.25':'0.85'};">
+                <div class="gantt-bar-label" style="color:${cfg.dark?'#1A1A1A':'#999'};">${widthPct > 10 ? p.name : ''}</div>
+              </div>
+              ${actualMarker}
+            </div>
+          </div>`;
+      }).join('');
+      const legend = Object.entries(PHASE_STATUS_CONFIG).map(([s, c]) =>
+        `<div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:${c.bar};"></div><span style="color:#555;font-size:0.62rem;letter-spacing:0.04em;">${s}</span></div>`
+      ).join('');
+      return `
+        <div class="gantt-wrap">
+          <div class="gantt-inner" style="width:${LABEL_W + weeks.length * WEEK_W}px;">
+            <div class="gantt-header-row">
+              <div class="gantt-label-header" style="width:${LABEL_W}px;"><span style="color:#444;font-size:0.58rem;letter-spacing:0.1em;">PHASE</span></div>
+              <div style="display:flex;">${weekHeaders}</div>
+            </div>
+            ${phaseRows}
+          </div>
+        </div>
+        <div class="gantt-legend">${legend}</div>`;
+    }
+    function buildPhaseListOnly(phases, isStaff, clientId) {
+      const rows = phases.map(p => {
+        const cfg = PHASE_STATUS_CONFIG[p.status] || PHASE_STATUS_CONFIG['Scheduled'];
+        const selector = isStaff ? `
+          <select class="phase-status-select" style="width:auto;" onchange="updatePhaseStatus('${p.phaseId}', this.value, '${clientId}')">
+            <option ${p.status==='Scheduled'  ?'selected':''}>Scheduled</option>
+            <option ${p.status==='In Progress'?'selected':''}>In Progress</option>
+            <option ${p.status==='Waiting'    ?'selected':''}>Waiting</option>
+            <option ${p.status==='Completed'  ?'selected':''}>Completed</option>
+            <option ${p.status==='Cancelled'  ?'selected':''}>Cancelled</option>
+          </select>` : '';
+        return `
+          <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem 0;border-bottom:1px solid #1a1a1a;">
+            <div style="width:10px;height:10px;background:${cfg.bar};flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="color:#ddd;font-size:0.85rem;">${p.name}</div>
+              ${p.description ? `<div style="color:#666;font-size:0.75rem;">${p.description}</div>` : ''}
+            </div>
+            <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.6rem;padding:0.2rem 0.5rem;flex-shrink:0;">${p.status.toUpperCase()}</span>
+            ${selector}
+          </div>`;
+      }).join('');
+      return `<div>${rows}</div><div style="color:#555;font-size:0.72rem;margin-top:0.6rem;font-style:italic;">Add planned dates to each phase to see the Gantt chart.</div>`;
+    }
+    function buildReport(phases) {
+      const completed = phases.filter(p => p.actualEnd && p.plannedEnd);
+      if (!completed.length) return '';
+      const rows = completed.map(p => {
+        const planned = parseAUDate(p.plannedEnd);
+        const actual  = parseAUDate(p.actualEnd);
+        if (!planned || !actual) return '';
+        const diffDays = Math.round((actual - planned) / 86400000);
+        const varClass = diffDays < 0 ? 'variance-early' : diffDays === 0 ? 'variance-ontime' : 'variance-late';
+        const varLabel = diffDays < 0 ? `${Math.abs(diffDays)}d early` : diffDays === 0 ? 'On time' : `${diffDays}d late`;
+        return `
+          <div class="report-cell">${p.name}</div>
+          <div class="report-cell" style="color:#666;">${p.plannedEnd}</div>
+          <div class="report-cell" style="color:#4CAF50;">${p.actualEnd}</div>
+          <div class="report-cell ${varClass}">${varLabel}</div>`;
+      }).join('');
+      if (!rows.trim()) return '';
+      return `
+        <div class="report-grid">
+          <div class="report-header-cell">PHASE</div>
+          <div class="report-header-cell">PLANNED END</div>
+          <div class="report-header-cell">ACTUAL END</div>
+          <div class="report-header-cell">VARIANCE</div>
+          ${rows}
+        </div>`;
+    }
+    async function updatePhaseStatus(phaseId, newStatus, clientId) {
+      const now = formatDateTime();
+      const staffId = sessionStorage.getItem('clientId');
+      const updates = { Status: newStatus, UpdatedDate: now, UpdatedBy: staffId };
+      if (newStatus === 'Completed') updates['ActualEnd'] = formatDateToAU(new Date());
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'updateRow', sheet: 'Project Phases', idField: 'PhaseID', id: phaseId, updates })
+        });
+        setTimeout(() => loadProjectTracker(sessionStorage.getItem('clientId')), 900);
+      } catch (e) { alert('Error updating status. Please try again.'); }
+    }
+    function formatDateToAU(date) {
+      const d = date.getDate().toString().padStart(2, '0');
+      const m = (date.getMonth() + 1).toString().padStart(2, '0');
+      return `${d}/${m}/${date.getFullYear()}`;
+    }
+    function openAddProjectModal() {
+      document.getElementById('palModalBody').innerHTML = `
+        <div class="modal-title">NEW PROJECT</div>
+        <label class="modal-field-label">CLIENT ID</label>
+        <select id="mProjClient" style="width:100%;background:#1A1A1A;border:1px solid #444;color:#fff;padding:0.7rem;font-family:Georgia,serif;font-size:0.85rem;margin-bottom:0.5rem;">
+          <option value="">Select client...</option>
+          <option value="C001">C001 - Maria Alice</option>
+          <option value="C002">C002 - Adeliny</option>
+          <option value="C003">C003 - Vania Cristina</option>
+          <option value="C004">C004 - Reuben Falzon</option>
+          <option value="C005">C005 - Mattheus da Rosa</option>
+          <option value="C006">C006 - Ana Barbara</option>
+        </select>
+        <label class="modal-field-label">PROJECT NAME</label>
+        <input id="mProjName" type="text" placeholder="e.g. Website Redesign" style="margin-bottom:0">
+        <label class="modal-field-label">DESCRIPTION</label>
+        <textarea id="mProjDesc" style="height:70px;"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+          <div><label class="modal-field-label">PLANNED START</label><input id="mProjStart" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+          <div><label class="modal-field-label">PLANNED END</label><input id="mProjEnd" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+        </div>
+        <button class="btn" style="margin-top:1.2rem;" onclick="submitNewProject()">CREATE PROJECT</button>
+        <div class="error" id="mProjError"></div>
+        <div class="success-msg" id="mProjSuccess"></div>`;
+      document.getElementById('palProjectModal').style.display = 'flex';
+    }
+    function openAddPhaseModal(projectId, clientId) {
+      document.getElementById('palModalBody').innerHTML = `
+        <div class="modal-title">ADD PHASE</div>
+        <input type="hidden" id="mPhaseProjectId" value="${projectId}">
+        <input type="hidden" id="mPhaseClientId" value="${clientId}">
+        <label class="modal-field-label">PHASE NAME</label>
+        <input id="mPhaseName" type="text" placeholder="e.g. Discovery & Planning" style="margin-bottom:0">
+        <label class="modal-field-label">DESCRIPTION</label>
+        <textarea id="mPhaseDesc" style="height:60px;"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+          <div><label class="modal-field-label">PLANNED START</label><input id="mPhaseStart" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+          <div><label class="modal-field-label">PLANNED END</label><input id="mPhaseEnd" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+        </div>
+        <label class="modal-field-label">NOTES</label>
+        <input id="mPhaseNotes" type="text" placeholder="Optional notes..." style="margin-bottom:0">
+        <button class="btn" style="margin-top:1.2rem;" onclick="submitNewPhase()">ADD PHASE</button>
+        <div class="error" id="mPhaseError"></div>
+        <div class="success-msg" id="mPhaseSuccess"></div>`;
+      document.getElementById('palProjectModal').style.display = 'flex';
+    }
+    function closePalModal() {
+      document.getElementById('palProjectModal').style.display = 'none';
+    }
+    async function submitNewProject() {
+      const clientId  = document.getElementById('mProjClient').value.trim();
+      const name      = document.getElementById('mProjName').value.trim();
+      const desc      = document.getElementById('mProjDesc').value.trim();
+      const start     = document.getElementById('mProjStart').value.trim();
+      const end       = document.getElementById('mProjEnd').value.trim();
+      const errEl     = document.getElementById('mProjError');
+      const successEl = document.getElementById('mProjSuccess');
+      errEl.textContent = ''; successEl.textContent = '';
+      if (!clientId) { errEl.textContent = 'Please select a client.'; return; }
+      if (!name)     { errEl.textContent = 'Please enter a project name.'; return; }
+      const projectId = 'PROJ' + Date.now();
+      const now = formatDateTime();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Active', now] })
+        });
+        successEl.textContent = 'Project created!';
+        setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId')); }, 1000);
+      } catch (e) { errEl.textContent = 'Error. Please try again.'; }
+    }
+    async function submitNewPhase() {
+      const projectId  = document.getElementById('mPhaseProjectId').value;
+      const clientId   = document.getElementById('mPhaseClientId').value;
+      const name       = document.getElementById('mPhaseName').value.trim();
+      const desc       = document.getElementById('mPhaseDesc').value.trim();
+      const start      = document.getElementById('mPhaseStart').value.trim();
+      const end        = document.getElementById('mPhaseEnd').value.trim();
+      const notes      = document.getElementById('mPhaseNotes').value.trim();
+      const errEl      = document.getElementById('mPhaseError');
+      const successEl  = document.getElementById('mPhaseSuccess');
+      errEl.textContent = ''; successEl.textContent = '';
+      if (!name) { errEl.textContent = 'Please enter a phase name.'; return; }
+      const phaseId = 'PH' + Date.now();
+      const now = formatDateTime();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Project Phases', row: [phaseId, projectId, clientId, name, desc, 'Scheduled', start, end, '', notes, now, sessionStorage.getItem('clientId')] })
+        });
+        successEl.textContent = 'Phase added!';
+        setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId')); }, 1000);
+      } catch (e) { errEl.textContent = 'Error. Please try again.'; }
+    }
+    // Close modal on backdrop click
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('palProjectModal');
+      if (modal) modal.addEventListener('click', function(e) { if (e.target === this) closePalModal(); });
+    });
+
   </script>
 </body>
 </html>
