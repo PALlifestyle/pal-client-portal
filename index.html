@@ -218,7 +218,8 @@
     .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
     .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
     .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
-    /* Project Tracker & Gantt */
+
+    /* ── Project Tracker & Gantt ── */
     .gantt-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #2a2a2a; margin-top:0.5rem; }
     .gantt-inner { display:inline-block; min-width:100%; }
     .gantt-header-row { display:flex; background:#111; border-bottom:1px solid #2a2a2a; position:sticky; top:0; z-index:2; }
@@ -246,15 +247,15 @@
     .variance-late { color:#ff6b6b; }
     .modal-field-label { color:#888; font-size:0.75rem; letter-spacing:0.15em; display:block; margin:0.8rem 0 0.3rem; }
     .modal-title { color:#D4A574; font-size:0.85rem; letter-spacing:0.2em; margin-bottom:1.2rem; }
-    /* Action Plan compact */
+    /* ── Action Plan compact layout ── */
     .task-update-row { display:flex; gap:0.5rem; margin-top:0.7rem; align-items:center; flex-wrap:wrap; }
     .task-inline-select { flex:0 0 110px; background:#1A1A1A; border:1px solid #444; color:#aaa; padding:0.4rem 0.5rem; font-family:Georgia,serif; font-size:0.75rem; }
     .task-inline-input { flex:1; min-width:120px; background:#1A1A1A; border:1px solid #444; color:#fff; padding:0.4rem 0.6rem; font-family:Georgia,serif; font-size:0.8rem; margin-bottom:0; }
     .task-inline-btn { background:#D4A574; color:#1A1A1A; border:none; padding:0.4rem 0.8rem; font-family:Georgia,serif; font-size:0.75rem; letter-spacing:0.1em; cursor:pointer; white-space:nowrap; margin-top:0; }
   </style>
 </head>
-<body>
-<div id="loginScreen">
+  <body>
+  <div id="loginScreen">
     <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
     <div class="login-box">
@@ -574,6 +575,7 @@
         </div>
       </div>
     </div>
+
     <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
@@ -844,7 +846,6 @@
               bonus: row.c[8]?.v || 0,
               discount: row.c[9]?.v || 0,
               address: row.c[10]?.v || '',
-              address: row.c[10]?.v || '',
               profilePhoto: row.c[11]?.v || ''
             };
             break;
@@ -871,7 +872,7 @@
         errorMsg.textContent = 'Connection error. Please try again.';
       }
     }
-    // ── NOTIFICATIONS ─────────────────────────────────────────────
+      // ── NOTIFICATIONS ─────────────────────────────────────────────
     async function checkNotifStatus() {
       try {
         if (typeof OneSignal === 'undefined') return;
@@ -1113,7 +1114,6 @@
               const checkOutMatch = notes.match(/CheckOut:([\d:apmAPM\s]+)/);
               const checkInTime = checkInMatch ? checkInMatch[1].trim() : '';
               const checkOutTime = checkOutMatch ? checkOutMatch[1].trim() : '';
-              let dateStr = '';
               let dateStr = '';
               if (row.c[2]) {
                 if (row.c[2].f) dateStr = row.c[2].f;
@@ -1384,7 +1384,7 @@
             if (item.uploadedBy === 'PAL') palItems.push(item);
             else clientItems.push(item);
           }
-         }
+        }
         palGrid.innerHTML = palItems.length ? palItems.map(item => `
           <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
             <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
@@ -1399,7 +1399,7 @@
           </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
       } catch(e) { console.log('Media error:', e); }
     }
-    function uploadMedia() {
+      function uploadMedia() {
       const clientId = sessionStorage.getItem('clientId');
       const caption = document.getElementById('uploadCaption').value.trim();
       const folderId = FOLDER_MAP[clientId];
@@ -1653,7 +1653,6 @@
       }
     }
     function buildProjectBlock(project, phases, isStaff) {
-    function buildProjectBlock(project, phases, isStaff) {
       const sColor = PROJECT_STATUS_COLORS[project.status] || '#888';
       const ganttHtml = buildGantt(phases, isStaff, project.clientId);
       const reportHtml = buildReport(phases);
@@ -1685,7 +1684,7 @@
           </div>
         </div>`;
     }
-    function buildGantt(phases, isStaff, clientId) {
+      function buildGantt(phases, isStaff, clientId) {
       if (!phases.length) return '<div style="color:#555;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
       const parsed = phases.map(p => ({
         ...p,
@@ -1934,3 +1933,5 @@
   </script>
 </body>
 </html>
+    
+
