@@ -51,9 +51,6 @@
     .login-divider { display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0; }
     .login-divider span { color: #555; font-size: 0.8rem; letter-spacing: 0.1em; white-space: nowrap; }
     .login-divider::before, .login-divider::after { content: ''; flex: 1; border-top: 1px solid #444; }
-    .google-btn { width: 100%; background: #fff; color: #1A1A1A; border: none; padding: 0.75rem; font-family: Georgia, serif; font-size: 0.85rem; letter-spacing: 0.1em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0; }
-    .google-btn:hover { background: #f0f0f0; }
-    .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     .top-bar { background: #111; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
     .top-bar .btn { width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; margin: 0; }
     .nav { display: flex; background: #1a1a1a; border-bottom: 1px solid #333; overflow-x: auto; }
@@ -261,7 +258,7 @@
     .modal-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1.2rem; }
   </style>
 </head>
-  <body>
+<body>
   <div id="loginScreen">
     <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
@@ -271,15 +268,7 @@
       <input type="password" placeholder="Password" id="password">
       <button class="btn" onclick="login()">ACCESS MY PORTAL</button>
       <div class="login-divider"><span>OR</span></div>
-      <button class="google-btn" onclick="triggerGoogleLogin()">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
-        CONTINUE WITH GOOGLE
-      </button>
+      <div id="googleBtnContainer" style="width:100%;display:flex;justify-content:center;min-height:44px;margin-top:0;"></div>
       <div class="error" id="errorMsg"></div>
       <div class="loading" id="loadingMsg"></div>
     </div>
@@ -573,6 +562,25 @@
           <div class="success-msg" id="notifSuccess"></div>
           <div class="error" id="notifError"></div>
         </div>
+        <div class="section-title">UPLOAD PHOTO FOR CLIENT</div>
+        <div class="staff-task-box">
+          <label>CLIENT</label>
+          <select id="photoUploadClient">
+            <option value="">Select client...</option>
+            <option value="C001">C001 - Sabrina Ferreira</option>
+            <option value="C002">C002 - Adeliny</option>
+            <option value="C003">C003 - Vania Cristina</option>
+            <option value="C004">C004 - Reuben Falzon</option>
+            <option value="C005">C005 - Mattheus da Rosa</option>
+            <option value="C006">C006 - Ana Barbara</option>
+          </select>
+          <label>CAPTION</label>
+          <input type="text" placeholder="Add a caption..." id="photoUploadCaption">
+          <input type="file" id="clientMediaInput" accept="image/*,video/*" style="display:none" onchange="handleClientPhotoUpload(event)">
+          <button class="btn" onclick="triggerClientPhotoUpload()" style="margin-top:0;">+ SELECT PHOTO / VIDEO</button>
+          <div class="success-msg" id="photoUploadSuccess"></div>
+          <div class="error" id="photoUploadError"></div>
+        </div>
         <div class="section-title">NEW APPOINTMENT</div>
         <div class="staff-appt-box">
           <label>CLIENT</label>
@@ -677,6 +685,8 @@
       </div>
     </div>
   </div>
+  <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
+  <input type="file" id="staffPhotoInput" accept="image/*" style="display:none" onchange="handleStaffPhotoUpload(event)">
   <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
@@ -716,6 +726,7 @@
     let clientServices = [];
     let activeTimers = {};
     let timerIntervals = {};
+
     // ── GOOGLE OAUTH ──────────────────────────────────────────────
     window.addEventListener('load', () => {
       if (typeof google === 'undefined') return;
@@ -725,14 +736,17 @@
         auto_select: false,
         cancel_on_tap_outside: true
       });
-    });
-    function triggerGoogleLogin() {
-      if (typeof google === 'undefined') {
-        document.getElementById('errorMsg').textContent = 'Google login unavailable. Please use email/password.';
-        return;
+      const container = document.getElementById('googleBtnContainer');
+      if (container) {
+        google.accounts.id.renderButton(container, {
+          theme: 'outline',
+          size: 'large',
+          text: 'continue_with',
+          width: 320
+        });
       }
-      google.accounts.id.prompt();
-    }
+    });
+
     async function handleGoogleCredential(response) {
       const loadingMsg = document.getElementById('loadingMsg');
       const errorMsg = document.getElementById('errorMsg');
@@ -767,6 +781,7 @@
         errorMsg.textContent = 'Google login failed. Please try email/password.';
       }
     }
+
     // ── HELPERS ───────────────────────────────────────────────────
     function formatDate(dateVal) {
       if (!dateVal) return '';
@@ -875,17 +890,166 @@
         if (placeholder) placeholder.style.display = 'none';
       }
     }
+
     function uploadProfilePhoto() {
-      const clientId = sessionStorage.getItem('clientId');
-      const folderId = FOLDER_MAP[clientId];
-      if (folderId) {
-        window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
-        alert('Upload your profile photo to Google Drive, then send the photo link to P.A.L. to update your profile.');
+      document.getElementById('profilePhotoInput').click();
+    }
+
+    async function handleProfilePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) {
+        alert('Photo must be under 8MB.');
+        event.target.value = '';
+        return;
       }
+      const clientId = sessionStorage.getItem('clientId');
+      const btn = document.querySelector('#tabDashboard .profile-upload-btn');
+      if (btn) btn.textContent = 'UPLOADING...';
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64 = e.target.result.split(',')[1];
+        const img = document.getElementById('profileAvatarImg');
+        const placeholder = document.getElementById('profileAvatarPlaceholder');
+        if (img) { img.src = e.target.result; img.style.display = 'block'; }
+        if (placeholder) placeholder.style.display = 'none';
+        try {
+          const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'uploadPhoto',
+              clientId,
+              fileData: base64,
+              fileName: file.name,
+              mimeType: file.type,
+              target: 'profile'
+            })
+          });
+          const result = await response.json();
+          if (result.success && result.fileId) {
+            sessionStorage.setItem('profilePhoto', result.fileId);
+            if (img) img.src = `https://drive.google.com/thumbnail?id=${result.fileId}&sz=w200`;
+          }
+          if (btn) btn.textContent = 'PHOTO SAVED!';
+        } catch(e) {
+          if (btn) btn.textContent = 'SAVED (reload to confirm)';
+        }
+        setTimeout(() => { if (btn) btn.textContent = 'CHANGE PHOTO'; }, 3000);
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
     }
+
     function uploadStaffPhoto() {
-      alert('Upload your photo to Google Drive and send the file ID to update your staff profile.');
+      document.getElementById('staffPhotoInput').click();
     }
+
+    async function handleStaffPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) {
+        alert('Photo must be under 8MB.');
+        event.target.value = '';
+        return;
+      }
+      const staffId = sessionStorage.getItem('clientId');
+      const btn = document.querySelector('#tabStaff .profile-upload-btn');
+      if (btn) btn.textContent = 'UPLOADING...';
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64 = e.target.result.split(',')[1];
+        const img = document.getElementById('staffAvatarImg');
+        const placeholder = document.getElementById('staffAvatarPlaceholder');
+        if (img) { img.src = e.target.result; img.style.display = 'block'; }
+        if (placeholder) placeholder.style.display = 'none';
+        try {
+          const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'uploadPhoto',
+              clientId: staffId,
+              fileData: base64,
+              fileName: file.name,
+              mimeType: file.type,
+              target: 'profile'
+            })
+          });
+          const result = await response.json();
+          if (btn) btn.textContent = result.success ? 'PHOTO SAVED!' : 'SAVED (reload to confirm)';
+        } catch(e) {
+          if (btn) btn.textContent = 'SAVED (reload to confirm)';
+        }
+        setTimeout(() => { if (btn) btn.textContent = 'CHANGE PHOTO'; }, 3000);
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function triggerClientPhotoUpload() {
+      const clientId = document.getElementById('photoUploadClient').value;
+      const errorEl = document.getElementById('photoUploadError');
+      if (!clientId) {
+        errorEl.textContent = 'Please select a client first.';
+        return;
+      }
+      errorEl.textContent = '';
+      document.getElementById('clientMediaInput').click();
+    }
+
+    async function handleClientPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const clientId = document.getElementById('photoUploadClient').value;
+      const caption = document.getElementById('photoUploadCaption').value.trim();
+      const successEl = document.getElementById('photoUploadSuccess');
+      const errorEl = document.getElementById('photoUploadError');
+      if (file.size > 10 * 1024 * 1024) {
+        errorEl.textContent = 'File must be under 10MB.';
+        event.target.value = '';
+        return;
+      }
+      successEl.textContent = '';
+      errorEl.textContent = '';
+      const uploadBtn = document.querySelector('.staff-task-box [onclick="triggerClientPhotoUpload()"]');
+      if (uploadBtn) uploadBtn.textContent = 'UPLOADING...';
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64 = e.target.result.split(',')[1];
+        try {
+          const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'uploadPhoto',
+              clientId,
+              fileData: base64,
+              fileName: file.name,
+              mimeType: file.type,
+              target: 'clientMedia',
+              caption: caption || file.name,
+              uploadedBy: 'PAL',
+              date: formatDateTime()
+            })
+          });
+          const result = await response.json();
+          if (result.success) {
+            successEl.textContent = `Photo uploaded for ${CLIENT_NAMES[clientId] || clientId}!`;
+            document.getElementById('photoUploadCaption').value = '';
+            document.getElementById('photoUploadClient').value = '';
+          } else {
+            errorEl.textContent = 'Upload failed. Please check Apps Script.';
+          }
+        } catch(err) {
+          successEl.textContent = 'Photo sent! It may take a moment to appear.';
+        }
+        if (uploadBtn) uploadBtn.textContent = '+ SELECT PHOTO / VIDEO';
+        event.target.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -964,6 +1128,7 @@
         document.getElementById('notifMessage').value = '';
       } catch(e) { errorEl.textContent = 'Error sending notification. Try again.'; }
     }
+
     // ── STAFF DASHBOARD ───────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
@@ -979,6 +1144,7 @@
       restoreActiveTimers();
       loadActiveSessions();
     }
+
     // ── ACTIVITY LOGGING ──────────────────────────────────────────
     function saveActiveTimers() {
       localStorage.setItem('pal_active_timers', JSON.stringify(activeTimers));
@@ -1311,6 +1477,7 @@
           </div>`;
       } catch(e) { console.log('Hours error:', e); }
     }
+
     // ── DASHBOARD ─────────────────────────────────────────────────
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
@@ -1533,6 +1700,7 @@
         document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
       }
     }
+
     // ── JOURNEY ───────────────────────────────────────────────────
     async function loadJourney(clientId) {
       try {
@@ -1558,6 +1726,7 @@
         }
       } catch(e) { console.log('Journey error:', e); }
     }
+
     // ── PROCESS ───────────────────────────────────────────────────
     function loadProcess() {
       const container = document.getElementById('processFlow');
@@ -1580,6 +1749,7 @@
         ${i < steps.length - 1 ? '<div style="display:flex;justify-content:center;margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
       `).join('');
     }
+
     // ── FEEDBACK ──────────────────────────────────────────────────
     function setRating(rating) {
       currentRating = rating;
@@ -1622,6 +1792,7 @@
           </div>`).join('') : '<div style="color:#666;font-size:0.85rem;padding:1rem 0;">No feedback submitted yet.</div>';
       } catch(e) {}
     }
+
     // ── REQUESTS ──────────────────────────────────────────────────
     async function submitRequest() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1656,6 +1827,7 @@
           </div>`).join('') : '<div style="color:#666;font-size:0.85rem;padding:1rem 0;">No requests submitted yet.</div>';
       } catch(e) {}
     }
+
     // ── MESSAGES ──────────────────────────────────────────────────
     async function loadMessages() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1686,6 +1858,7 @@
         await loadMessages();
       } catch(e) {}
     }
+
     // ── ACTION PLAN ───────────────────────────────────────────────
     async function loadActionPlan(clientId) {
       const container = document.getElementById('taskList');
@@ -1800,6 +1973,7 @@
       if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
     }
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+
     // ── PROJECT TRACKER ───────────────────────────────────────────
     const PHASE_STATUS_CONFIG = {
       'Scheduled':   { bar: '#2196F3', text: '#fff',    dark: true  },
@@ -2135,5 +2309,3 @@
   </script>
 </body>
 </html>
-  
-    
