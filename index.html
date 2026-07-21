@@ -105,6 +105,7 @@
     .feedback-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
     .feedback-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     select { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
+
     .book-page { padding: 2rem 1rem; text-align: center; }
     .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
     .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
@@ -174,27 +175,27 @@
     .priority-medium { color: #D4A574; }
     .priority-low { color: #4caf50; }
     .staff-page { padding: 1rem; }
-    .staff-client-card { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
-    .staff-client-name { color: #D4A574; font-size: 1rem; margin-bottom: 0.3rem; }
-    .staff-client-address { color: #888; font-size: 0.8rem; margin-bottom: 0.8rem; }
-    .staff-status { font-size: 0.75rem; padding: 0.3rem 0.6rem; display: inline-block; margin-bottom: 0.8rem; }
-    .staff-status-active { background: #1a3a1a; color: #4caf50; }
-    .staff-status-inactive { background: #333; color: #888; }
-    .staff-btn-row { display: flex; gap: 0.8rem; }
-    .staff-btn { flex: 1; padding: 0.7rem; border: none; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; }
-    .staff-btn-checkin { background: #D4A574; color: #1A1A1A; }
-    .staff-btn-checkout { background: #ff6b6b; color: #1A1A1A; }
-    .staff-btn-disabled { background: #333; color: #666; cursor: not-allowed; }
-    .staff-location-msg { font-size: 0.75rem; margin-top: 0.6rem; padding: 0.5rem; }
-    .staff-location-near { background: #1a3a1a; color: #4caf50; }
-    .staff-location-far { background: #3a2a1a; color: #D4A574; }
-    .staff-active-timer { color: #D4A574; font-size: 0.85rem; margin-top: 0.5rem; }
-    .payment-history-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
-    .payment-history-item .pay-amount { color: #D4A574; font-size: 1rem; }
-    .payment-history-item .pay-meta { color: #666; font-size: 0.75rem; margin-top: 0.2rem; }
-    .pay-status-paid { color: #4caf50; font-size: 0.75rem; font-weight: bold; }
-    .pay-status-pending { color: #D4A574; font-size: 0.75rem; font-weight: bold; }
-    .pay-status-overdue { color: #ff6b6b; font-size: 0.75rem; font-weight: bold; }
+    .staff-notif-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-notif-box label { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-notif-box input { margin-bottom: 0.5rem; }
+    .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
+    .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-activity-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-activity-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-field-label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin: 0.8rem 0 0.4rem; }
+    .activity-timer { color: #D4A574; font-size: 0.9rem; font-weight: bold; margin-top: 0.6rem; text-align: center; letter-spacing: 0.1em; }
+    .activity-session-card { background: #1a1a1a; border: 1px solid #333; border-left: 3px solid #D4A574; padding: 1rem; margin-bottom: 0.8rem; }
+    .activity-session-type { color: #D4A574; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 0.3rem; }
+    .activity-session-client { color: #fff; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .activity-session-meta { color: #666; font-size: 0.75rem; }
+    .activity-session-elapsed { color: #4caf50; font-size: 0.85rem; font-weight: bold; margin-top: 0.3rem; }
+    .btn-green { background: #4CAF50; color: #fff; }
+    .btn-green:hover { background: #388E3C; }
+    .btn-red { background: #ff6b6b; color: #fff; }
+    .btn-red:hover { background: #d32f2f; }
+    .btn-half { width: calc(50% - 0.4rem); display: inline-block; margin-top: 0; }
+
     .action-plan-page { padding: 1rem; }
     .task-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
     .task-title { color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; font-weight: bold; }
@@ -207,19 +208,10 @@
     .task-status-waiting { background: #FF9800; color: #fff; }
     .task-status-skip { background: #9C27B0; color: #fff; }
     .task-status-done { background: #4CAF50; color: #fff; }
-    .task-update-box { background: #222; border: 1px solid #333; padding: 1rem; margin-top: 0.5rem; }
-    .task-update-box label { color: #888; font-size: 0.75rem; letter-spacing: 0.1em; display: block; margin-bottom: 0.4rem; }
-    .task-update-box select { margin-bottom: 0.5rem; font-size: 0.85rem; padding: 0.5rem; }
-    .task-update-box textarea { height: 60px; font-size: 0.85rem; margin-bottom: 0.5rem; }
-    .task-update-btn { background: #D4A574; color: #1A1A1A; border: none; padding: 0.5rem 1rem; font-family: Georgia, serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; width: 100%; }
-    .staff-notif-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; }
-    .staff-notif-box label { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
-    .staff-notif-box input { margin-bottom: 0.5rem; }
-    .staff-notif-box textarea { height: 80px; margin-bottom: 0.5rem; }
-    .staff-task-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
-    .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
-
-    /* ── Project Tracker & Gantt ── */
+    .task-update-row { display:flex; gap:0.5rem; margin-top:0.7rem; align-items:center; flex-wrap:wrap; }
+    .task-inline-select { flex:0 0 110px; background:#1A1A1A; border:1px solid #444; color:#aaa; padding:0.4rem 0.5rem; font-family:Georgia,serif; font-size:0.75rem; }
+    .task-inline-input { flex:1; min-width:120px; background:#1A1A1A; border:1px solid #444; color:#fff; padding:0.4rem 0.6rem; font-family:Georgia,serif; font-size:0.8rem; margin-bottom:0; }
+    .task-inline-btn { background:#D4A574; color:#1A1A1A; border:none; padding:0.4rem 0.8rem; font-family:Georgia,serif; font-size:0.75rem; letter-spacing:0.1em; cursor:pointer; white-space:nowrap; margin-top:0; }
     .gantt-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #2a2a2a; margin-top:0.5rem; }
     .gantt-inner { display:inline-block; min-width:100%; }
     .gantt-header-row { display:flex; background:#111; border-bottom:1px solid #2a2a2a; position:sticky; top:0; z-index:2; }
@@ -247,14 +239,9 @@
     .variance-late { color:#ff6b6b; }
     .modal-field-label { color:#888; font-size:0.75rem; letter-spacing:0.15em; display:block; margin:0.8rem 0 0.3rem; }
     .modal-title { color:#D4A574; font-size:0.85rem; letter-spacing:0.2em; margin-bottom:1.2rem; }
-    /* ── Action Plan compact layout ── */
-    .task-update-row { display:flex; gap:0.5rem; margin-top:0.7rem; align-items:center; flex-wrap:wrap; }
-    .task-inline-select { flex:0 0 110px; background:#1A1A1A; border:1px solid #444; color:#aaa; padding:0.4rem 0.5rem; font-family:Georgia,serif; font-size:0.75rem; }
-    .task-inline-input { flex:1; min-width:120px; background:#1A1A1A; border:1px solid #444; color:#fff; padding:0.4rem 0.6rem; font-family:Georgia,serif; font-size:0.8rem; margin-bottom:0; }
-    .task-inline-btn { background:#D4A574; color:#1A1A1A; border:none; padding:0.4rem 0.8rem; font-family:Georgia,serif; font-size:0.75rem; letter-spacing:0.1em; cursor:pointer; white-space:nowrap; margin-top:0; }
   </style>
 </head>
-  <body>
+<body>
   <div id="loginScreen">
     <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
@@ -277,6 +264,7 @@
       <div class="loading" id="loadingMsg"></div>
     </div>
   </div>
+
   <div id="dashboardScreen" class="screen">
     <div class="top-bar">
       <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img-small">
@@ -373,9 +361,7 @@
         <div class="feedback-title">LEAVE FEEDBACK</div>
         <div class="feedback-box">
           <label>SELECT SERVICE</label>
-          <select id="feedbackService">
-            <option value="">Select a service...</option>
-          </select>
+          <select id="feedbackService"><option value="">Select a service...</option></select>
           <label>YOUR RATING</label>
           <div class="stars">
             <span class="star" onclick="setRating(1)">&#9733;</span>
@@ -414,6 +400,7 @@
         <div id="requestHistory"></div>
       </div>
     </div>
+
     <div id="tabActionplan" class="screen">
       <div class="action-plan-page">
         <div class="feedback-title">ACTION PLAN</div>
@@ -516,11 +503,25 @@
       <div class="staff-page">
         <div class="section-title" style="border-top:none; padding-top:0;">SEND NOTIFICATION</div>
         <div class="staff-notif-box">
+          <label>TO</label>
+          <select id="notifTarget" onchange="toggleNotifClientSelect()">
+            <option value="all">All Clients</option>
+            <option value="specific">Select Specific Client</option>
+          </select>
+          <select id="notifSpecificClient" style="display:none; margin-bottom:0.5rem;">
+            <option value="">Select client...</option>
+            <option value="C001">C001 - Maria Alice</option>
+            <option value="C002">C002 - Adeliny</option>
+            <option value="C003">C003 - Vania Cristina</option>
+            <option value="C004">C004 - Reuben Falzon</option>
+            <option value="C005">C005 - Mattheus da Rosa</option>
+            <option value="C006">C006 - Ana Barbara</option>
+          </select>
           <label>TITLE</label>
           <input type="text" placeholder="Notification title..." id="notifTitle">
           <label>MESSAGE</label>
           <textarea placeholder="Write your message..." id="notifMessage"></textarea>
-          <button class="btn" onclick="sendPushNotification()" style="margin-top:0;">SEND TO ALL CLIENTS</button>
+          <button class="btn" onclick="sendPushNotification()" style="margin-top:0;">SEND NOTIFICATION</button>
           <div class="success-msg" id="notifSuccess"></div>
           <div class="error" id="notifError"></div>
         </div>
@@ -556,25 +557,47 @@
           <div class="success-msg" id="taskSuccess"></div>
           <div class="error" id="taskError"></div>
         </div>
-        <div class="section-title">ACTIVE CLIENTS</div>
-        <div id="staffClientList"></div>
+        <div class="section-title">LOG ACTIVITY</div>
+        <div class="staff-activity-box">
+          <label>CLIENT</label>
+          <select id="activityClient" onchange="renderActivityFields()">
+            <option value="">Select client...</option>
+            <option value="C001">C001 - Maria Alice</option>
+            <option value="C002">C002 - Adeliny</option>
+            <option value="C003">C003 - Vania Cristina</option>
+            <option value="C004">C004 - Reuben Falzon</option>
+            <option value="C005">C005 - Mattheus da Rosa</option>
+            <option value="C006">C006 - Ana Barbara</option>
+          </select>
+          <label>ACTIVITY TYPE</label>
+          <select id="activityType" onchange="renderActivityFields()">
+            <option value="">Select type...</option>
+            <option value="consultation">1ª Consulta</option>
+            <option value="meeting">Reunião Presencial</option>
+            <option value="homevisit">Home Visit</option>
+            <option value="execution">Execução de Projeto</option>
+            <option value="planning">Planejamento</option>
+          </select>
+          <div id="activityFields" style="margin-top:0.8rem;"></div>
+        </div>
+        <div class="section-title">ACTIVE SESSIONS</div>
+        <div id="activeSessionsList"><div style="padding:1rem;color:#666;font-size:0.85rem;">No active sessions.</div></div>
       </div>
     </div>
   </div>
-
-    <div id="tabProjects" class="screen">
-      <div style="padding:0;">
-        <div id="palProjectModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;">
-          <div style="background:#222;border:1px solid #D4A574;padding:2rem;width:92%;max-width:420px;max-height:90vh;overflow-y:auto;position:relative;">
-            <button onclick="closePalModal()" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#666;font-size:1.2rem;cursor:pointer;">&#10005;</button>
-            <div id="palModalBody"></div>
-          </div>
-        </div>
-        <div id="projectsContent">
-          <div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;letter-spacing:0.1em;">Loading projects...</div>
+  <div id="tabProjects" class="screen">
+    <div style="padding:0;">
+      <div id="palProjectModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;">
+        <div style="background:#222;border:1px solid #D4A574;padding:2rem;width:92%;max-width:420px;max-height:90vh;overflow-y:auto;position:relative;">
+          <button onclick="closePalModal()" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#666;font-size:1.2rem;cursor:pointer;">&#10005;</button>
+          <div id="palModalBody"></div>
         </div>
       </div>
+      <div id="projectsContent">
+        <div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;letter-spacing:0.1em;">Loading projects...</div>
+      </div>
     </div>
+  </div>
 
     <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
@@ -599,26 +622,23 @@
       'C002': 'Adeline.escola.png',
       'C006': 'https://drive.google.com/thumbnail?id=1_vLm2zv8AF_3W45pqfIX09miQ-JVq6eI&sz=w400'
     };
+    const CLIENT_NAMES = {
+      'C001': 'Maria Alice', 'C002': 'Adeliny', 'C003': 'Vania Cristina',
+      'C004': 'Reuben Falzon', 'C005': 'Mattheus da Rosa', 'C006': 'Ana Barbara'
+    };
     const STAFF_IDS = ['STAFF001'];
     const TAB_ID_MAP = {
-      'dashboard': 'tabDashboard',
-      'messages': 'tabMessages',
-      'media': 'tabMedia',
-      'feedback': 'tabFeedback',
-      'requests': 'tabRequests',
-      'actionplan': 'tabActionplan',
-      'invoices': 'tabInvoices',
-      'book': 'tabBook',
-      'journey': 'tabJourney',
-      'process': 'tabProcess',
-      'concierge': 'tabConcierge',
-      'about': 'tabAbout',
-      'staff': 'tabStaff',
-      'projects': 'tabProjects'
+      'dashboard': 'tabDashboard', 'messages': 'tabMessages', 'media': 'tabMedia',
+      'feedback': 'tabFeedback', 'requests': 'tabRequests', 'actionplan': 'tabActionplan',
+      'invoices': 'tabInvoices', 'book': 'tabBook', 'journey': 'tabJourney',
+      'process': 'tabProcess', 'concierge': 'tabConcierge', 'about': 'tabAbout',
+      'staff': 'tabStaff', 'projects': 'tabProjects'
     };
     let currentRating = 0;
     let clientServices = [];
-    let activeCheckIns = {};
+    let activeTimers = {};
+    let timerIntervals = {};
+
     // ── GOOGLE OAUTH ──────────────────────────────────────────────
     window.addEventListener('load', () => {
       if (typeof google === 'undefined') return;
@@ -649,14 +669,7 @@
         for (const row of rows) {
           const rowEmail = row.c[2]?.v?.toString().toLowerCase().trim();
           if (rowEmail === googleEmail) {
-            found = {
-              id: row.c[0]?.v,
-              name: row.c[1]?.v,
-              bonus: row.c[8]?.v || 0,
-              discount: row.c[9]?.v || 0,
-              address: row.c[10]?.v || '',
-              profilePhoto: row.c[11]?.v || ''
-            };
+            found = { id: row.c[0]?.v, name: row.c[1]?.v, bonus: row.c[8]?.v || 0, discount: row.c[9]?.v || 0, profilePhoto: row.c[11]?.v || '' };
             break;
           }
         }
@@ -667,11 +680,8 @@
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
           sessionStorage.setItem('profilePhoto', found.profilePhoto);
-          if (STAFF_IDS.includes(found.id)) {
-            showStaffDashboard(found.id, found.name);
-          } else {
-            showDashboard(found.id, found.name);
-          }
+          if (STAFF_IDS.includes(found.id)) { showStaffDashboard(found.id, found.name); }
+          else { showDashboard(found.id, found.name); }
         } else {
           errorMsg.textContent = 'This Google account is not registered as a P.A.L. client.';
         }
@@ -680,15 +690,13 @@
         errorMsg.textContent = 'Google login failed. Please try email/password.';
       }
     }
+
     // ── HELPERS ───────────────────────────────────────────────────
     function formatDate(dateVal) {
       if (!dateVal) return '';
       if (typeof dateVal === 'string' && dateVal.includes('Date')) {
         const parts = dateVal.match(/\d+/g);
-        if (parts) {
-          const d = new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
-          return d.toLocaleDateString('en-AU');
-        }
+        if (parts) { const d = new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2])); return d.toLocaleDateString('en-AU'); }
       }
       if (dateVal instanceof Date) return dateVal.toLocaleDateString('en-AU');
       return dateVal;
@@ -700,22 +708,23 @@
     function formatTimeOnly(date) {
       return date.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
     }
+    function formatDateToAU(date) {
+      const d = date.getDate().toString().padStart(2, '0');
+      const m = (date.getMonth() + 1).toString().padStart(2, '0');
+      return `${d}/${m}/${date.getFullYear()}`;
+    }
     function getCurrentMonth() {
       const now = new Date();
       return { month: now.getMonth(), year: now.getFullYear() };
     }
     function parseRowDate(rawDate) {
       if (!rawDate) return null;
-      const v = rawDate.v;
-      const f = rawDate.f;
+      const v = rawDate.v; const f = rawDate.f;
       if (v && typeof v === 'string' && v.includes('Date')) {
         const parts = v.match(/\d+/g);
         if (parts) return new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
       }
-      if (f) {
-        const d = new Date(f);
-        if (!isNaN(d)) return d;
-      }
+      if (f) { const d = new Date(f); if (!isNaN(d)) return d; }
       return null;
     }
     function parseAUDate(dateStr) {
@@ -723,23 +732,14 @@
       const str = dateStr.toString().trim();
       const parts = str.split('/');
       if (parts.length === 3) {
-        const day = parseInt(parts[0]);
-        const month = parseInt(parts[1]) - 1;
-        const year = parseInt(parts[2]);
-        const d = new Date(year, month, day);
+        const d = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
         return isNaN(d.getTime()) ? null : d;
       }
       const d = new Date(str);
       return isNaN(d.getTime()) ? null : d;
     }
     function getTaskStatusClass(status) {
-      const map = {
-        'To Do': 'task-status-todo',
-        'Ongoing': 'task-status-ongoing',
-        'Waiting': 'task-status-waiting',
-        'Skip': 'task-status-skip',
-        'Done': 'task-status-done'
-      };
+      const map = { 'To Do': 'task-status-todo', 'Ongoing': 'task-status-ongoing', 'Waiting': 'task-status-waiting', 'Skip': 'task-status-skip', 'Done': 'task-status-done' };
       return map[status] || 'task-status-todo';
     }
     async function fetchSheet(sheet) {
@@ -758,19 +758,11 @@
         for (const row of rows) {
           const rowClientId = row.c[1]?.v?.toString().replace("'", "").trim();
           if (rowClientId === clientId) {
-            payments.push({
-              Amount: row.c[2]?.v || 0,
-              DueDate: row.c[3]?.f || row.c[3]?.v?.toString() || '',
-              PaidDate: row.c[4]?.f || row.c[4]?.v?.toString() || '',
-              Status: row.c[5]?.v?.toString() || 'Pending'
-            });
+            payments.push({ Amount: row.c[2]?.v || 0, DueDate: row.c[3]?.f || row.c[3]?.v?.toString() || '', PaidDate: row.c[4]?.f || row.c[4]?.v?.toString() || '', Status: row.c[5]?.v?.toString() || 'Pending' });
           }
         }
         return payments;
-      } catch(e) {
-        console.log('Payments fetch error:', e);
-        return [];
-      }
+      } catch(e) { return []; }
     }
     async function fetchTasks(clientId) {
       try {
@@ -783,27 +775,18 @@
           const rowClientId = row.c[1]?.v?.toString().trim();
           if (rowClientId === clientId) {
             tasks.push({
-              taskId: row.c[0]?.v?.toString() || '',
-              clientId: rowClientId,
-              title: row.c[2]?.v?.toString() || '',
-              description: row.c[3]?.v?.toString() || '',
-              status: row.c[4]?.v?.toString() || 'To Do',
-              comment: row.c[5]?.v?.toString() || '',
-              dueDate: row.c[6]?.f || row.c[6]?.v?.toString() || '',
-              createdBy: row.c[7]?.v?.toString() || '',
-              createdAt: row.c[8]?.v?.toString() || '',
-              updatedAt: row.c[9]?.v?.toString() || '',
-              assignedTo: row.c[10]?.v?.toString() || '',
-              requestedBy: row.c[11]?.v?.toString() || ''
+              taskId: row.c[0]?.v?.toString() || '', clientId: rowClientId,
+              title: row.c[2]?.v?.toString() || '', description: row.c[3]?.v?.toString() || '',
+              status: row.c[4]?.v?.toString() || 'To Do', comment: row.c[5]?.v?.toString() || '',
+              dueDate: row.c[6]?.f || row.c[6]?.v?.toString() || '', createdBy: row.c[7]?.v?.toString() || '',
+              assignedTo: row.c[10]?.v?.toString() || '', requestedBy: row.c[11]?.v?.toString() || ''
             });
           }
         }
         return tasks;
-      } catch(e) {
-        console.log('Tasks fetch error:', e);
-        return [];
-      }
+      } catch(e) { return []; }
     }
+
     // ── PROFILE PHOTO ─────────────────────────────────────────────
     function loadProfilePhoto() {
       const profilePhoto = sessionStorage.getItem('profilePhoto');
@@ -825,14 +808,14 @@
         alert('Upload your profile photo to Google Drive, then send the photo link to P.A.L. to update your profile.');
       }
     }
+
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
       const errorMsg = document.getElementById('errorMsg');
       const loadingMsg = document.getElementById('loadingMsg');
-      errorMsg.textContent = '';
-      loadingMsg.textContent = 'Verifying...';
+      errorMsg.textContent = ''; loadingMsg.textContent = 'Verifying...';
       try {
         const rows = await fetchSheet('Clients');
         let found = null;
@@ -840,14 +823,7 @@
           const rowEmail = row.c[2]?.v?.toString().toLowerCase().trim();
           const rowPassword = row.c[6]?.v?.toString().trim();
           if (rowEmail === email && rowPassword === password) {
-            found = {
-              id: row.c[0]?.v,
-              name: row.c[1]?.v,
-              bonus: row.c[8]?.v || 0,
-              discount: row.c[9]?.v || 0,
-              address: row.c[10]?.v || '',
-              profilePhoto: row.c[11]?.v || ''
-            };
+            found = { id: row.c[0]?.v, name: row.c[1]?.v, bonus: row.c[8]?.v || 0, discount: row.c[9]?.v || 0, profilePhoto: row.c[11]?.v || '' };
             break;
           }
         }
@@ -858,11 +834,8 @@
           sessionStorage.setItem('bonus', found.bonus);
           sessionStorage.setItem('discount', found.discount);
           sessionStorage.setItem('profilePhoto', found.profilePhoto);
-          if (STAFF_IDS.includes(found.id)) {
-            showStaffDashboard(found.id, found.name);
-          } else {
-            showDashboard(found.id, found.name);
-          }
+          if (STAFF_IDS.includes(found.id)) { showStaffDashboard(found.id, found.name); }
+          else { showDashboard(found.id, found.name); }
         } else {
           loadingMsg.textContent = '';
           errorMsg.textContent = 'Incorrect email or password.';
@@ -872,6 +845,7 @@
         errorMsg.textContent = 'Connection error. Please try again.';
       }
     }
+
       // ── NOTIFICATIONS ─────────────────────────────────────────────
     async function checkNotifStatus() {
       try {
@@ -889,24 +863,33 @@
         });
       } catch(e) {}
     }
+    function toggleNotifClientSelect() {
+      const target = document.getElementById('notifTarget').value;
+      const clientSelect = document.getElementById('notifSpecificClient');
+      clientSelect.style.display = target === 'specific' ? 'block' : 'none';
+    }
     async function sendPushNotification() {
+      const target = document.getElementById('notifTarget').value;
+      const specificClient = document.getElementById('notifSpecificClient').value;
       const title = document.getElementById('notifTitle').value.trim();
       const message = document.getElementById('notifMessage').value.trim();
       const successEl = document.getElementById('notifSuccess');
       const errorEl = document.getElementById('notifError');
       successEl.textContent = ''; errorEl.textContent = '';
       if (!title || !message) { errorEl.textContent = 'Please fill in title and message.'; return; }
+      if (target === 'specific' && !specificClient) { errorEl.textContent = 'Please select a client.'; return; }
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'sendNotification', appId: ONESIGNAL_APP_ID, title, message })
+          body: JSON.stringify({ action: 'sendNotification', appId: ONESIGNAL_APP_ID, title, message, target, clientId: specificClient })
         });
-        successEl.textContent = 'Notification sent to all clients!';
+        successEl.textContent = target === 'all' ? 'Notification sent to all clients!' : 'Notification sent to ' + (CLIENT_NAMES[specificClient] || specificClient) + '!';
         document.getElementById('notifTitle').value = '';
         document.getElementById('notifMessage').value = '';
       } catch(e) { errorEl.textContent = 'Error sending notification. Try again.'; }
     }
-    // ── STAFF ─────────────────────────────────────────────────────
+
+    // ── STAFF DASHBOARD ───────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
@@ -914,136 +897,247 @@
       document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'none');
       document.getElementById('staffNavItem').style.display = 'block';
       showTab('staff', document.getElementById('staffNavItem'));
-      restoreCheckInState();
+      restoreActiveTimers();
+      loadActiveSessions();
     }
-    function saveCheckInState() {
-      localStorage.setItem('activeCheckIns', JSON.stringify(
-        Object.fromEntries(Object.entries(activeCheckIns).map(([k, v]) => [k, { ...v, time: v.time.toISOString() }]))
-      ));
+
+    // ── ACTIVITY LOGGING ──────────────────────────────────────────
+    function saveActiveTimers() {
+      localStorage.setItem('pal_active_timers', JSON.stringify(activeTimers));
     }
-    function restoreCheckInState() {
+    function restoreActiveTimers() {
       try {
-        const saved = localStorage.getItem('activeCheckIns');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          activeCheckIns = Object.fromEntries(
-            Object.entries(parsed).map(([k, v]) => [k, { ...v, time: new Date(v.time) }])
-          );
-        }
-      } catch(e) { activeCheckIns = {}; }
+        const saved = localStorage.getItem('pal_active_timers');
+        if (saved) activeTimers = JSON.parse(saved);
+      } catch(e) { activeTimers = {}; }
     }
-    async function createTask() {
-      const clientId = document.getElementById('taskClientId').value;
-      const title = document.getElementById('taskTitle').value.trim();
-      const description = document.getElementById('taskDescription').value.trim();
-      const dueDate = document.getElementById('taskDueDate').value.trim();
-      const assignedTo = document.getElementById('taskAssignedTo').value;
-      const requestedBy = document.getElementById('taskRequestedBy').value;
-      const successEl = document.getElementById('taskSuccess');
-      const errorEl = document.getElementById('taskError');
-      successEl.textContent = ''; errorEl.textContent = '';
-      if (!clientId) { errorEl.textContent = 'Please select a client.'; return; }
-      if (!title) { errorEl.textContent = 'Please enter a task title.'; return; }
-      const taskId = 'T' + Date.now();
-      const timestamp = formatDateTime();
-      try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Task', row: [taskId, clientId, title, description, 'To Do', '', dueDate, 'PAL', timestamp, '', assignedTo, requestedBy] })
-        });
-        successEl.textContent = 'Task created successfully!';
-        document.getElementById('taskClientId').value = '';
-        document.getElementById('taskTitle').value = '';
-        document.getElementById('taskDescription').value = '';
-        document.getElementById('taskDueDate').value = '';
-        document.getElementById('taskAssignedTo').value = 'Client';
-        document.getElementById('taskRequestedBy').value = 'PAL';
-      } catch(e) { errorEl.textContent = 'Error creating task. Try again.'; }
+    function renderActivityFields() {
+      const type = document.getElementById('activityType').value;
+      const clientId = document.getElementById('activityClient').value;
+      const container = document.getElementById('activityFields');
+      if (!type || !clientId) { container.innerHTML = ''; return; }
+      const key = clientId + '_' + type;
+      const running = activeTimers[key];
+      const timerDisplay = running ? `<div class="activity-timer" id="actTimer">Session running...</div>` : `<div class="activity-timer" id="actTimer"></div>`;
+      const startDisplay = running ? 'display:none' : '';
+      const stopDisplay = running ? '' : 'display:none';
+      const fields = {
+        consultation: `
+          <span class="staff-field-label">DATE</span>
+          <input type="text" id="actDate" placeholder="DD/MM/YYYY" value="${formatDateToAU(new Date())}">
+          <span class="staff-field-label">FORMAT</span>
+          <select id="actFormat"><option value="Online">Online</option><option value="Presencial">Presencial</option></select>
+          <span class="staff-field-label">LINK / LOCATION</span>
+          <input type="text" id="actLocation" placeholder="Zoom link or address...">
+          <span class="staff-field-label">NOTES</span>
+          <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+          <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
+            <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('consultation')" style="${startDisplay}">START SESSION</button>
+            <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('consultation')" style="${stopDisplay}">STOP & SAVE</button>
+          </div>${timerDisplay}`,
+        meeting: `
+          <span class="staff-field-label">DATE</span>
+          <input type="text" id="actDate" placeholder="DD/MM/YYYY" value="${formatDateToAU(new Date())}">
+          <span class="staff-field-label">TIME</span>
+          <input type="text" id="actTime" placeholder="e.g. 10:00 AM">
+          <span class="staff-field-label">LOCATION / LINK</span>
+          <input type="text" id="actLocation" placeholder="Address or video link...">
+          <span class="staff-field-label">NOTES</span>
+          <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+          <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
+            <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('meeting')" style="${startDisplay}">START SESSION</button>
+            <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('meeting')" style="${stopDisplay}">STOP & SAVE</button>
+          </div>${timerDisplay}`,
+        homevisit: `
+          <div id="homeVisitStatus"></div>
+          <span class="staff-field-label">NOTES</span>
+          <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+          <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
+            <button class="btn btn-green btn-half" id="checkInBtn" onclick="homeVisitCheckIn()">CHECK IN</button>
+            <button class="btn btn-red btn-half" id="checkOutBtn" onclick="homeVisitCheckOut()">CHECK OUT</button>
+          </div>${timerDisplay}`,
+        execution: `
+          <span class="staff-field-label">PROJECT NAME</span>
+          <input type="text" id="actProject" placeholder="e.g. Soul Fitness Website">
+          <span class="staff-field-label">NOTES</span>
+          <textarea id="actNotes" style="height:60px;" placeholder="What are you working on today?"></textarea>
+          <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
+            <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('execution')" style="${startDisplay}">START SESSION</button>
+            <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('execution')" style="${stopDisplay}">STOP & SAVE</button>
+          </div>${timerDisplay}`,
+        planning: `
+          <span class="staff-field-label">PROJECT NAME</span>
+          <input type="text" id="actProject" placeholder="e.g. Soul Fitness Website">
+          <span class="staff-field-label">NOTES</span>
+          <textarea id="actNotes" style="height:60px;" placeholder="What are you planning today?"></textarea>
+          <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
+            <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('planning')" style="${startDisplay}">START SESSION</button>
+            <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('planning')" style="${stopDisplay}">STOP & SAVE</button>
+          </div>${timerDisplay}`
+      };
+      container.innerHTML = fields[type] || '';
+      if (type === 'homevisit') updateHomeVisitUI(clientId);
+      if (running) startTimerDisplay(key);
     }
-    async function loadStaffClients() {
-      const container = document.getElementById('staffClientList');
-      container.innerHTML = '<div style="color:#666; padding:1rem;">Loading clients...</div>';
-      try {
-        const rows = await fetchSheet('Clients');
-        const clients = [];
-        for (const row of rows) {
-          const id = row.c[0]?.v || '';
-          if (STAFF_IDS.includes(id)) continue;
-          clients.push({ id, name: row.c[1]?.v || '', address: row.c[10]?.v || 'No address on file' });
-        }
-        container.innerHTML = clients.map(c => {
-          const active = activeCheckIns[c.id];
-          const checkedInSince = active ? formatTimeOnly(active.time) : '';
-          return `
-          <div class="staff-client-card">
-            <div class="staff-client-name">${c.name}</div>
-            <div class="staff-client-address">${c.address}</div>
-            <div class="staff-status ${active ? 'staff-status-active' : 'staff-status-inactive'}">${active ? 'CHECKED IN since ' + checkedInSince : 'NOT CHECKED IN'}</div>
-            <div class="staff-btn-row">
-              <button class="staff-btn ${active ? 'staff-btn-disabled' : 'staff-btn-checkin'}" ${active ? 'disabled' : ''} onclick="staffCheckIn('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK IN</button>
-              <button class="staff-btn ${active ? 'staff-btn-checkout' : 'staff-btn-disabled'}" ${active ? '' : 'disabled'} onclick="staffCheckOut('${c.id}', '${c.name.replace(/'/g,"\\'")}')">CHECK OUT</button>
-            </div>
-            <div id="staffMsg-${c.id}"></div>
-          </div>`;
-        }).join('');
-      } catch(e) {
-        container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading clients.</div>';
-      }
+    function startTimedActivity(type) {
+      const clientId = document.getElementById('activityClient').value;
+      if (!clientId) { alert('Please select a client first.'); return; }
+      const key = clientId + '_' + type;
+      activeTimers[key] = {
+        startTime: new Date().toISOString(), type, clientId,
+        project: document.getElementById('actProject')?.value || '',
+        notes: document.getElementById('actNotes')?.value || '',
+        location: document.getElementById('actLocation')?.value || '',
+        format: document.getElementById('actFormat')?.value || '',
+        time: document.getElementById('actTime')?.value || ''
+      };
+      saveActiveTimers();
+      const startBtn = document.getElementById('actStartBtn');
+      const stopBtn = document.getElementById('actStopBtn');
+      if (startBtn) startBtn.style.display = 'none';
+      if (stopBtn) stopBtn.style.display = 'inline-block';
+      startTimerDisplay(key);
+      loadActiveSessions();
     }
-    function getLocation() {
-      return new Promise((resolve) => {
-        if (!navigator.geolocation) { resolve(null); return; }
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-          () => resolve(null),
-          { timeout: 8000 }
-        );
-      });
-    }
-    async function staffCheckIn(clientId, clientName) {
-      const msgEl = document.getElementById('staffMsg-' + clientId);
-      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Getting location...</div>';
-      const loc = await getLocation();
-      const now = new Date();
-      activeCheckIns[clientId] = { time: now, loc };
-      saveCheckInState();
-      const timeStr = formatTimeOnly(now);
-      const locNote = loc ? `<a href="https://www.google.com/maps?q=${loc.lat},${loc.lng}" target="_blank" style="color:#D4A574;">View location</a>` : 'location unavailable';
-      msgEl.innerHTML = `<div class="staff-active-timer">Checked in at ${timeStr} &middot; ${locNote}</div>`;
-      loadStaffClients();
-    }
-    async function staffCheckOut(clientId, clientName) {
-      const checkInData = activeCheckIns[clientId];
-      if (!checkInData) return;
-      const msgEl = document.getElementById('staffMsg-' + clientId);
-      msgEl.innerHTML = '<div class="staff-location-msg" style="color:#888;">Saving check-out...</div>';
-      const loc = await getLocation();
-      const checkOutTime = new Date();
-      const checkInTime = checkInData.time;
-      const durationMs = checkOutTime - checkInTime;
-      const durationHours = parseFloat((durationMs / (1000 * 60 * 60)).toFixed(2));
-      const dateStr = checkOutTime.toLocaleDateString('en-AU');
-      const checkInTimeStr = formatTimeOnly(checkInTime);
-      const checkOutTimeStr = formatTimeOnly(checkOutTime);
-      const checkInLoc = checkInData.loc;
+    async function stopTimedActivity(type) {
+      const clientId = document.getElementById('activityClient').value;
+      if (!clientId) return;
+      const key = clientId + '_' + type;
+      const session = activeTimers[key];
+      if (!session) return;
+      const startTime = new Date(session.startTime);
+      const endTime = new Date();
+      const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
+      const dateStr = formatDateToAU(endTime);
+      const typeLabels = { consultation: '1ª Consulta', meeting: 'Reunião Presencial', execution: 'Execução de Projeto', planning: 'Planejamento' };
       const logId = 'L' + Date.now();
-      let notes = `CheckIn:${checkInTimeStr}|CheckOut:${checkOutTimeStr}`;
-      if (checkInLoc) notes += `|CheckInGPS:${checkInLoc.lat},${checkInLoc.lng}`;
-      if (loc) notes += `|CheckOutGPS:${loc.lat},${loc.lng}`;
+      let notesStr = `Type:${type}|Start:${formatTimeOnly(startTime)}|End:${formatTimeOnly(endTime)}`;
+      if (session.project) notesStr += `|Project:${session.project}`;
+      if (session.notes) notesStr += `|Notes:${session.notes}`;
+      if (session.location) notesStr += `|Location:${session.location}`;
+      if (session.format) notesStr += `|Format:${session.format}`;
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, 'Staff Visit', durationHours, notes] })
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, typeLabels[type] || type, durationHours, notesStr] })
         });
-        delete activeCheckIns[clientId];
-        saveCheckInState();
-        msgEl.innerHTML = `<div class="staff-location-msg staff-location-near">Checked out at ${checkOutTimeStr}. Duration: ${durationHours}h logged.</div>`;
-        loadStaffClients();
+        if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
+        delete activeTimers[key];
+        saveActiveTimers();
+        const timerEl = document.getElementById('actTimer');
+        if (timerEl) timerEl.textContent = `Saved! Duration: ${durationHours}h`;
+        const startBtn = document.getElementById('actStartBtn');
+        const stopBtn = document.getElementById('actStopBtn');
+        if (startBtn) startBtn.style.display = 'inline-block';
+        if (stopBtn) stopBtn.style.display = 'none';
+        loadActiveSessions();
       } catch(e) {
-        msgEl.innerHTML = '<div class="staff-location-msg" style="color:#ff6b6b;">Error saving. Try again.</div>';
+        const timerEl = document.getElementById('actTimer');
+        if (timerEl) timerEl.textContent = 'Error saving. Please try again.';
       }
     }
-    // ── DASHBOARD ─────────────────────────────────────────────────
+    async function homeVisitCheckIn() {
+      const clientId = document.getElementById('activityClient').value;
+      if (!clientId) { alert('Please select a client first.'); return; }
+      const key = clientId + '_homevisit';
+      if (activeTimers[key]) { alert('Already checked in for this client.'); return; }
+      const notes = document.getElementById('actNotes')?.value || '';
+      const now = new Date();
+      const logId = 'L' + Date.now();
+      activeTimers[key] = { startTime: now.toISOString(), type: 'homevisit', clientId, notes, logId, checkedIn: true };
+      saveActiveTimers();
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(now), 'Home Visit', 0, `CheckIn:${formatTimeOnly(now)}|Notes:${notes}|Status:open`] })
+        });
+      } catch(e) {}
+      updateHomeVisitUI(clientId);
+      startTimerDisplay(key);
+      loadActiveSessions();
+    }
+    async function homeVisitCheckOut() {
+      const clientId = document.getElementById('activityClient').value;
+      if (!clientId) return;
+      const key = clientId + '_homevisit';
+      const session = activeTimers[key];
+      if (!session) { alert('No active check-in found for this client.'); return; }
+      const startTime = new Date(session.startTime);
+      const endTime = new Date();
+      const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
+      const notes = document.getElementById('actNotes')?.value || session.notes || '';
+      const logId = 'L' + Date.now();
+      const notesStr = `CheckIn:${formatTimeOnly(startTime)}|CheckOut:${formatTimeOnly(endTime)}|Duration:${durationHours}h|Notes:${notes}`;
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(endTime), 'Home Visit', durationHours, notesStr] })
+        });
+        if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
+        delete activeTimers[key];
+        saveActiveTimers();
+        const timerEl = document.getElementById('actTimer');
+        if (timerEl) timerEl.textContent = `Checked out! Duration: ${durationHours}h saved.`;
+        updateHomeVisitUI(clientId);
+        loadActiveSessions();
+      } catch(e) {
+        const timerEl = document.getElementById('actTimer');
+        if (timerEl) timerEl.textContent = 'Error saving check-out. Please try again.';
+      }
+    }
+    function updateHomeVisitUI(clientId) {
+      const key = clientId + '_homevisit';
+      const session = activeTimers[key];
+      const statusEl = document.getElementById('homeVisitStatus');
+      const checkInBtn = document.getElementById('checkInBtn');
+      const checkOutBtn = document.getElementById('checkOutBtn');
+      if (session && session.checkedIn) {
+        const startTime = new Date(session.startTime);
+        if (statusEl) statusEl.innerHTML = `<div style="background:#1a3a1a;border:1px solid #4CAF50;padding:0.8rem;color:#4caf50;font-size:0.8rem;margin-bottom:0.8rem;">Checked in at ${formatTimeOnly(startTime)}</div>`;
+        if (checkInBtn) { checkInBtn.disabled = true; checkInBtn.style.opacity = '0.4'; }
+        if (checkOutBtn) { checkOutBtn.disabled = false; checkOutBtn.style.opacity = '1'; }
+      } else {
+        if (statusEl) statusEl.innerHTML = '';
+        if (checkInBtn) { checkInBtn.disabled = false; checkInBtn.style.opacity = '1'; }
+        if (checkOutBtn) { checkOutBtn.disabled = true; checkOutBtn.style.opacity = '0.4'; }
+      }
+    }
+    function startTimerDisplay(key) {
+      if (timerIntervals[key]) clearInterval(timerIntervals[key]);
+      timerIntervals[key] = setInterval(() => {
+        const session = activeTimers[key];
+        if (!session) { clearInterval(timerIntervals[key]); return; }
+        const elapsed = new Date() - new Date(session.startTime);
+        const h = Math.floor(elapsed / 3600000);
+        const m = Math.floor((elapsed % 3600000) / 60000);
+        const s = Math.floor((elapsed % 60000) / 1000);
+        const timerEl = document.getElementById('actTimer');
+        if (timerEl) timerEl.textContent = `Running: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      }, 1000);
+    }
+    function loadActiveSessions() {
+      const container = document.getElementById('activeSessionsList');
+      if (!container) return;
+      const entries = Object.entries(activeTimers);
+      if (!entries.length) { container.innerHTML = '<div style="padding:1rem;color:#666;font-size:0.85rem;">No active sessions.</div>'; return; }
+      const typeLabels = { consultation: '1ª Consulta', meeting: 'Reunião Presencial', homevisit: 'Home Visit', execution: 'Execução de Projeto', planning: 'Planejamento' };
+      container.innerHTML = entries.map(([key, session]) => {
+        const startTime = new Date(session.startTime);
+        const elapsed = new Date() - startTime;
+        const h = Math.floor(elapsed / 3600000);
+        const m = Math.floor((elapsed % 3600000) / 60000);
+        return `
+          <div class="activity-session-card">
+            <div class="activity-session-type">${typeLabels[session.type] || session.type}</div>
+            <div class="activity-session-client">${CLIENT_NAMES[session.clientId] || session.clientId}</div>
+            ${session.project ? `<div class="activity-session-meta">Project: ${session.project}</div>` : ''}
+            <div class="activity-session-meta">Started: ${formatTimeOnly(startTime)}</div>
+            <div class="activity-session-elapsed">${h}h ${m}m running</div>
+          </div>`;
+      }).join('');
+    }
+
+      // ── DASHBOARD ─────────────────────────────────────────────────
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
@@ -1055,8 +1149,7 @@
         const services = await fetchSheet('Services');
         let totalServices = 0, totalCost = 0, totalGST = 0;
         let allTimeCost = 0, allTimeGST = 0, allTimeHours = 0;
-        let uniqueDays = new Set();
-        let allTimeDays = new Set();
+        let uniqueDays = new Set(), allTimeDays = new Set();
         let byMonth = {};
         clientServices = [];
         let invoicesData = [];
@@ -1067,22 +1160,16 @@
             const sName = row.c[3]?.v || 'Service';
             const sId = row.c[0]?.v || '';
             let dateStr = '';
-            if (row.c[2]) {
-              if (row.c[2].f) dateStr = row.c[2].f;
-              else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString());
-            }
+            if (row.c[2]) { if (row.c[2].f) dateStr = row.c[2].f; else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString()); }
             const cost = row.c[6]?.v || 0;
             const gst = row.c[8]?.v || 0;
             const invoice = row.c[7]?.v || '';
             const invoiceFile = row.c[9]?.v || '';
-            allTimeCost += cost;
-            allTimeGST += gst;
+            allTimeCost += cost; allTimeGST += gst;
             if (rowDate) allTimeDays.add(rowDate.toDateString());
             if (invoice) invoicesData.push({ invoice, cost, gst, date: dateStr, service: sName, file: invoiceFile });
             if (isThisMonth) {
-              totalServices++;
-              totalCost += cost;
-              totalGST += gst;
+              totalServices++; totalCost += cost; totalGST += gst;
               if (rowDate) uniqueDays.add(rowDate.toDateString());
             }
             if (rowDate) {
@@ -1109,36 +1196,27 @@
             }
             const serviceType = row.c[3]?.v || '';
             const notes = row.c[5]?.v || '';
-            if (serviceType === 'Staff Visit' && notes.includes('CheckIn:')) {
+            if (serviceType === 'Home Visit' && notes.includes('CheckIn:')) {
               const checkInMatch = notes.match(/CheckIn:([\d:apmAPM\s]+)/);
               const checkOutMatch = notes.match(/CheckOut:([\d:apmAPM\s]+)/);
-              const checkInTime = checkInMatch ? checkInMatch[1].trim() : '';
-              const checkOutTime = checkOutMatch ? checkOutMatch[1].trim() : '';
               let dateStr = '';
-              if (row.c[2]) {
-                if (row.c[2].f) dateStr = row.c[2].f;
-                else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString());
-              }
+              if (row.c[2]) { if (row.c[2].f) dateStr = row.c[2].f; else if (row.c[2].v) dateStr = formatDate(row.c[2].v.toString()); }
               if (rowDate) {
                 const vkey = rowDate.getFullYear() + '-' + String(rowDate.getMonth()).padStart(2,'0');
                 const vlabel = rowDate.toLocaleString('en-AU', { month: 'long', year: 'numeric' }).toUpperCase();
                 if (!visitsByMonth[vkey]) visitsByMonth[vkey] = { label: vlabel, items: [] };
-                visitsByMonth[vkey].items.push({ date: dateStr, checkIn: checkInTime, checkOut: checkOutTime, hours: hrs });
+                visitsByMonth[vkey].items.push({ date: dateStr, checkIn: checkInMatch ? checkInMatch[1].trim() : '', checkOut: checkOutMatch ? checkOutMatch[1].trim() : '', hours: hrs });
               }
             }
           }
         }
         let totalPurchases = 0;
         const purchases = await fetchSheet('Purchases');
-        for (const row of purchases) {
-          if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0;
-        }
-        // ── PAYMENTS ─────────────────────────────────────────────
+        for (const row of purchases) { if (row.c[1]?.v === clientId) totalPurchases += row.c[5]?.v || 0; }
         let balanceDue = 0, nextDueDate = '', paymentStatus = '';
         let paymentHistory = [];
         const paymentsData = await fetchPayments(clientId);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const today = new Date(); today.setHours(0,0,0,0);
         for (const p of paymentsData) {
           const amount = parseFloat(p.Amount) || 0;
           const dueDateRaw = p.DueDate ? p.DueDate.toString().trim() : '';
@@ -1181,14 +1259,10 @@
         if (paymentHistoryEl) {
           paymentHistoryEl.innerHTML = paymentHistory.length ? paymentHistory.map(p => {
             const cls = p.status === 'Paid' ? 'pay-status-paid' : p.status === 'Overdue' ? 'pay-status-overdue' : 'pay-status-pending';
-            return `
-            <div class="payment-history-item">
-              <div>
-                <div class="pay-amount">$${parseFloat(p.amount).toFixed(0)}</div>
-                <div class="pay-meta">Due: ${p.dueDate}${p.paidDate ? ' &middot; Paid: ' + p.paidDate : ''}</div>
-              </div>
-              <div class="${cls}">${p.status.toUpperCase()}</div>
-            </div>`;
+            return `<div class="payment-history-item">
+              <div><div class="pay-amount">$${parseFloat(p.amount).toFixed(0)}</div>
+              <div class="pay-meta">Due: ${p.dueDate}${p.paidDate ? ' · Paid: ' + p.paidDate : ''}</div></div>
+              <div class="${cls}">${p.status.toUpperCase()}</div></div>`;
           }).join('') : '<div style="padding:1rem 0;color:#666;">No payment records yet.</div>';
         }
         const monthName = new Date(year, month).toLocaleString('en-AU', { month: 'long' });
@@ -1201,42 +1275,32 @@
         const list = document.getElementById('servicesList');
         list.innerHTML = sortedKeys.length ? sortedKeys.map(key => {
           const m = byMonth[key];
-          return `
-            <div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
+          return `<div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
               <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${m.label}</div>
-              <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
+              <div style="color:#666; font-size:0.75rem;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
             </div>
-            ${m.items.map(s => `
-            <div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+            ${m.items.map(s => `<div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
               <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
                 <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
                 <div class="status">${s.status}</div>
               </div>
-              <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+              <div style="color:#666; font-size:0.75rem; display:flex; gap:1rem; flex-wrap:wrap;">
                 ${s.invoice ? `<span style="color:#D4A574;">${s.invoice}</span>` : ''}
                 ${s.cost ? `<span>$${s.cost.toFixed(0)}</span>` : ''}
                 ${s.gst ? `<span>GST $${s.gst.toFixed(0)}</span>` : ''}
-              </div>
-            </div>`).join('')}`;
+              </div></div>`).join('')}`;
         }).join('') : '<div style="padding:1rem;color:#666">No services recorded yet.</div>';
         const sortedVisitKeys = Object.keys(visitsByMonth).sort().reverse();
         const visitList = document.getElementById('visitHistoryList');
         if (visitList) {
           visitList.innerHTML = sortedVisitKeys.length ? sortedVisitKeys.map(key => {
             const m = visitsByMonth[key];
-            return `
-              <div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
-                <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em;">${m.label}</div>
-              </div>
-              ${m.items.map(v => `
-              <div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+            return `<div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
+                <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em;">${m.label}</div></div>
+              ${m.items.map(v => `<div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
                 <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-                  <div class="name">In-person visit</div>
-                  <div class="date">${v.date}</div>
-                </div>
-                <div style="color:#666; font-size:0.75rem; letter-spacing:0.1em;">
-                  Check-in: ${v.checkIn} &nbsp;→&nbsp; Check-out: ${v.checkOut} &nbsp;(${v.hours}h)
-                </div>
+                  <div class="name">In-person visit</div><div class="date">${v.date}</div></div>
+                <div style="color:#666; font-size:0.75rem;">Check-in: ${v.checkIn} &nbsp;→&nbsp; Check-out: ${v.checkOut} &nbsp;(${v.hours}h)</div>
               </div>`).join('')}`;
           }).join('') : '<div style="padding:1rem;color:#666">No visits recorded yet.</div>';
         }
@@ -1246,22 +1310,216 @@
             <div class="invoice-item">
               <div class="invoice-item-left">
                 <div class="inv-number">${inv.invoice}</div>
-                <div class="inv-detail">${inv.service} &middot; ${inv.date} &middot; $${inv.cost.toFixed(0)}${inv.gst ? ' (GST $' + inv.gst.toFixed(0) + ')' : ''}</div>
+                <div class="inv-detail">${inv.service} · ${inv.date} · $${inv.cost.toFixed(0)}${inv.gst ? ' (GST $' + inv.gst.toFixed(0) + ')' : ''}</div>
               </div>
               ${inv.file ? `<a href="${inv.file}" target="_blank" class="invoice-link">VIEW PDF</a>` : ''}
             </div>`).join('') : '<div class="empty-invoices">No invoices yet.</div>';
         }
         const select = document.getElementById('feedbackService');
         select.innerHTML = '<option value="">Select a service...</option>';
-        clientServices.forEach(s => {
-          select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-        });
+        clientServices.forEach(s => { select.innerHTML += `<option value="${s.id}">${s.name}</option>`; });
       } catch(e) { console.log('Dashboard error:', e); }
       loadMedia(clientId);
       loadJourney(clientId);
       loadProcess();
     }
-    // ── ACTION PLAN ───────────────────────────────────────────────
+
+    // ── MEDIA ─────────────────────────────────────────────────────
+    async function loadMedia(clientId) {
+      try {
+        const rows = await fetchSheet('Media');
+        const palGrid = document.getElementById('mediaFromPAL');
+        const clientGrid = document.getElementById('mediaFromClient');
+        let palItems = [], clientItems = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) {
+            const item = { fileId: row.c[0]?.v || '', caption: row.c[2]?.v || '', uploadedBy: row.c[3]?.v || '', date: formatDate(row.c[4]?.v || '') };
+            if (item.uploadedBy === 'PAL') palItems.push(item); else clientItems.push(item);
+          }
+        }
+        palGrid.innerHTML = palItems.length ? palItems.map(item => `
+          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
+            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
+            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
+            <div class="media-card-meta"><span class="media-card-by-pal">PAL</span><span>${item.date}</span></div></div>
+          </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
+        clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
+          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
+            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
+            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
+            <div class="media-card-meta"><span class="media-card-by-client">You</span><span>${item.date}</span></div></div>
+          </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
+      } catch(e) { console.log('Media error:', e); }
+    }
+    function uploadMedia() {
+      const clientId = sessionStorage.getItem('clientId');
+      const caption = document.getElementById('uploadCaption').value.trim();
+      const folderId = FOLDER_MAP[clientId];
+      if (folderId) {
+        window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
+        document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
+      }
+    }
+
+    // ── JOURNEY ───────────────────────────────────────────────────
+    async function loadJourney(clientId) {
+      try {
+        const rows = await fetchSheet('Relationship');
+        let found = null;
+        for (const row of rows) {
+          if (row.c[0]?.v === clientId) {
+            found = { welcome: row.c[1]?.v || '', since: row.c[2]?.v || '', services: row.c[3]?.v || '', note: row.c[4]?.v || '', reward: row.c[5]?.v || '' };
+            break;
+          }
+        }
+        document.getElementById('journeyLoading').style.display = 'none';
+        if (found) {
+          document.getElementById('journeyContent').style.display = 'block';
+          document.getElementById('journeyWelcome').textContent = found.welcome;
+          document.getElementById('journeySince').textContent = 'TOGETHER SINCE ' + found.since.toUpperCase();
+          document.getElementById('journeyNote').textContent = found.note;
+          document.getElementById('journeyReward').textContent = found.reward;
+          const servicesList = found.services.split(',').map(s => s.trim());
+          document.getElementById('journeyServices').innerHTML = servicesList.map(s => `<div class="journey-service-tag">${s}</div>`).join('');
+          const petPhoto = PET_PHOTO_MAP[clientId];
+          if (petPhoto) { const img = document.getElementById('journeyPetPhoto'); img.src = petPhoto; img.style.display = 'block'; }
+        }
+      } catch(e) { console.log('Journey error:', e); }
+    }
+
+    // ── PROCESS ───────────────────────────────────────────────────
+    function loadProcess() {
+      const container = document.getElementById('processFlow');
+      if (!container || container.dataset.loaded) return;
+      container.dataset.loaded = 'true';
+      const steps = [
+        { label: "Initial consultation", sub: "Understand needs · present options · client chooses" },
+        { label: "Proposal or payment link sent", sub: "Client reviews and confirms" },
+        { label: "Payment confirmed", sub: "PayPal · Apple Pay · Credit Card · Bank Transfer" },
+        { label: "Client portal access sent", sub: "Service details · insurance information · provider contacts" },
+        { label: "Service delivered", sub: "The PAL team takes care of everything" },
+        { label: "Feedback requested", sub: "Google review or private feedback" },
+        { label: "Invoice sent", sub: "Full summary with all service details" }
+      ];
+      container.innerHTML = steps.map((s, i) => `
+        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center;">
+          <div style="color:#D4A574; font-size:0.9rem; font-weight:500; margin-bottom:0.3rem;">${s.label}</div>
+          <div style="color:#7A6A4A; font-size:0.75rem;">${s.sub}</div>
+        </div>
+        ${i < steps.length - 1 ? '<div style="display:flex; justify-content:center; margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
+      `).join('');
+    }
+
+    // ── FEEDBACK ──────────────────────────────────────────────────
+    function setRating(rating) {
+      currentRating = rating;
+      document.querySelectorAll('.star').forEach((star, i) => star.classList.toggle('active', i < rating));
+    }
+    async function submitFeedback() {
+      const clientId = sessionStorage.getItem('clientId');
+      const serviceId = document.getElementById('feedbackService').value;
+      const comment = document.getElementById('feedbackComment').value.trim();
+      const successEl = document.getElementById('feedbackSuccess');
+      const errorEl = document.getElementById('feedbackError');
+      successEl.textContent = ''; errorEl.textContent = '';
+      if (!serviceId) { errorEl.textContent = 'Please select a service.'; return; }
+      if (!currentRating) { errorEl.textContent = 'Please select a rating.'; return; }
+      const feedbackId = 'F' + Date.now();
+      try {
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment, formatDateTime()] }) });
+        successEl.textContent = 'Thank you! Your feedback has been submitted.';
+        document.getElementById('feedbackComment').value = '';
+        document.getElementById('feedbackService').value = '';
+        setRating(0);
+        loadFeedbackHistory(clientId);
+      } catch(e) { errorEl.textContent = 'Error submitting feedback. Please try again.'; }
+    }
+    async function loadFeedbackHistory(clientId) {
+      try {
+        const rows = await fetchSheet('Feedback');
+        const history = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) history.push({ service: row.c[2]?.v || '', rating: row.c[3]?.v || 0, comment: row.c[4]?.v || '', date: row.c[5]?.v || '' });
+        }
+        const container = document.getElementById('feedbackHistory');
+        if (!container) return;
+        container.innerHTML = history.length ? history.map(f => `
+          <div style="background:#1a1a1a; border:1px solid #333; padding:1rem; margin-top:0.8rem;">
+            <div style="color:#D4A574; font-size:0.75rem; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
+            <div style="color:#fff; font-size:0.85rem; margin-bottom:0.3rem;">${f.comment}</div>
+            <div style="color:#666; font-size:0.75rem;">${f.service} · ${f.date}</div>
+          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
+      } catch(e) {}
+    }
+
+    // ── REQUESTS ──────────────────────────────────────────────────
+    async function submitRequest() {
+      const clientId = sessionStorage.getItem('clientId');
+      const text = document.getElementById('requestText').value.trim();
+      const priority = document.getElementById('requestPriority').value;
+      const successEl = document.getElementById('requestSuccess');
+      const errorEl = document.getElementById('requestError');
+      successEl.textContent = ''; errorEl.textContent = '';
+      if (!text) { errorEl.textContent = 'Please describe your request.'; return; }
+      const requestId = 'R' + Date.now();
+      try {
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Requests', row: [requestId, clientId, text, priority, formatDateTime(), 'New'] }) });
+        successEl.textContent = 'Request submitted! P.A.L. will be in touch.';
+        document.getElementById('requestText').value = '';
+        loadRequestHistory(clientId);
+      } catch(e) { errorEl.textContent = 'Error submitting request. Please try again.'; }
+    }
+    async function loadRequestHistory(clientId) {
+      try {
+        const rows = await fetchSheet('Requests');
+        const history = [];
+        for (const row of rows) {
+          if (row.c[1]?.v === clientId) history.push({ text: row.c[2]?.v || '', priority: row.c[3]?.v || 'Medium', date: row.c[4]?.v || '', status: row.c[5]?.v || 'New' });
+        }
+        const container = document.getElementById('requestHistory');
+        if (!container) return;
+        container.innerHTML = history.length ? history.slice().reverse().map(r => `
+          <div class="request-history-item">
+            <div class="req-text">${r.text}</div>
+            <div class="req-meta"><span class="priority-${r.priority.toLowerCase()}">${r.priority} priority</span> · ${r.date} · ${r.status}</div>
+          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No requests submitted yet.</div>';
+      } catch(e) {}
+    }
+
+    // ── MESSAGES ──────────────────────────────────────────────────
+    async function loadMessages() {
+      const clientId = sessionStorage.getItem('clientId');
+      const list = document.getElementById('messagesList');
+      try {
+        const rows = await fetchSheet('Messages');
+        const msgs = [];
+        for (const row of rows) {
+          if (row.c[0]?.v === clientId) msgs.push({ from: row.c[1]?.v || '', message: row.c[2]?.v || '', date: row.c[3]?.v || '' });
+        }
+        list.innerHTML = msgs.length ? msgs.map(m => `
+          <div class="msg-bubble ${m.from === 'PAL' ? 'msg-from-pal' : 'msg-from-client'}">
+            ${m.message}
+            <div class="msg-meta">${m.from === 'PAL' ? 'PAL' : 'You'} · ${m.date}</div>
+          </div>`).join('') : '<div class="messages-loading">No messages yet. Say hello!</div>';
+        list.scrollTop = list.scrollHeight;
+      } catch(e) { list.innerHTML = '<div class="messages-loading">Could not load messages.</div>'; }
+    }
+    async function sendMessage() {
+      const clientId = sessionStorage.getItem('clientId');
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      try {
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Messages', row: [clientId, 'Client', text, formatDateTime()] }) });
+        await loadMessages();
+      } catch(e) {}
+    }
+
+      // ── ACTION PLAN ───────────────────────────────────────────────
     async function loadActionPlan(clientId) {
       const container = document.getElementById('taskList');
       if (!container) return;
@@ -1281,8 +1539,8 @@
                 <div class="task-title">${t.title}</div>
                 <div class="task-meta">
                   ${t.dueDate ? `Due: ${t.dueDate}` : ''}
-                  ${t.assignedTo ? ` &middot; <span style="color:#D4A574;">${t.assignedTo}</span>` : ''}
-                  ${t.requestedBy ? ` &middot; by ${t.requestedBy}` : ''}
+                  ${t.assignedTo ? ` · <span style="color:#D4A574;">${t.assignedTo}</span>` : ''}
+                  ${t.requestedBy ? ` · by ${t.requestedBy}` : ''}
                 </div>
                 ${t.description ? `<div class="task-description">${t.description}</div>` : ''}
                 ${t.comment ? `<div class="task-comment">"${t.comment}"</div>` : ''}
@@ -1310,222 +1568,37 @@
       const status = document.getElementById('statusSelect-' + taskId).value;
       const comment = document.getElementById('commentInput-' + taskId).value.trim();
       const successEl = document.getElementById('taskUpdateSuccess-' + taskId);
-      const timestamp = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'updateTask', taskId, status, comment, updatedAt: timestamp })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'updateTask', taskId, status, comment, updatedAt: formatDateTime() }) });
         successEl.textContent = 'Updated successfully!';
         setTimeout(() => { loadActionPlan(clientId); }, 1500);
       } catch(e) { successEl.textContent = 'Error updating. Try again.'; }
     }
-    // ── PROCESS ───────────────────────────────────────────────────
-    function loadProcess() {
-      const container = document.getElementById('processFlow');
-      if (!container || container.dataset.loaded) return;
-      container.dataset.loaded = 'true';
-      const steps = [
-        { label: "Initial consultation", sub: "Understand needs · present options · client chooses" },
-        { label: "Proposal or payment link sent", sub: "Client reviews and confirms" },
-        { label: "Payment confirmed", sub: "PayPal · Apple Pay · Credit Card · Bank Transfer" },
-        { label: "Client portal access sent", sub: "Service details · insurance information · provider contacts" },
-        { label: "Service delivered", sub: "The PAL team takes care of everything" },
-        { label: "Feedback requested", sub: "Google review or private feedback" },
-        { label: "Invoice sent", sub: "Full summary with all service details" },
-      ];
-      container.innerHTML = steps.map((s, i) => `
-        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center;">
-          <div style="color:#D4A574; font-size:0.9rem; font-weight:500; margin-bottom:0.3rem;">${s.label}</div>
-          <div style="color:#7A6A4A; font-size:0.75rem;">${s.sub}</div>
-        </div>
-        ${i < steps.length - 1 ? '<div style="display:flex; justify-content:center; margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
-      `).join('');
-    }
-    // ── JOURNEY ───────────────────────────────────────────────────
-    async function loadJourney(clientId) {
-      try {
-        const rows = await fetchSheet('Relationship');
-        let found = null;
-        for (const row of rows) {
-          if (row.c[0]?.v === clientId) {
-            found = { welcome: row.c[1]?.v || '', since: row.c[2]?.v || '', services: row.c[3]?.v || '', note: row.c[4]?.v || '', reward: row.c[5]?.v || '' };
-            break;
-          }
-        }
-        document.getElementById('journeyLoading').style.display = 'none';
-        if (found) {
-          document.getElementById('journeyContent').style.display = 'block';
-          document.getElementById('journeyWelcome').textContent = found.welcome;
-          document.getElementById('journeySince').textContent = 'TOGETHER SINCE ' + found.since.toUpperCase();
-          document.getElementById('journeyNote').textContent = found.note;
-          document.getElementById('journeyReward').textContent = found.reward;
-          const servicesList = found.services.split(',').map(s => s.trim());
-          document.getElementById('journeyServices').innerHTML = servicesList.map(s => `<div class="journey-service-tag">${s}</div>`).join('');
-          const petPhoto = PET_PHOTO_MAP[clientId];
-          if (petPhoto) {
-            const img = document.getElementById('journeyPetPhoto');
-            img.src = petPhoto;
-            img.style.display = 'block';
-          }
-        }
-      } catch(e) { console.log('Journey error:', e); }
-    }
-    // ── MEDIA ─────────────────────────────────────────────────────
-    async function loadMedia(clientId) {
-      try {
-        const rows = await fetchSheet('Media');
-        const palGrid = document.getElementById('mediaFromPAL');
-        const clientGrid = document.getElementById('mediaFromClient');
-        let palItems = [], clientItems = [];
-        for (const row of rows) {
-          if (row.c[1]?.v === clientId) {
-            const item = { fileId: row.c[0]?.v || '', caption: row.c[2]?.v || '', uploadedBy: row.c[3]?.v || '', date: formatDate(row.c[4]?.v || '') };
-            if (item.uploadedBy === 'PAL') palItems.push(item);
-            else clientItems.push(item);
-          }
-        }
-        palGrid.innerHTML = palItems.length ? palItems.map(item => `
-          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
-            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
-            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
-            <div class="media-card-meta"><span class="media-card-by-pal">PAL</span><span>${item.date}</span></div></div>
-          </div>`).join('') : '<div class="empty-media">No media from P.A.L. yet.</div>';
-        clientGrid.innerHTML = clientItems.length ? clientItems.map(item => `
-          <div class="media-card" onclick="window.open('https://drive.google.com/file/d/${item.fileId}/view','_blank')">
-            <img src="https://drive.google.com/thumbnail?id=${item.fileId}&sz=w400" onerror="this.src=''" alt="${item.caption}">
-            <div class="media-card-info"><div class="media-card-caption">${item.caption}</div>
-            <div class="media-card-meta"><span class="media-card-by-client">You</span><span>${item.date}</span></div></div>
-          </div>`).join('') : '<div class="empty-media">No media from you yet.</div>';
-      } catch(e) { console.log('Media error:', e); }
-    }
-      function uploadMedia() {
-      const clientId = sessionStorage.getItem('clientId');
-      const caption = document.getElementById('uploadCaption').value.trim();
-      const folderId = FOLDER_MAP[clientId];
-      if (folderId) {
-        window.open(`https://drive.google.com/drive/folders/${folderId}`, '_blank');
-        document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
-      }
-    }
-    // ── FEEDBACK ──────────────────────────────────────────────────
-    function setRating(rating) {
-      currentRating = rating;
-      document.querySelectorAll('.star').forEach((star, i) => star.classList.toggle('active', i < rating));
-    }
-    async function submitFeedback() {
-      const clientId = sessionStorage.getItem('clientId');
-      const serviceId = document.getElementById('feedbackService').value;
-      const comment = document.getElementById('feedbackComment').value.trim();
-      const successEl = document.getElementById('feedbackSuccess');
-      const errorEl = document.getElementById('feedbackError');
+    async function createTask() {
+      const clientId = document.getElementById('taskClientId').value;
+      const title = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDescription').value.trim();
+      const dueDate = document.getElementById('taskDueDate').value.trim();
+      const assignedTo = document.getElementById('taskAssignedTo').value;
+      const requestedBy = document.getElementById('taskRequestedBy').value;
+      const successEl = document.getElementById('taskSuccess');
+      const errorEl = document.getElementById('taskError');
       successEl.textContent = ''; errorEl.textContent = '';
-      if (!serviceId) { errorEl.textContent = 'Please select a service.'; return; }
-      if (!currentRating) { errorEl.textContent = 'Please select a rating.'; return; }
-      const feedbackId = 'F' + Date.now();
-      const timestamp = formatDateTime();
+      if (!clientId) { errorEl.textContent = 'Please select a client.'; return; }
+      if (!title) { errorEl.textContent = 'Please enter a task title.'; return; }
+      const taskId = 'T' + Date.now();
       try {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Feedback', row: [feedbackId, clientId, serviceId, currentRating, comment, timestamp] }) });
-        successEl.textContent = 'Thank you! Your feedback has been submitted.';
-        document.getElementById('feedbackComment').value = '';
-        document.getElementById('feedbackService').value = '';
-        setRating(0);
-        loadFeedbackHistory(clientId);
-      } catch(e) { errorEl.textContent = 'Error submitting feedback. Please try again.'; }
+          body: JSON.stringify({ sheet: 'Task', row: [taskId, clientId, title, description, 'To Do', '', dueDate, 'PAL', formatDateTime(), '', assignedTo, requestedBy] }) });
+        successEl.textContent = 'Task created successfully!';
+        document.getElementById('taskClientId').value = '';
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskDescription').value = '';
+        document.getElementById('taskDueDate').value = '';
+      } catch(e) { errorEl.textContent = 'Error creating task. Try again.'; }
     }
-    async function loadFeedbackHistory(clientId) {
-      try {
-        const rows = await fetchSheet('Feedback');
-        const history = [];
-        for (const row of rows) {
-          if (row.c[1]?.v === clientId) {
-            history.push({ service: row.c[2]?.v || '', rating: row.c[3]?.v || 0, comment: row.c[4]?.v || '', date: row.c[5]?.v || '' });
-          }
-        }
-        const container = document.getElementById('feedbackHistory');
-        if (!container) return;
-        container.innerHTML = history.length ? history.map(f => `
-          <div style="background:#1a1a1a; border:1px solid #333; padding:1rem; margin-top:0.8rem;">
-            <div style="color:#D4A574; font-size:0.75rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
-            <div style="color:#fff; font-size:0.85rem; margin-bottom:0.3rem;">${f.comment}</div>
-            <div style="color:#666; font-size:0.75rem;">${f.service} &middot; ${f.date}</div>
-          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
-      } catch(e) { console.log('Feedback history error:', e); }
-    }
-    // ── REQUESTS ──────────────────────────────────────────────────
-    async function submitRequest() {
-      const clientId = sessionStorage.getItem('clientId');
-      const text = document.getElementById('requestText').value.trim();
-      const priority = document.getElementById('requestPriority').value;
-      const successEl = document.getElementById('requestSuccess');
-      const errorEl = document.getElementById('requestError');
-      successEl.textContent = ''; errorEl.textContent = '';
-      if (!text) { errorEl.textContent = 'Please describe your request.'; return; }
-      const requestId = 'R' + Date.now();
-      const timestamp = formatDateTime();
-      try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Requests', row: [requestId, clientId, text, priority, timestamp, 'New'] }) });
-        successEl.textContent = 'Request submitted! P.A.L. will be in touch.';
-        document.getElementById('requestText').value = '';
-        document.getElementById('requestPriority').value = 'Medium';
-        loadRequestHistory(clientId);
-      } catch(e) { errorEl.textContent = 'Error submitting request. Please try again.'; }
-    }
-    async function loadRequestHistory(clientId) {
-      try {
-        const rows = await fetchSheet('Requests');
-        const history = [];
-        for (const row of rows) {
-          if (row.c[1]?.v === clientId) {
-            history.push({ text: row.c[2]?.v || '', priority: row.c[3]?.v || 'Medium', date: row.c[4]?.v || '', status: row.c[5]?.v || 'New' });
-          }
-        }
-        const container = document.getElementById('requestHistory');
-        if (!container) return;
-        container.innerHTML = history.length ? history.slice().reverse().map(r => `
-          <div class="request-history-item">
-            <div class="req-text">${r.text}</div>
-            <div class="req-meta">
-              <span class="priority-${r.priority.toLowerCase()}">${r.priority} priority</span> &middot; ${r.date} &middot; ${r.status}
-            </div>
-          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No requests submitted yet.</div>';
-      } catch(e) { console.log('Request history error:', e); }
-    }
-    // ── MESSAGES ──────────────────────────────────────────────────
-    async function loadMessages() {
-      const clientId = sessionStorage.getItem('clientId');
-      const list = document.getElementById('messagesList');
-      try {
-        const rows = await fetchSheet('Messages');
-        const msgs = [];
-        for (const row of rows) {
-          if (row.c[0]?.v === clientId) {
-            msgs.push({ from: row.c[1]?.v || '', message: row.c[2]?.v || '', date: row.c[3]?.v || '' });
-          }
-        }
-        list.innerHTML = msgs.length ? msgs.map(m => `
-          <div class="msg-bubble ${m.from === 'PAL' ? 'msg-from-pal' : 'msg-from-client'}">
-            ${m.message}
-            <div class="msg-meta">${m.from === 'PAL' ? 'PAL' : 'You'} &middot; ${m.date}</div>
-          </div>`).join('') : '<div class="messages-loading">No messages yet. Say hello!</div>';
-        list.scrollTop = list.scrollHeight;
-      } catch(e) { list.innerHTML = '<div class="messages-loading">Could not load messages.</div>'; }
-    }
-    async function sendMessage() {
-      const clientId = sessionStorage.getItem('clientId');
-      const input = document.getElementById('messageInput');
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = '';
-      const timestamp = formatDateTime();
-      try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Messages', row: [clientId, 'Client', text, timestamp] }) });
-        await loadMessages();
-      } catch(e) { console.log('Message send error:', e); }
-    }
+
     // ── TABS & LOGOUT ─────────────────────────────────────────────
     function showTab(tab, el) {
       Object.values(TAB_ID_MAP).forEach(id => {
@@ -1544,13 +1617,14 @@
       if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
       if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
       if (tab === 'actionplan') loadActionPlan(sessionStorage.getItem('clientId'));
-      if (tab === 'staff') loadStaffClients();
+      if (tab === 'staff') { restoreActiveTimers(); loadActiveSessions(); }
       if (tab === 'projects') loadProjectTracker(sessionStorage.getItem('clientId'));
     }
     function logout() {
       sessionStorage.clear();
-      activeCheckIns = {};
-      localStorage.removeItem('activeCheckIns');
+      activeTimers = {};
+      Object.values(timerIntervals).forEach(i => clearInterval(i));
+      timerIntervals = {};
       document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'block');
       document.getElementById('staffNavItem').style.display = 'none';
       document.getElementById('loginScreen').style.display = 'flex';
@@ -1558,76 +1632,62 @@
       if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
     }
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-  
-    // ============================================================
-    // PROJECT TRACKER
-    // ============================================================
+
+    // ── PROJECT TRACKER ───────────────────────────────────────────
     const PHASE_STATUS_CONFIG = {
-      'Scheduled':   { bar: '#2196F3', text: '#fff', dark: true },    text: '#999',    dark: false },
+      'Scheduled':   { bar: '#2196F3', text: '#fff',    dark: true  },
       'In Progress': { bar: '#D4A574', text: '#1A1A1A', dark: true  },
       'Waiting':     { bar: '#E8A000', text: '#1A1A1A', dark: true  },
       'Completed':   { bar: '#4CAF50', text: '#1A1A1A', dark: true  },
-      'Cancelled':   { bar: '#ff4444', text: '#fff', dark: true }    text: '#666',    dark: false }
+      'Cancelled':   { bar: '#ff4444', text: '#fff',    dark: true  }
     };
     const PROJECT_STATUS_COLORS = {
-      'Active':    '#4CAF50',
-      'Paused':    '#E8A000',
-      'Completed': '#888',
-      'Cancelled': '#555'
+      'Active': '#4CAF50', 'Paused': '#E8A000', 'Completed': '#888', 'Cancelled': '#555'
     };
     async function fetchAllProjects(clientIdFilter) {
       try {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PROJECTS_GID}&t=${Date.now()}`);
         const text = await res.text();
         const json = JSON.parse(text.substring(47).slice(0, -2));
-        return (json.table.rows || [])
-          .map(row => ({
-            projectId:   (row.c[0]?.v || '').toString(),
-            clientId:    (row.c[1]?.v || '').toString().trim(),
-            name:        (row.c[2]?.v || '').toString(),
-            description: (row.c[3]?.v || '').toString(),
-            plannedStart:(row.c[4]?.f || row.c[4]?.v || '').toString(),
-            plannedEnd:  (row.c[5]?.f || row.c[5]?.v || '').toString(),
-            status:      (row.c[6]?.v || 'Active').toString(),
-            createdDate: (row.c[7]?.v || '').toString()
-          }))
-          .filter(p => !clientIdFilter || p.clientId === clientIdFilter);
-      } catch (e) { return []; }
+        return (json.table.rows || []).map(row => ({
+          projectId:   (row.c[0]?.v || '').toString(),
+          clientId:    (row.c[1]?.v || '').toString().trim(),
+          name:        (row.c[2]?.v || '').toString(),
+          description: (row.c[3]?.v || '').toString(),
+          plannedStart:(row.c[4]?.f || row.c[4]?.v || '').toString(),
+          plannedEnd:  (row.c[5]?.f || row.c[5]?.v || '').toString(),
+          status:      (row.c[6]?.v || 'Active').toString(),
+          createdDate: (row.c[7]?.v || '').toString()
+        })).filter(p => !clientIdFilter || p.clientId === clientIdFilter);
+      } catch(e) { return []; }
     }
     async function fetchAllPhases(clientIdFilter) {
       try {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${PHASES_GID}&t=${Date.now()}`);
         const text = await res.text();
         const json = JSON.parse(text.substring(47).slice(0, -2));
-        return (json.table.rows || [])
-          .map(row => ({
-            phaseId:     (row.c[0]?.v || '').toString(),
-            projectId:   (row.c[1]?.v || '').toString(),
-            clientId:    (row.c[2]?.v || '').toString().trim(),
-            name:        (row.c[3]?.v || '').toString(),
-            description: (row.c[4]?.v || '').toString(),
-            status:      (row.c[5]?.v || 'Scheduled').toString(),
-            plannedStart:(row.c[6]?.f || row.c[6]?.v || '').toString(),
-            plannedEnd:  (row.c[7]?.f || row.c[7]?.v || '').toString(),
-            actualEnd:   (row.c[8]?.f || row.c[8]?.v || '').toString(),
-            notes:       (row.c[9]?.v || '').toString(),
-            updatedDate: (row.c[10]?.v || '').toString(),
-            updatedBy:   (row.c[11]?.v || '').toString()
-          }))
-          .filter(p => !clientIdFilter || p.clientId === clientIdFilter);
-      } catch (e) { return []; }
+        return (json.table.rows || []).map(row => ({
+          phaseId:     (row.c[0]?.v || '').toString(),
+          projectId:   (row.c[1]?.v || '').toString(),
+          clientId:    (row.c[2]?.v || '').toString().trim(),
+          name:        (row.c[3]?.v || '').toString(),
+          description: (row.c[4]?.v || '').toString(),
+          status:      (row.c[5]?.v || 'Scheduled').toString(),
+          plannedStart:(row.c[6]?.f || row.c[6]?.v || '').toString(),
+          plannedEnd:  (row.c[7]?.f || row.c[7]?.v || '').toString(),
+          actualEnd:   (row.c[8]?.f || row.c[8]?.v || '').toString(),
+          notes:       (row.c[9]?.v || '').toString()
+        })).filter(p => !clientIdFilter || p.clientId === clientIdFilter);
+      } catch(e) { return []; }
     }
     async function loadProjectTracker(currentClientId) {
       const container = document.getElementById('projectsContent');
       if (!container) return;
-      container.innerHTML = '<div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;letter-spacing:0.1em;">Loading projects...</div>';
+      container.innerHTML = '<div style="color:#666;text-align:center;padding:3rem;font-size:0.85rem;">Loading projects...</div>';
       const isStaff = STAFF_IDS.includes(currentClientId);
       const clientFilter = isStaff ? null : currentClientId;
       try {
-        const [projects, phases] = await Promise.all([
-          fetchAllProjects(clientFilter),
-          fetchAllPhases(clientFilter)
-        ]);
+        const [projects, phases] = await Promise.all([fetchAllProjects(clientFilter), fetchAllPhases(clientFilter)]);
         if (!projects.length) {
           container.innerHTML = `
             <div style="text-align:center;padding:3rem 2rem;">
@@ -1638,18 +1698,14 @@
           return;
         }
         let html2 = '';
-        if (isStaff) {
-          html2 += `<div style="padding:1rem 1rem 0;display:flex;gap:0.8rem;flex-wrap:wrap;">
-            <button class="btn" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem;" onclick="openAddProjectModal()">+ NEW PROJECT</button>
-          </div>`;
-        }
+        if (isStaff) html2 += `<div style="padding:1rem 1rem 0;"><button class="btn" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem;" onclick="openAddProjectModal()">+ NEW PROJECT</button></div>`;
         for (const project of projects) {
           const projectPhases = phases.filter(p => p.projectId === project.projectId);
           html2 += buildProjectBlock(project, projectPhases, isStaff);
         }
         container.innerHTML = html2;
-      } catch (e) {
-        container.innerHTML = '<div style="color:#ff6b6b;text-align:center;padding:2rem;font-size:0.85rem;">Error loading projects. Please try again.</div>';
+      } catch(e) {
+        container.innerHTML = '<div style="color:#ff6b6b;text-align:center;padding:2rem;">Error loading projects. Please try again.</div>';
       }
     }
     function buildProjectBlock(project, phases, isStaff) {
@@ -1662,7 +1718,7 @@
             <div style="flex:1;min-width:0;">
               <div style="color:#666;font-size:0.65rem;letter-spacing:0.2em;margin-bottom:0.3rem;">PROJECT</div>
               <div style="color:#fff;font-size:1rem;letter-spacing:0.08em;line-height:1.3;">${project.name}</div>
-              ${project.clientId && isStaff ? `<div style="color:#D4A574;font-size:0.7rem;margin-top:0.2rem;letter-spacing:0.1em;">CLIENT: ${project.clientId}</div>` : ''}
+              ${project.clientId && isStaff ? `<div style="color:#D4A574;font-size:0.7rem;margin-top:0.2rem;">CLIENT: ${project.clientId}</div>` : ''}
               ${project.description ? `<div style="color:#888;font-size:0.8rem;margin-top:0.4rem;line-height:1.6;">${project.description}</div>` : ''}
               ${(project.plannedStart || project.plannedEnd) ? `
                 <div style="display:flex;gap:1.5rem;margin-top:0.6rem;">
@@ -1675,15 +1731,12 @@
           <div class="project-body">
             <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">TIMELINE</div>
             ${ganttHtml}
-            ${isStaff ? `<button onclick="openAddPhaseModal('${project.projectId}','${project.clientId}')" style="background:transparent;border:1px solid #444;color:#888;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
-            ${reportHtml ? `
-              <div style="margin-top:1.2rem;border-top:1px solid #2a2a2a;padding-top:1.2rem;">
-                <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.8rem;">PLANNED vs ACTUAL</div>
-                ${reportHtml}
-              </div>` : ''}
+            ${isStaff ? `<button onclick="openAddPhaseModal('${project.projectId}','${project.clientId}')" style="background:transparent;border:1px solid #444;color:#888;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
+            ${reportHtml ? `<div style="margin-top:1.2rem;border-top:1px solid #2a2a2a;padding-top:1.2rem;"><div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.8rem;">PLANNED vs ACTUAL</div>${reportHtml}</div>` : ''}
           </div>
         </div>`;
     }
+
       function buildGantt(phases, isStaff, clientId) {
       if (!phases.length) return '<div style="color:#555;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
       const parsed = phases.map(p => ({
@@ -1707,7 +1760,7 @@
       const WEEK_W = 60, LABEL_W = 148;
       const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       const weekHeaders = weeks.map(w =>
-        `<div class="gantt-week-header" style="width:${WEEK_W}px;font-size:0.58rem;color:#555;letter-spacing:0.03em;">${w.getDate()} ${monthNames[w.getMonth()]}</div>`
+        `<div class="gantt-week-header" style="width:${WEEK_W}px;font-size:0.58rem;color:#555;">${w.getDate()} ${monthNames[w.getMonth()]}</div>`
       ).join('');
       const phaseRows = parsed.map(p => {
         const cfg = PHASE_STATUS_CONFIG[p.status] || PHASE_STATUS_CONFIG['Scheduled'];
@@ -1720,7 +1773,7 @@
           const actualOffsetDays = (p.actualEndDate - minDate) / 86400000;
           const actualLeftPct = (actualOffsetDays / totalDays) * 100;
           const color = p.actualEndDate <= p.endDate ? '#4CAF50' : '#ff6b6b';
-          actualMarker = `<div class="gantt-actual-line" style="left:${actualLeftPct}%;background:${color};" title="Actual: ${p.actualEnd}"></div>`;
+          actualMarker = `<div class="gantt-actual-line" style="left:${actualLeftPct}%;background:${color};"></div>`;
         }
         const statusSelector = isStaff ? `
           <select class="phase-status-select" onchange="updatePhaseStatus('${p.phaseId}', this.value, '${clientId}')">
@@ -1730,13 +1783,13 @@
             <option ${p.status==='Completed'  ?'selected':''}>Completed</option>
             <option ${p.status==='Cancelled'  ?'selected':''}>Cancelled</option>
           </select>` : '';
-        const notesHtml = p.notes ? `<div style="color:#555;font-size:0.65rem;margin-top:0.15rem;font-style:italic;line-height:1.4;">${p.notes}</div>` : '';
+        const notesHtml = p.notes ? `<div style="color:#555;font-size:0.65rem;margin-top:0.15rem;font-style:italic;">${p.notes}</div>` : '';
         const actualEndHtml = p.actualEnd ? `<div style="color:#4CAF50;font-size:0.62rem;margin-top:0.15rem;">Done: ${p.actualEnd}</div>` : '';
         return `
           <div class="gantt-phase-row">
             <div class="gantt-phase-label" style="width:${LABEL_W}px;">
               <div style="color:#ddd;font-size:0.75rem;line-height:1.3;">${p.name}</div>
-              <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.55rem;padding:0.1rem 0.35rem;letter-spacing:0.04em;">${p.status.toUpperCase()}</span>
+              <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.55rem;padding:0.1rem 0.35rem;">${p.status.toUpperCase()}</span>
               ${statusSelector}${notesHtml}${actualEndHtml}
             </div>
             <div class="gantt-phase-timeline">
@@ -1748,7 +1801,7 @@
           </div>`;
       }).join('');
       const legend = Object.entries(PHASE_STATUS_CONFIG).map(([s, c]) =>
-        `<div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:${c.bar};"></div><span style="color:#555;font-size:0.62rem;letter-spacing:0.04em;">${s}</span></div>`
+        `<div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:${c.bar};"></div><span style="color:#555;font-size:0.62rem;">${s}</span></div>`
       ).join('');
       return `
         <div class="gantt-wrap">
@@ -1780,7 +1833,7 @@
               <div style="color:#ddd;font-size:0.85rem;">${p.name}</div>
               ${p.description ? `<div style="color:#666;font-size:0.75rem;">${p.description}</div>` : ''}
             </div>
-            <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.6rem;padding:0.2rem 0.5rem;flex-shrink:0;">${p.status.toUpperCase()}</span>
+            <span style="background:${cfg.bar};color:${cfg.dark?'#1A1A1A':'#999'};font-size:0.6rem;padding:0.2rem 0.5rem;">${p.status.toUpperCase()}</span>
             ${selector}
           </div>`;
       }).join('');
@@ -1803,14 +1856,13 @@
           <div class="report-cell ${varClass}">${varLabel}</div>`;
       }).join('');
       if (!rows.trim()) return '';
-      return `
-        <div class="report-grid">
-          <div class="report-header-cell">PHASE</div>
-          <div class="report-header-cell">PLANNED END</div>
-          <div class="report-header-cell">ACTUAL END</div>
-          <div class="report-header-cell">VARIANCE</div>
-          ${rows}
-        </div>`;
+      return `<div class="report-grid">
+        <div class="report-header-cell">PHASE</div>
+        <div class="report-header-cell">PLANNED END</div>
+        <div class="report-header-cell">ACTUAL END</div>
+        <div class="report-header-cell">VARIANCE</div>
+        ${rows}
+      </div>`;
     }
     async function updatePhaseStatus(phaseId, newStatus, clientId) {
       const now = formatDateTime();
@@ -1818,17 +1870,10 @@
       const updates = { Status: newStatus, UpdatedDate: now, UpdatedBy: staffId };
       if (newStatus === 'Completed') updates['ActualEnd'] = formatDateToAU(new Date());
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'updateRow', sheet: 'Project Phases', idField: 'PhaseID', id: phaseId, updates })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'updateRow', sheet: 'Project Phases', idField: 'PhaseID', id: phaseId, updates }) });
         setTimeout(() => loadProjectTracker(sessionStorage.getItem('clientId')), 900);
-      } catch (e) { alert('Error updating status. Please try again.'); }
-    }
-    function formatDateToAU(date) {
-      const d = date.getDate().toString().padStart(2, '0');
-      const m = (date.getMonth() + 1).toString().padStart(2, '0');
-      return `${d}/${m}/${date.getFullYear()}`;
+      } catch(e) { alert('Error updating status. Please try again.'); }
     }
     function openAddProjectModal() {
       document.getElementById('palModalBody').innerHTML = `
@@ -1876,9 +1921,7 @@
         <div class="success-msg" id="mPhaseSuccess"></div>`;
       document.getElementById('palProjectModal').style.display = 'flex';
     }
-    function closePalModal() {
-      document.getElementById('palProjectModal').style.display = 'none';
-    }
+    function closePalModal() { document.getElementById('palProjectModal').style.display = 'none'; }
     async function submitNewProject() {
       const clientId  = document.getElementById('mProjClient').value.trim();
       const name      = document.getElementById('mProjName').value.trim();
@@ -1891,15 +1934,12 @@
       if (!clientId) { errEl.textContent = 'Please select a client.'; return; }
       if (!name)     { errEl.textContent = 'Please enter a project name.'; return; }
       const projectId = 'PROJ' + Date.now();
-      const now = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Active', now] })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Active', formatDateTime()] }) });
         successEl.textContent = 'Project created!';
         setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId')); }, 1000);
-      } catch (e) { errEl.textContent = 'Error. Please try again.'; }
+      } catch(e) { errEl.textContent = 'Error. Please try again.'; }
     }
     async function submitNewPhase() {
       const projectId  = document.getElementById('mPhaseProjectId').value;
@@ -1914,24 +1954,17 @@
       errEl.textContent = ''; successEl.textContent = '';
       if (!name) { errEl.textContent = 'Please enter a phase name.'; return; }
       const phaseId = 'PH' + Date.now();
-      const now = formatDateTime();
       try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Project Phases', row: [phaseId, projectId, clientId, name, desc, 'Scheduled', start, end, '', notes, now, sessionStorage.getItem('clientId')] })
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Project Phases', row: [phaseId, projectId, clientId, name, desc, 'Scheduled', start, end, '', notes, formatDateTime(), sessionStorage.getItem('clientId')] }) });
         successEl.textContent = 'Phase added!';
         setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId')); }, 1000);
-      } catch (e) { errEl.textContent = 'Error. Please try again.'; }
+      } catch(e) { errEl.textContent = 'Error. Please try again.'; }
     }
-    // Close modal on backdrop click
     document.addEventListener('DOMContentLoaded', function() {
       const modal = document.getElementById('palProjectModal');
       if (modal) modal.addEventListener('click', function(e) { if (e.target === this) closePalModal(); });
     });
-
   </script>
 </body>
 </html>
-    
-
