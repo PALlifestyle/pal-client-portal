@@ -575,7 +575,7 @@
             <option value="consultation">Initial Consultation</option>
             <option value="meeting">In-Person Meeting</option>
             <option value="homevisit">Home Visit</option>
-            <option value="execution">Execução de Projeto</option>
+            <option value="execution">Project Execution</option>
             <option value="planning">Planejamento</option>
           </select>
           <div id="activityFields" style="margin-top:0.8rem;"></div>
@@ -1009,7 +1009,7 @@
       const endTime = new Date();
       const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
       const dateStr = formatDateToAU(endTime);
-      const typeLabels = { consultation: 'Initial Consultation', meeting: 'In-Person Meeting', execution: 'Execução de Projeto', planning: 'Planejamento' };
+      const typeLabels = { consultation: 'Initial Consultation', meeting: 'In-Person Meeting', execution: 'Project Execution', planning: 'Planejamento' };
       const logId = 'L' + Date.now();
       let notesStr = `Type:${type}|Start:${formatTimeOnly(startTime)}|End:${formatTimeOnly(endTime)}`;
       if (session.project) notesStr += `|Project:${session.project}`;
@@ -1120,7 +1120,7 @@
       if (!container) return;
       const entries = Object.entries(activeTimers);
       if (!entries.length) { container.innerHTML = '<div style="padding:1rem;color:#666;font-size:0.85rem;">No active sessions.</div>'; return; }
-      const typeLabels = { consultation: 'Initial Consultation', meeting: 'In-Person Meeting', homevisit: 'Home Visit', execution: 'Execução de Projeto', planning: 'Planejamento' };
+      const typeLabels = { consultation: 'Initial Consultation', meeting: 'In-Person Meeting', homevisit: 'Home Visit', execution: 'Project Execution', planning: 'Planejamento' };
       container.innerHTML = entries.map(([key, session]) => {
         const startTime = new Date(session.startTime);
         const elapsed = new Date() - startTime;
