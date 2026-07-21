@@ -83,6 +83,12 @@
     .service-item .name { color: #fff; font-size: 0.9rem; }
     .service-item .date { color: #666; font-size: 0.8rem; }
     .service-item .status { font-size: 0.75rem; padding: 0.2rem 0.5rem; background: #1a3a1a; color: #4caf50; }
+    .payment-history-item { background: #1a1a1a; border: 1px solid #333; padding: 0.8rem 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .pay-amount { color: #fff; font-size: 0.9rem; }
+    .pay-meta { color: #666; font-size: 0.75rem; margin-top: 0.2rem; }
+    .pay-status-paid { color: #4caf50; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-overdue { color: #ff6b6b; font-size: 0.75rem; font-weight: bold; }
+    .pay-status-pending { color: #D4A574; font-size: 0.75rem; font-weight: bold; }
     .media-page { padding: 1rem; }
     .media-section-title { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.2em; margin: 1rem 0 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #333; }
     .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
@@ -105,7 +111,6 @@
     .feedback-box { background: #222; border: 1px solid #333; padding: 1.5rem; margin-bottom: 1rem; }
     .feedback-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     select { width: 100%; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.8rem 1rem; margin-bottom: 1rem; font-family: Georgia, serif; font-size: 0.9rem; }
-
     .book-page { padding: 2rem 1rem; text-align: center; }
     .book-page p { color: #888; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 2rem; line-height: 1.8; }
     .book-btn { background: #D4A574; color: #1A1A1A; padding: 1rem 2.5rem; text-decoration: none; font-family: Georgia, serif; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; display: inline-block; }
@@ -174,7 +179,21 @@
     .priority-high { color: #ff6b6b; }
     .priority-medium { color: #D4A574; }
     .priority-low { color: #4caf50; }
+    .schedule-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
+    .schedule-item-date { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .schedule-item-type { color: #fff; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .schedule-item-meta { color: #666; font-size: 0.75rem; margin-bottom: 0.2rem; }
+    .schedule-status-scheduled { color: #2196F3; font-size: 0.75rem; font-weight: bold; margin-top: 0.3rem; }
+    .schedule-status-completed { color: #4CAF50; font-size: 0.75rem; font-weight: bold; margin-top: 0.3rem; }
+    .hours-project-block { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .hours-project-name { color: #D4A574; font-size: 0.9rem; letter-spacing: 0.1em; margin-bottom: 0.8rem; }
+    .hours-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #1a1a1a; }
+    .hours-label { color: #aaa; font-size: 0.78rem; }
+    .hours-value { color: #fff; font-size: 0.78rem; font-weight: bold; }
+    .hours-total { color: #D4A574; font-size: 0.9rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #333; text-align: right; }
     .staff-page { padding: 1rem; }
+    .staff-profile-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+    .staff-profile-avatar { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #D4A574; background: #333; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
     .staff-notif-box { background: #222; border: 1px solid #D4A574; padding: 1.2rem; margin-bottom: 1rem; }
     .staff-notif-box label { color: #D4A574; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     .staff-notif-box input { margin-bottom: 0.5rem; }
@@ -183,6 +202,8 @@
     .staff-task-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     .staff-activity-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
     .staff-activity-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
+    .staff-appt-box { background: #222; border: 1px solid #333; padding: 1.2rem; margin-bottom: 1rem; }
+    .staff-appt-box label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin-bottom: 0.5rem; }
     .staff-field-label { color: #888; font-size: 0.8rem; letter-spacing: 0.15em; display: block; margin: 0.8rem 0 0.4rem; }
     .activity-timer { color: #D4A574; font-size: 0.9rem; font-weight: bold; margin-top: 0.6rem; text-align: center; letter-spacing: 0.1em; }
     .activity-session-card { background: #1a1a1a; border: 1px solid #333; border-left: 3px solid #D4A574; padding: 1rem; margin-bottom: 0.8rem; }
@@ -195,7 +216,6 @@
     .btn-red { background: #ff6b6b; color: #fff; }
     .btn-red:hover { background: #d32f2f; }
     .btn-half { width: calc(50% - 0.4rem); display: inline-block; margin-top: 0; }
-
     .action-plan-page { padding: 1rem; }
     .task-item { background: #1a1a1a; border: 1px solid #333; padding: 1rem; margin-bottom: 0.8rem; }
     .task-title { color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; font-weight: bold; }
@@ -208,40 +228,40 @@
     .task-status-waiting { background: #FF9800; color: #fff; }
     .task-status-skip { background: #9C27B0; color: #fff; }
     .task-status-done { background: #4CAF50; color: #fff; }
-    .task-update-row { display:flex; gap:0.5rem; margin-top:0.7rem; align-items:center; flex-wrap:wrap; }
-    .task-inline-select { flex:0 0 110px; background:#1A1A1A; border:1px solid #444; color:#aaa; padding:0.4rem 0.5rem; font-family:Georgia,serif; font-size:0.75rem; }
-    .task-inline-input { flex:1; min-width:120px; background:#1A1A1A; border:1px solid #444; color:#fff; padding:0.4rem 0.6rem; font-family:Georgia,serif; font-size:0.8rem; margin-bottom:0; }
-    .task-inline-btn { background:#D4A574; color:#1A1A1A; border:none; padding:0.4rem 0.8rem; font-family:Georgia,serif; font-size:0.75rem; letter-spacing:0.1em; cursor:pointer; white-space:nowrap; margin-top:0; }
-    .gantt-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #2a2a2a; margin-top:0.5rem; }
-    .gantt-inner { display:inline-block; min-width:100%; }
-    .gantt-header-row { display:flex; background:#111; border-bottom:1px solid #2a2a2a; position:sticky; top:0; z-index:2; }
-    .gantt-label-header { flex-shrink:0; padding:0.4rem 0.8rem; background:#111; position:sticky; left:0; z-index:3; border-right:1px solid #2a2a2a; }
-    .gantt-week-header { flex-shrink:0; text-align:center; padding:0.4rem 0; border-right:1px solid #222; }
-    .gantt-phase-row { display:flex; border-bottom:1px solid #1a1a1a; min-height:52px; }
-    .gantt-phase-label { flex-shrink:0; padding:0.6rem 0.8rem; background:#1c1c1c; position:sticky; left:0; z-index:1; border-right:1px solid #2a2a2a; display:flex; flex-direction:column; justify-content:center; }
-    .gantt-phase-timeline { flex:1; position:relative; }
-    .gantt-bar { position:absolute; top:8px; bottom:8px; border-radius:2px; min-width:6px; overflow:hidden; }
-    .gantt-bar-label { font-size:0.6rem; padding:0.15rem 0.4rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.6; }
-    .gantt-actual-line { position:absolute; top:0; bottom:0; width:2px; opacity:0.9; }
-    .project-block { background:#222; border:1px solid #2a2a2a; margin:1rem; }
-    .project-block-header { padding:1.2rem 1.5rem; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #2a2a2a; }
-    .project-status-badge { font-size:0.65rem; letter-spacing:0.15em; padding:0.2rem 0.7rem; border:1px solid; flex-shrink:0; margin-left:1rem; }
-    .project-body { padding:1.2rem 1.5rem; }
-    .gantt-legend { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.8rem; }
-    .gantt-legend-item { display:flex; align-items:center; gap:0.35rem; }
-    .gantt-legend-dot { width:10px; height:10px; flex-shrink:0; }
-    .phase-status-select { background:#1A1A1A; border:1px solid #333; color:#aaa; padding:0.2rem 0.3rem; font-family:Georgia,serif; font-size:0.65rem; margin-top:0.3rem; width:100%; cursor:pointer; }
-    .report-grid { display:grid; grid-template-columns:1fr auto auto auto; gap:0.5rem; }
-    .report-header-cell { color:#555; font-size:0.65rem; letter-spacing:0.1em; padding-bottom:0.4rem; }
-    .report-cell { color:#aaa; font-size:0.75rem; padding:0.4rem 0; border-bottom:1px solid #1a1a1a; }
-    .variance-early { color:#4CAF50; }
-    .variance-ontime { color:#4CAF50; }
-    .variance-late { color:#ff6b6b; }
-    .modal-field-label { color:#888; font-size:0.75rem; letter-spacing:0.15em; display:block; margin:0.8rem 0 0.3rem; }
-    .modal-title { color:#D4A574; font-size:0.85rem; letter-spacing:0.2em; margin-bottom:1.2rem; }
+    .task-update-row { display: flex; gap: 0.5rem; margin-top: 0.7rem; align-items: center; flex-wrap: wrap; }
+    .task-inline-select { flex: 0 0 110px; background: #1A1A1A; border: 1px solid #444; color: #aaa; padding: 0.4rem 0.5rem; font-family: Georgia, serif; font-size: 0.75rem; }
+    .task-inline-input { flex: 1; min-width: 120px; background: #1A1A1A; border: 1px solid #444; color: #fff; padding: 0.4rem 0.6rem; font-family: Georgia, serif; font-size: 0.8rem; margin-bottom: 0; }
+    .task-inline-btn { background: #D4A574; color: #1A1A1A; border: none; padding: 0.4rem 0.8rem; font-family: Georgia, serif; font-size: 0.75rem; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap; margin-top: 0; }
+    .gantt-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #2a2a2a; margin-top: 0.5rem; }
+    .gantt-inner { display: inline-block; min-width: 100%; }
+    .gantt-header-row { display: flex; background: #111; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; z-index: 2; }
+    .gantt-label-header { flex-shrink: 0; padding: 0.4rem 0.8rem; background: #111; position: sticky; left: 0; z-index: 3; border-right: 1px solid #2a2a2a; }
+    .gantt-week-header { flex-shrink: 0; text-align: center; padding: 0.4rem 0; border-right: 1px solid #222; }
+    .gantt-phase-row { display: flex; border-bottom: 1px solid #1a1a1a; min-height: 52px; }
+    .gantt-phase-label { flex-shrink: 0; padding: 0.6rem 0.8rem; background: #1c1c1c; position: sticky; left: 0; z-index: 1; border-right: 1px solid #2a2a2a; display: flex; flex-direction: column; justify-content: center; }
+    .gantt-phase-timeline { flex: 1; position: relative; }
+    .gantt-bar { position: absolute; top: 8px; bottom: 8px; border-radius: 2px; min-width: 6px; overflow: hidden; }
+    .gantt-bar-label { font-size: 0.6rem; padding: 0.15rem 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.6; }
+    .gantt-actual-line { position: absolute; top: 0; bottom: 0; width: 2px; opacity: 0.9; }
+    .project-block { background: #222; border: 1px solid #2a2a2a; margin: 1rem; }
+    .project-block-header { padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #2a2a2a; }
+    .project-status-badge { font-size: 0.65rem; letter-spacing: 0.15em; padding: 0.2rem 0.7rem; border: 1px solid; flex-shrink: 0; margin-left: 1rem; }
+    .project-body { padding: 1.2rem 1.5rem; }
+    .gantt-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .gantt-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+    .gantt-legend-dot { width: 10px; height: 10px; flex-shrink: 0; }
+    .phase-status-select { background: #1A1A1A; border: 1px solid #333; color: #aaa; padding: 0.2rem 0.3rem; font-family: Georgia, serif; font-size: 0.65rem; margin-top: 0.3rem; width: 100%; cursor: pointer; }
+    .report-grid { display: grid; grid-template-columns: 1fr auto auto auto; gap: 0.5rem; }
+    .report-header-cell { color: #555; font-size: 0.65rem; letter-spacing: 0.1em; padding-bottom: 0.4rem; }
+    .report-cell { color: #aaa; font-size: 0.75rem; padding: 0.4rem 0; border-bottom: 1px solid #1a1a1a; }
+    .variance-early { color: #4CAF50; }
+    .variance-ontime { color: #4CAF50; }
+    .variance-late { color: #ff6b6b; }
+    .modal-field-label { color: #888; font-size: 0.75rem; letter-spacing: 0.15em; display: block; margin: 0.8rem 0 0.3rem; }
+    .modal-title { color: #D4A574; font-size: 0.85rem; letter-spacing: 0.2em; margin-bottom: 1.2rem; }
   </style>
 </head>
-<body>
+  <body>
   <div id="loginScreen">
     <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img">
     <div class="tagline">PREMIUM ACTIVITIES & LIFESTYLE</div>
@@ -264,7 +284,6 @@
       <div class="loading" id="loadingMsg"></div>
     </div>
   </div>
-
   <div id="dashboardScreen" class="screen">
     <div class="top-bar">
       <img src="pal-logo-black.jpeg" alt="PAL" class="logo-img-small">
@@ -278,6 +297,8 @@
       <div class="nav-item" onclick="showTab('requests', this)">REQUESTS</div>
       <div class="nav-item" onclick="showTab('actionplan', this)">ACTION PLAN</div>
       <div class="nav-item" onclick="showTab('invoices', this)">INVOICES</div>
+      <div class="nav-item" onclick="showTab('schedule', this)">SCHEDULE</div>
+      <div class="nav-item" onclick="showTab('hours', this)">HOURS</div>
       <div class="nav-item" onclick="showTab('book', this)">CLIENT SCHEDULING</div>
       <div class="nav-item" onclick="showTab('journey', this)">OUR JOURNEY</div>
       <div class="nav-item" onclick="showTab('process', this)">OUR PROCESS</div>
@@ -400,7 +421,6 @@
         <div id="requestHistory"></div>
       </div>
     </div>
-
     <div id="tabActionplan" class="screen">
       <div class="action-plan-page">
         <div class="feedback-title">ACTION PLAN</div>
@@ -409,8 +429,24 @@
     </div>
     <div id="tabInvoices" class="screen">
       <div class="invoices-page">
-        <div class="section-title" style="border-top:none; padding-top:0;">YOUR INVOICES</div>
+        <div class="section-title" style="border-top:none;padding-top:0;">YOUR INVOICES</div>
         <div id="invoicesList"></div>
+      </div>
+    </div>
+    <div id="tabSchedule" class="screen">
+      <div style="padding:1rem;">
+        <div class="section-title" style="border-top:none;padding-top:0;">UPCOMING APPOINTMENTS</div>
+        <div id="scheduleUpcoming"><div style="padding:1rem;color:#666;font-size:0.85rem;">Loading...</div></div>
+        <div class="section-title">PAST APPOINTMENTS</div>
+        <div id="schedulePast"><div style="padding:1rem;color:#666;font-size:0.85rem;">Loading...</div></div>
+      </div>
+    </div>
+    <div id="tabHours" class="screen">
+      <div style="padding:1rem;">
+        <div class="section-title" style="border-top:none;padding-top:0;">HOURS BY PROJECT</div>
+        <div id="hoursByProject"><div style="padding:1rem;color:#666;font-size:0.85rem;">Loading...</div></div>
+        <div class="section-title">TOTAL HOURS</div>
+        <div id="hoursTotalSummary"></div>
       </div>
     </div>
     <div id="tabBook" class="screen">
@@ -444,8 +480,8 @@
     </div>
     <div id="tabProcess" class="screen">
       <div class="process-page">
-        <p style="color:#D4A574; font-size:0.7rem; letter-spacing:0.3em; text-align:center; margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
-        <p style="color:#6B5A3E; font-size:0.7rem; letter-spacing:0.1em; text-align:center; margin-bottom:1.5rem;">Your Time is Precious. Invest in Your Lifestyle.</p>
+        <p style="color:#D4A574;font-size:0.7rem;letter-spacing:0.3em;text-align:center;margin-bottom:0.3rem;">P.A.L. PREMIUM ACTIVITIES &amp; LIFESTYLE</p>
+        <p style="color:#6B5A3E;font-size:0.7rem;letter-spacing:0.1em;text-align:center;margin-bottom:1.5rem;">Your Time is Precious. Invest in Your Lifestyle.</p>
         <div id="processFlow"></div>
       </div>
     </div>
@@ -489,9 +525,9 @@
           <div class="about-stat"><div class="about-stat-value">Lifestyle</div><div class="about-stat-label">PERSONAL ORGANISATION</div></div>
         </div>
         <hr class="about-divider">
-        <p class="about-text" style="text-align:center; font-style:italic; color:#D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
+        <p class="about-text" style="text-align:center;font-style:italic;color:#D4A574;">Having you as a client is something I do not take for granted. It is a privilege to be part of your day, and I look forward to everything we will continue to build together.</p>
         <hr class="about-divider">
-        <div class="about-stat-label" style="text-align:center; margin-bottom:1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
+        <div class="about-stat-label" style="text-align:center;margin-bottom:1.2rem;">WHERE ELSE YOU CAN FIND ME</div>
         <div class="about-links">
           <a href="https://www.linkedin.com/in/p%C3%A2mela-l-55730bb8/" target="_blank" class="about-link-btn">LINKEDIN</a>
           <a href="https://www.airbnb.com.au/users/profile/about?context=host" target="_blank" class="about-link-btn">AIRBNB CO-HOST</a>
@@ -501,14 +537,26 @@
     </div>
     <div id="tabStaff" class="screen">
       <div class="staff-page">
-        <div class="section-title" style="border-top:none; padding-top:0;">SEND NOTIFICATION</div>
+        <div class="section-title" style="border-top:none;padding-top:0;">MY PROFILE</div>
+        <div class="staff-profile-box">
+          <div class="staff-profile-avatar" id="staffAvatarContainer">
+            <span style="color:#D4A574;font-size:1.5rem;" id="staffAvatarPlaceholder">P</span>
+            <img id="staffAvatarImg" src="" alt="Staff" style="display:none;width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div>
+            <div style="color:#fff;font-size:0.9rem;" id="staffNameDisplay">P.A.L. Staff</div>
+            <div style="color:#666;font-size:0.75rem;margin-top:0.2rem;">STAFF001</div>
+            <button class="profile-upload-btn" style="margin-top:0.5rem;" onclick="uploadStaffPhoto()">CHANGE PHOTO</button>
+          </div>
+        </div>
+        <div class="section-title">SEND NOTIFICATION</div>
         <div class="staff-notif-box">
           <label>TO</label>
           <select id="notifTarget" onchange="toggleNotifClientSelect()">
             <option value="all">All Clients</option>
             <option value="specific">Select Specific Client</option>
           </select>
-          <select id="notifSpecificClient" style="display:none; margin-bottom:0.5rem;">
+          <select id="notifSpecificClient" style="display:none;margin-bottom:0.5rem;">
             <option value="">Select client...</option>
             <option value="C001">C001 - Sabrina Ferreira</option>
             <option value="C002">C002 - Adeliny</option>
@@ -524,6 +572,37 @@
           <button class="btn" onclick="sendPushNotification()" style="margin-top:0;">SEND NOTIFICATION</button>
           <div class="success-msg" id="notifSuccess"></div>
           <div class="error" id="notifError"></div>
+        </div>
+        <div class="section-title">NEW APPOINTMENT</div>
+        <div class="staff-appt-box">
+          <label>CLIENT</label>
+          <select id="apptClient">
+            <option value="">Select client...</option>
+            <option value="C001">C001 - Sabrina Ferreira</option>
+            <option value="C002">C002 - Adeliny</option>
+            <option value="C003">C003 - Vania Cristina</option>
+            <option value="C004">C004 - Reuben Falzon</option>
+            <option value="C005">C005 - Mattheus da Rosa</option>
+            <option value="C006">C006 - Ana Barbara</option>
+          </select>
+          <label>DATE</label>
+          <input type="text" placeholder="DD/MM/YYYY" id="apptDate">
+          <label>TIME</label>
+          <input type="text" placeholder="e.g. 15:00" id="apptTime">
+          <label>TYPE</label>
+          <select id="apptType">
+            <option value="In Person">In Person</option>
+            <option value="Home Visit">Home Visit</option>
+            <option value="Online">Online</option>
+            <option value="Phone Call">Phone Call</option>
+          </select>
+          <label>LOCATION</label>
+          <input type="text" placeholder="Address or link..." id="apptLocation">
+          <label>NOTES</label>
+          <textarea placeholder="Optional notes..." id="apptNotes" style="height:60px;"></textarea>
+          <button class="btn" onclick="saveAppointment()" style="margin-top:0;">SAVE APPOINTMENT</button>
+          <div class="success-msg" id="apptSuccess"></div>
+          <div class="error" id="apptError"></div>
         </div>
         <div class="section-title">CREATE TASK FOR CLIENT</div>
         <div class="staff-task-box">
@@ -598,8 +677,7 @@
       </div>
     </div>
   </div>
-
-    <script>
+  <script>
     const SHEET_ID = '1vtI_FnwHjD1lyR4xIYUWYZb6E_H3BqmoMFZE3SUTjmg';
     const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-mle0YZH0BjjlY14hW6rCiE79AwVU-M1Sq5_Sj6jKlgDmdBMIkbEHmc38GRQPdQMVkw/exec';
@@ -623,7 +701,7 @@
       'C006': 'https://drive.google.com/thumbnail?id=1_vLm2zv8AF_3W45pqfIX09miQ-JVq6eI&sz=w400'
     };
     const CLIENT_NAMES = {
-      'C001': 'Maria Alice', 'C002': 'Adeliny', 'C003': 'Vania Cristina',
+      'C001': 'Sabrina Ferreira', 'C002': 'Adeliny', 'C003': 'Vania Cristina',
       'C004': 'Reuben Falzon', 'C005': 'Mattheus da Rosa', 'C006': 'Ana Barbara'
     };
     const STAFF_IDS = ['STAFF001'];
@@ -632,13 +710,12 @@
       'feedback': 'tabFeedback', 'requests': 'tabRequests', 'actionplan': 'tabActionplan',
       'invoices': 'tabInvoices', 'book': 'tabBook', 'journey': 'tabJourney',
       'process': 'tabProcess', 'concierge': 'tabConcierge', 'about': 'tabAbout',
-      'staff': 'tabStaff', 'projects': 'tabProjects'
+      'staff': 'tabStaff', 'projects': 'tabProjects', 'schedule': 'tabSchedule', 'hours': 'tabHours'
     };
     let currentRating = 0;
     let clientServices = [];
     let activeTimers = {};
     let timerIntervals = {};
-
     // ── GOOGLE OAUTH ──────────────────────────────────────────────
     window.addEventListener('load', () => {
       if (typeof google === 'undefined') return;
@@ -690,7 +767,6 @@
         errorMsg.textContent = 'Google login failed. Please try email/password.';
       }
     }
-
     // ── HELPERS ───────────────────────────────────────────────────
     function formatDate(dateVal) {
       if (!dateVal) return '';
@@ -786,7 +862,6 @@
         return tasks;
       } catch(e) { return []; }
     }
-
     // ── PROFILE PHOTO ─────────────────────────────────────────────
     function loadProfilePhoto() {
       const profilePhoto = sessionStorage.getItem('profilePhoto');
@@ -808,7 +883,9 @@
         alert('Upload your profile photo to Google Drive, then send the photo link to P.A.L. to update your profile.');
       }
     }
-
+    function uploadStaffPhoto() {
+      alert('Upload your photo to Google Drive and send the file ID to update your staff profile.');
+    }
     // ── LOGIN ─────────────────────────────────────────────────────
     async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -845,8 +922,7 @@
         errorMsg.textContent = 'Connection error. Please try again.';
       }
     }
-
-      // ── NOTIFICATIONS ─────────────────────────────────────────────
+    // ── NOTIFICATIONS ─────────────────────────────────────────────
     async function checkNotifStatus() {
       try {
         if (typeof OneSignal === 'undefined') return;
@@ -888,19 +964,21 @@
         document.getElementById('notifMessage').value = '';
       } catch(e) { errorEl.textContent = 'Error sending notification. Try again.'; }
     }
-
     // ── STAFF DASHBOARD ───────────────────────────────────────────
     function showStaffDashboard(staffId, staffName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
       document.getElementById('clientName').textContent = staffName.toUpperCase();
+      const staffNameEl = document.getElementById('staffNameDisplay');
+      if (staffNameEl) staffNameEl.textContent = staffName;
+      const staffPlaceholder = document.getElementById('staffAvatarPlaceholder');
+      if (staffPlaceholder) staffPlaceholder.textContent = staffName.charAt(0).toUpperCase();
       document.querySelectorAll('#mainNav .nav-item').forEach(n => n.style.display = 'none');
       document.getElementById('staffNavItem').style.display = 'block';
       showTab('staff', document.getElementById('staffNavItem'));
       restoreActiveTimers();
       loadActiveSessions();
     }
-
     // ── ACTIVITY LOGGING ──────────────────────────────────────────
     function saveActiveTimers() {
       localStorage.setItem('pal_active_timers', JSON.stringify(activeTimers));
@@ -929,6 +1007,8 @@
           <select id="actFormat"><option value="Online">Online</option><option value="Presencial">Presencial</option></select>
           <span class="staff-field-label">LINK / LOCATION</span>
           <input type="text" id="actLocation" placeholder="Zoom link or address...">
+          <span class="staff-field-label">PROJECT</span>
+          <input type="text" id="actProject" placeholder="Project name (optional)...">
           <span class="staff-field-label">NOTES</span>
           <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
           <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
@@ -942,6 +1022,8 @@
           <input type="text" id="actTime" placeholder="e.g. 10:00 AM">
           <span class="staff-field-label">LOCATION / LINK</span>
           <input type="text" id="actLocation" placeholder="Address or video link...">
+          <span class="staff-field-label">PROJECT</span>
+          <input type="text" id="actProject" placeholder="Project name (optional)...">
           <span class="staff-field-label">NOTES</span>
           <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
           <div style="display:flex;gap:0.8rem;margin-top:0.5rem;">
@@ -1012,14 +1094,13 @@
       const typeLabels = { consultation: 'Initial Consultation', meeting: 'In-Person Meeting', execution: 'Project Execution', planning: 'Planning' };
       const logId = 'L' + Date.now();
       let notesStr = `Type:${type}|Start:${formatTimeOnly(startTime)}|End:${formatTimeOnly(endTime)}`;
-      if (session.project) notesStr += `|Project:${session.project}`;
       if (session.notes) notesStr += `|Notes:${session.notes}`;
       if (session.location) notesStr += `|Location:${session.location}`;
       if (session.format) notesStr += `|Format:${session.format}`;
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, typeLabels[type] || type, durationHours, notesStr] })
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, dateStr, typeLabels[type] || type, durationHours, notesStr, session.project || '', formatTimeOnly(startTime), formatTimeOnly(endTime)] })
         });
         if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
         delete activeTimers[key];
@@ -1049,7 +1130,7 @@
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(now), 'Home Visit', 0, `CheckIn:${formatTimeOnly(now)}|Notes:${notes}|Status:open`] })
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(now), 'Home Visit', 0, `CheckIn:${formatTimeOnly(now)}|Notes:${notes}|Status:open`, '', formatTimeOnly(now), ''] })
         });
       } catch(e) {}
       updateHomeVisitUI(clientId);
@@ -1071,7 +1152,7 @@
       try {
         await fetch(SCRIPT_URL, {
           method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(endTime), 'Home Visit', durationHours, notesStr] })
+          body: JSON.stringify({ sheet: 'Time Log', row: [logId, clientId, formatDateToAU(endTime), 'Home Visit', durationHours, notesStr, '', formatTimeOnly(startTime), formatTimeOnly(endTime)] })
         });
         if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
         delete activeTimers[key];
@@ -1136,8 +1217,101 @@
           </div>`;
       }).join('');
     }
-
-      // ── DASHBOARD ─────────────────────────────────────────────────
+    // ── SCHEDULE & HOURS ──────────────────────────────────────────
+    async function saveAppointment() {
+      const clientId = document.getElementById('apptClient').value;
+      const date = document.getElementById('apptDate').value.trim();
+      const time = document.getElementById('apptTime').value.trim();
+      const type = document.getElementById('apptType').value;
+      const location = document.getElementById('apptLocation').value.trim();
+      const notes = document.getElementById('apptNotes').value.trim();
+      const successEl = document.getElementById('apptSuccess');
+      const errorEl = document.getElementById('apptError');
+      successEl.textContent = ''; errorEl.textContent = '';
+      if (!clientId) { errorEl.textContent = 'Please select a client.'; return; }
+      if (!date || !time) { errorEl.textContent = 'Please enter date and time.'; return; }
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet: 'Schedule', row: [clientId, date, time, type, notes, location, 'Scheduled'] })
+        });
+        successEl.textContent = 'Appointment saved for ' + (CLIENT_NAMES[clientId] || clientId) + '!';
+        document.getElementById('apptDate').value = '';
+        document.getElementById('apptTime').value = '';
+        document.getElementById('apptLocation').value = '';
+        document.getElementById('apptNotes').value = '';
+      } catch(e) { errorEl.textContent = 'Error saving appointment. Try again.'; }
+    }
+    async function loadSchedule(clientId) {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSchedule&clientId=${clientId}&t=${Date.now()}`);
+        const json = await res.json();
+        const appts = json.data || [];
+        const today = new Date(); today.setHours(0,0,0,0);
+        const upcoming = appts.filter(a => { const d = parseAUDate(a.Date ? a.Date.toString() : ''); return d && d >= today; }).sort((a,b) => parseAUDate(a.Date) - parseAUDate(b.Date));
+        const past = appts.filter(a => { const d = parseAUDate(a.Date ? a.Date.toString() : ''); return d && d < today; }).sort((a,b) => parseAUDate(b.Date) - parseAUDate(a.Date));
+        const upcomingEl = document.getElementById('scheduleUpcoming');
+        const pastEl = document.getElementById('schedulePast');
+        if (!upcomingEl || !pastEl) return;
+        upcomingEl.innerHTML = upcoming.length ? upcoming.map(a => `
+          <div class="schedule-item">
+            <div class="schedule-item-date">&#128197; ${a.Date} — ${a.Time}</div>
+            <div class="schedule-item-type">${a.Type}</div>
+            ${a.Location ? `<div class="schedule-item-meta">&#128205; ${a.Location}</div>` : ''}
+            ${a.Notes ? `<div class="schedule-item-meta">${a.Notes}</div>` : ''}
+            <div class="schedule-status-scheduled">${(a.Status || 'SCHEDULED').toUpperCase()}</div>
+          </div>`).join('') : '<div style="padding:1rem;color:#666;font-size:0.85rem;">No upcoming appointments.</div>';
+        pastEl.innerHTML = past.length ? past.map(a => `
+          <div class="schedule-item">
+            <div class="schedule-item-date">&#128197; ${a.Date} — ${a.Time}</div>
+            <div class="schedule-item-type">${a.Type}</div>
+            ${a.Location ? `<div class="schedule-item-meta">&#128205; ${a.Location}</div>` : ''}
+            <div class="schedule-status-completed">&#10003; ${(a.Status || 'COMPLETED').toUpperCase()}</div>
+          </div>`).join('') : '<div style="padding:1rem;color:#666;font-size:0.85rem;">No past appointments.</div>';
+      } catch(e) { console.log('Schedule error:', e); }
+    }
+    async function loadHours(clientId) {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getTimeLog&clientId=${clientId}&t=${Date.now()}`);
+        const json = await res.json();
+        const logs = json.data || [];
+        const byProject = {};
+        let totalHours = 0;
+        for (const log of logs) {
+          const hours = parseFloat(log['Hours']) || 0;
+          const projectId = log['ProjectID'] || '';
+          const serviceType = log['Service Type'] || log['ServiceType'] || 'General';
+          const key = projectId || serviceType;
+          if (!byProject[key]) byProject[key] = { name: projectId || serviceType, entries: [], total: 0 };
+          byProject[key].entries.push({ date: log['Date'] ? log['Date'].toString() : '', type: serviceType, hours });
+          byProject[key].total += hours;
+          totalHours += hours;
+        }
+        const container = document.getElementById('hoursByProject');
+        const totalEl = document.getElementById('hoursTotalSummary');
+        if (!container) return;
+        const keys = Object.keys(byProject);
+        container.innerHTML = keys.length ? keys.map(k => {
+          const p = byProject[k];
+          return `
+            <div class="hours-project-block">
+              <div class="hours-project-name">${p.name}</div>
+              ${p.entries.map(e => `
+                <div class="hours-row">
+                  <div class="hours-label">${e.date} &nbsp;·&nbsp; ${e.type}</div>
+                  <div class="hours-value">${e.hours}h</div>
+                </div>`).join('')}
+              <div class="hours-total">TOTAL: ${p.total.toFixed(1)}h</div>
+            </div>`;
+        }).join('') : '<div style="padding:1rem;color:#666;">No hours logged yet.</div>';
+        if (totalEl) totalEl.innerHTML = `
+          <div style="background:#222;border:1px solid #D4A574;padding:1.5rem;text-align:center;margin-bottom:1rem;">
+            <div style="color:#D4A574;font-size:0.75rem;letter-spacing:0.2em;margin-bottom:0.5rem;">ALL TIME HOURS</div>
+            <div style="color:#fff;font-size:2rem;">${totalHours.toFixed(1)}h</div>
+          </div>`;
+      } catch(e) { console.log('Hours error:', e); }
+    }
+    // ── DASHBOARD ─────────────────────────────────────────────────
     async function showDashboard(clientId, clientName) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboardScreen').style.display = 'block';
@@ -1275,16 +1449,16 @@
         const list = document.getElementById('servicesList');
         list.innerHTML = sortedKeys.length ? sortedKeys.map(key => {
           const m = byMonth[key];
-          return `<div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
-              <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em; margin-bottom:0.3rem;">${m.label}</div>
-              <div style="color:#666; font-size:0.75rem;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
+          return `<div style="padding:0.8rem 1rem;background:#1a1a1a;border-top:1px solid #333;margin-top:0.5rem;">
+              <div style="color:#D4A574;font-size:0.8rem;letter-spacing:0.15em;margin-bottom:0.3rem;">${m.label}</div>
+              <div style="color:#666;font-size:0.75rem;">${m.days.size} day${m.days.size !== 1 ? 's' : ''} &nbsp;|&nbsp; ${m.hours}h logged &nbsp;|&nbsp; $${m.cost.toFixed(0)}</div>
             </div>
-            ${m.items.map(s => `<div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
-              <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+            ${m.items.map(s => `<div class="service-item" style="flex-direction:column;align-items:flex-start;gap:0.3rem;">
+              <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
                 <div><div class="name">${s.name}</div><div class="date">${s.date}</div></div>
                 <div class="status">${s.status}</div>
               </div>
-              <div style="color:#666; font-size:0.75rem; display:flex; gap:1rem; flex-wrap:wrap;">
+              <div style="color:#666;font-size:0.75rem;display:flex;gap:1rem;flex-wrap:wrap;">
                 ${s.invoice ? `<span style="color:#D4A574;">${s.invoice}</span>` : ''}
                 ${s.cost ? `<span>$${s.cost.toFixed(0)}</span>` : ''}
                 ${s.gst ? `<span>GST $${s.gst.toFixed(0)}</span>` : ''}
@@ -1295,12 +1469,12 @@
         if (visitList) {
           visitList.innerHTML = sortedVisitKeys.length ? sortedVisitKeys.map(key => {
             const m = visitsByMonth[key];
-            return `<div style="padding:0.8rem 1rem; background:#1a1a1a; border-top:1px solid #333; margin-top:0.5rem;">
-                <div style="color:#D4A574; font-size:0.8rem; letter-spacing:0.15em;">${m.label}</div></div>
-              ${m.items.map(v => `<div class="service-item" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
-                <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+            return `<div style="padding:0.8rem 1rem;background:#1a1a1a;border-top:1px solid #333;margin-top:0.5rem;">
+                <div style="color:#D4A574;font-size:0.8rem;letter-spacing:0.15em;">${m.label}</div></div>
+              ${m.items.map(v => `<div class="service-item" style="flex-direction:column;align-items:flex-start;gap:0.3rem;">
+                <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
                   <div class="name">In-person visit</div><div class="date">${v.date}</div></div>
-                <div style="color:#666; font-size:0.75rem;">Check-in: ${v.checkIn} &nbsp;→&nbsp; Check-out: ${v.checkOut} &nbsp;(${v.hours}h)</div>
+                <div style="color:#666;font-size:0.75rem;">Check-in: ${v.checkIn} &nbsp;&rarr;&nbsp; Check-out: ${v.checkOut} &nbsp;(${v.hours}h)</div>
               </div>`).join('')}`;
           }).join('') : '<div style="padding:1rem;color:#666">No visits recorded yet.</div>';
         }
@@ -1323,7 +1497,6 @@
       loadJourney(clientId);
       loadProcess();
     }
-
     // ── MEDIA ─────────────────────────────────────────────────────
     async function loadMedia(clientId) {
       try {
@@ -1360,7 +1533,6 @@
         document.getElementById('uploadSuccess').textContent = 'Upload the file to Google Drive, then let P.A.L. know the caption: ' + (caption || '(no caption)');
       }
     }
-
     // ── JOURNEY ───────────────────────────────────────────────────
     async function loadJourney(clientId) {
       try {
@@ -1386,7 +1558,6 @@
         }
       } catch(e) { console.log('Journey error:', e); }
     }
-
     // ── PROCESS ───────────────────────────────────────────────────
     function loadProcess() {
       const container = document.getElementById('processFlow');
@@ -1402,14 +1573,13 @@
         { label: "Invoice sent", sub: "Full summary with all service details" }
       ];
       container.innerHTML = steps.map((s, i) => `
-        <div style="background:#1E1E1E; border:0.8px solid #D4A574; border-radius:6px; padding:1rem 1.2rem; text-align:center;">
-          <div style="color:#D4A574; font-size:0.9rem; font-weight:500; margin-bottom:0.3rem;">${s.label}</div>
-          <div style="color:#7A6A4A; font-size:0.75rem;">${s.sub}</div>
+        <div style="background:#1E1E1E;border:0.8px solid #D4A574;border-radius:6px;padding:1rem 1.2rem;text-align:center;">
+          <div style="color:#D4A574;font-size:0.9rem;font-weight:500;margin-bottom:0.3rem;">${s.label}</div>
+          <div style="color:#7A6A4A;font-size:0.75rem;">${s.sub}</div>
         </div>
-        ${i < steps.length - 1 ? '<div style="display:flex; justify-content:center; margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
+        ${i < steps.length - 1 ? '<div style="display:flex;justify-content:center;margin:0.4rem 0;"><svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="16" stroke="#D4A574" stroke-width="0.8"/><polygon points="1,24 -3,14 5,14" fill="#D4A574"/></svg></div>' : ''}
       `).join('');
     }
-
     // ── FEEDBACK ──────────────────────────────────────────────────
     function setRating(rating) {
       currentRating = rating;
@@ -1445,14 +1615,13 @@
         const container = document.getElementById('feedbackHistory');
         if (!container) return;
         container.innerHTML = history.length ? history.map(f => `
-          <div style="background:#1a1a1a; border:1px solid #333; padding:1rem; margin-top:0.8rem;">
-            <div style="color:#D4A574; font-size:0.75rem; margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
-            <div style="color:#fff; font-size:0.85rem; margin-bottom:0.3rem;">${f.comment}</div>
-            <div style="color:#666; font-size:0.75rem;">${f.service} · ${f.date}</div>
-          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No feedback submitted yet.</div>';
+          <div style="background:#1a1a1a;border:1px solid #333;padding:1rem;margin-top:0.8rem;">
+            <div style="color:#D4A574;font-size:0.75rem;margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
+            <div style="color:#fff;font-size:0.85rem;margin-bottom:0.3rem;">${f.comment}</div>
+            <div style="color:#666;font-size:0.75rem;">${f.service} · ${f.date}</div>
+          </div>`).join('') : '<div style="color:#666;font-size:0.85rem;padding:1rem 0;">No feedback submitted yet.</div>';
       } catch(e) {}
     }
-
     // ── REQUESTS ──────────────────────────────────────────────────
     async function submitRequest() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1484,10 +1653,9 @@
           <div class="request-history-item">
             <div class="req-text">${r.text}</div>
             <div class="req-meta"><span class="priority-${r.priority.toLowerCase()}">${r.priority} priority</span> · ${r.date} · ${r.status}</div>
-          </div>`).join('') : '<div style="color:#666; font-size:0.85rem; padding:1rem 0;">No requests submitted yet.</div>';
+          </div>`).join('') : '<div style="color:#666;font-size:0.85rem;padding:1rem 0;">No requests submitted yet.</div>';
       } catch(e) {}
     }
-
     // ── MESSAGES ──────────────────────────────────────────────────
     async function loadMessages() {
       const clientId = sessionStorage.getItem('clientId');
@@ -1518,8 +1686,7 @@
         await loadMessages();
       } catch(e) {}
     }
-
-      // ── ACTION PLAN ───────────────────────────────────────────────
+    // ── ACTION PLAN ───────────────────────────────────────────────
     async function loadActionPlan(clientId) {
       const container = document.getElementById('taskList');
       if (!container) return;
@@ -1561,7 +1728,7 @@
             <div class="success-msg" id="taskUpdateSuccess-${t.taskId}"></div>
           </div>`).join('');
       } catch(e) {
-        container.innerHTML = '<div style="color:#ff6b6b; padding:1rem;">Error loading tasks.</div>';
+        container.innerHTML = '<div style="color:#ff6b6b;padding:1rem;">Error loading tasks.</div>';
       }
     }
     async function updateTask(taskId, clientId) {
@@ -1598,7 +1765,6 @@
         document.getElementById('taskDueDate').value = '';
       } catch(e) { errorEl.textContent = 'Error creating task. Try again.'; }
     }
-
     // ── TABS & LOGOUT ─────────────────────────────────────────────
     function showTab(tab, el) {
       Object.values(TAB_ID_MAP).forEach(id => {
@@ -1617,6 +1783,8 @@
       if (tab === 'feedback') loadFeedbackHistory(sessionStorage.getItem('clientId'));
       if (tab === 'requests') loadRequestHistory(sessionStorage.getItem('clientId'));
       if (tab === 'actionplan') loadActionPlan(sessionStorage.getItem('clientId'));
+      if (tab === 'schedule') loadSchedule(sessionStorage.getItem('clientId'));
+      if (tab === 'hours') loadHours(sessionStorage.getItem('clientId'));
       if (tab === 'staff') { restoreActiveTimers(); loadActiveSessions(); }
       if (tab === 'projects') loadProjectTracker(sessionStorage.getItem('clientId'));
     }
@@ -1632,7 +1800,6 @@
       if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
     }
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-
     // ── PROJECT TRACKER ───────────────────────────────────────────
     const PHASE_STATUS_CONFIG = {
       'Scheduled':   { bar: '#2196F3', text: '#fff',    dark: true  },
@@ -1642,7 +1809,8 @@
       'Cancelled':   { bar: '#ff4444', text: '#fff',    dark: true  }
     };
     const PROJECT_STATUS_COLORS = {
-      'Scheduled': '#2196F3', 'In Progress': '#D4A574', 'Completed': '#4CAF50', 'Cancelled': '#ff4444'
+      'Scheduled': '#2196F3', 'In Progress': '#D4A574', 'Waiting': '#E8A000',
+      'Completed': '#4CAF50', 'Cancelled': '#ff4444'
     };
     async function fetchAllProjects(clientIdFilter) {
       try {
@@ -1656,7 +1824,7 @@
           description: (row.c[3]?.v || '').toString(),
           plannedStart:(row.c[4]?.f || row.c[4]?.v || '').toString(),
           plannedEnd:  (row.c[5]?.f || row.c[5]?.v || '').toString(),
-          status:      (row.c[6]?.v || 'Active').toString(),
+          status:      (row.c[6]?.v || 'Scheduled').toString(),
           createdDate: (row.c[7]?.v || '').toString()
         })).filter(p => !clientIdFilter || p.clientId === clientIdFilter);
       } catch(e) { return []; }
@@ -1736,8 +1904,7 @@
           </div>
         </div>`;
     }
-
-      function buildGantt(phases, isStaff, clientId) {
+    function buildGantt(phases, isStaff, clientId) {
       if (!phases.length) return '<div style="color:#555;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
       const parsed = phases.map(p => ({
         ...p,
@@ -1936,7 +2103,7 @@
       const projectId = 'PROJ' + Date.now();
       try {
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Active', formatDateTime()] }) });
+          body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Scheduled', formatDateTime()] }) });
         successEl.textContent = 'Project created!';
         setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId')); }, 1000);
       } catch(e) { errEl.textContent = 'Error. Please try again.'; }
@@ -1968,3 +2135,5 @@
   </script>
 </body>
 </html>
+  
+    
