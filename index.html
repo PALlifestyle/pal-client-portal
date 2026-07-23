@@ -2502,7 +2502,6 @@ function renderActivityFields() {
 }
 async function logActivity(type) {
   const clientId   = currentDetailClientId;
-  const clientName = CLIENT_NAMES[clientId]||clientId;
   const date       = document.getElementById('actDate')?.value.trim()||'';
   const hours      = parseFloat(document.getElementById('actHours')?.value)||0;
   const notes      = document.getElementById('actNotes')?.value.trim()||'';
@@ -2510,11 +2509,14 @@ async function logActivity(type) {
   const errorEl    = document.getElementById('actError');
   if (!date||!hours) { errorEl.textContent='Date and hours are required.'; return; }
   errorEl.textContent=''; successEl.textContent='Logging...';
+  const typeLabels = { consultation:'Initial Consultation', meeting:'In-Person Meeting',
+    homevisit:'Home Visit', execution:'Project Execution', planning:'Planning' };
+  const logId = 'L' + Date.now();
   try {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ sheet:'Time Log',
-        row:[clientId, date, type, '', hours, notes, clientName, formatDateTimeStamp()] })
+        row:[logId, clientId, date, typeLabels[type]||type, hours, notes, '', '', ''] })
     });
     successEl.textContent='Activity logged!';
     document.getElementById('actHours').value='';
