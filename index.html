@@ -201,11 +201,11 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
 
 /* ── TASK STATUS BADGES ──────────────────────────────────────── */
 .task-status{padding:0.2rem 0.55rem;font-size:0.65rem;letter-spacing:0.1em;font-family:Georgia,serif;}
-.task-status-todo{background:#1a2030;color:#6699cc;border:1px solid #2a3a5a;}
-.task-status-ongoing{background:#1f1a14;color:#D4A574;border:1px solid #3a2e1a;}
-.task-status-waiting{background:#2a2010;color:#E8A000;border:1px solid #4a3800;}
-.task-status-skip{background:#1a1a2a;color:#9090cc;border:1px solid #2a2a4a;}
-.task-status-done{background:#1a2e1a;color:#4caf50;border:1px solid #2a4a2a;}
+.task-status-todo{background:#FF4444;color:#fff;font-weight:bold;}
+.task-status-ongoing{background:#2196F3;color:#fff;font-weight:bold;}
+.task-status-waiting{background:#FF9800;color:#fff;font-weight:bold;}
+.task-status-skip{background:#9C27B0;color:#fff;font-weight:bold;}
+.task-status-done{background:#4CAF50;color:#fff;font-weight:bold;}
 
 /* ── ACTION PLAN ─────────────────────────────────────────────── */
 .task-item{padding:0.9rem 1rem;border-bottom:1px solid #222;}
@@ -287,7 +287,7 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
   border-bottom:1px solid #222;font-size:0.78rem;flex-wrap:wrap;}
 .hours-date{color:#888;min-width:80px;}
 .hours-time{color:#D4A574;font-weight:bold;}
-.hours-note{color:#666;font-size:0.72rem;}
+  .hours-note{color:#666;font-size:0.72rem;}
 
 /* ── ABOUT ───────────────────────────────────────────────────── */
 .about-page{padding:1rem;max-width:480px;margin:0 auto;}
@@ -433,13 +433,16 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
       </button></li>
     </ul>
 
-    <!-- STAFF NAV (3 items) -->
+    <!-- STAFF NAV (4 items) -->
     <ul class="nav-list hidden" id="staffNav">
       <li><button class="nav-item-btn active" onclick="showTab('staffDashboard',this)">
         <span class="nav-icon">&#9632;</span> DASHBOARD
       </button></li>
       <li><button class="nav-item-btn" onclick="showTab('staffClients',this)">
         <span class="nav-icon">&#128100;</span> CLIENTS
+      </button></li>
+      <li><button class="nav-item-btn" onclick="showTab('staffProjects',this)">
+        <span class="nav-icon">&#9719;</span> PROJECTS
       </button></li>
       <li><button class="nav-item-btn" onclick="showTab('staffProfile',this)">
         <span class="nav-icon">&#9998;</span> MY PROFILE
@@ -559,7 +562,6 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
         <button class="btn" onclick="sendMessage()">SEND</button>
       </div>
     </div>
-
     <!-- ══════════════════════════════════════════════════════
          TAB: PHOTOS & VIDEOS
          ══════════════════════════════════════════════════════ -->
@@ -719,7 +721,18 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
          STAFF: DASHBOARD
          ══════════════════════════════════════════════════════ -->
     <div id="tabStaffDashboard" class="tab-pane">
-      <div class="section-title" style="border-top:none;padding-top:1rem;">STAFF DASHBOARD</div>
+      <div class="profile-header">
+        <div class="avatar-wrap" id="staffDashAvatarWrap">
+          <span class="avatar-placeholder" id="staffDashAvatarPlaceholder">P</span>
+          <img id="staffDashAvatarImg" src="" alt="" style="display:none;">
+        </div>
+        <div>
+          <div class="profile-name" id="staffDashNameDisplay">P.A.L. Staff</div>
+          <button class="profile-change-btn"
+            onclick="document.getElementById('staffPhotoInput').click()">CHANGE PHOTO</button>
+        </div>
+      </div>
+      <div class="section-title" style="border-top:none;">STAFF DASHBOARD</div>
       <div class="staff-kpi-grid">
         <div class="kpi-card"><div class="kpi-value" id="kpiAppointments">—</div>
           <div class="kpi-label">SCHEDULED APPOINTMENTS</div></div>
@@ -844,7 +857,6 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
           <div class="section-title" style="border-top:none;padding-top:0.8rem;">CLIENT REQUESTS</div>
           <div id="detailRequestsList"><div class="empty-state">Loading...</div></div>
         </div>
-
         <!-- Schedule -->
         <div id="detailSchedule" style="display:none;">
           <div class="section-title" style="border-top:none;padding-top:0.8rem;">APPOINTMENTS</div>
@@ -1137,7 +1149,7 @@ async function login() {
 }
 
 // ── LOGOUT ────────────────────────────────────────────────────────
-function logout() {
+  function logout() {
   sessionStorage.clear();
   activeTimers = {}; currentDetailClientId = '';
   Object.values(timerIntervals).forEach(i => clearInterval(i));
@@ -1156,7 +1168,8 @@ const TAB_MAP = {
   requests:'tabRequests', actionplan:'tabActionplan', projects:'tabProjects',
   invoices:'tabInvoices', schedule:'tabSchedule', hours:'tabHours',
   about:'tabAbout', staffDashboard:'tabStaffDashboard',
-  staffClients:'tabStaffClients', staffProfile:'tabStaffProfile'
+  staffClients:'tabStaffClients', staffProjects:'tabProjects',
+  staffProfile:'tabStaffProfile'
 };
 function showTab(tab, btn) {
   Object.values(TAB_MAP).forEach(id => {
@@ -1182,12 +1195,13 @@ function showTab(tab, btn) {
   if (tab === 'media')          loadMedia(cid);
   if (tab === 'requests')       loadRequestHistory(cid);
   if (tab === 'actionplan')     loadActionPlan(cid);
-  if (tab === 'projects')       loadProjectTracker(cid);
+  if (tab === 'projects')       loadProjectTracker(cid, false);
   if (tab === 'invoices')       loadInvoices(cid);
   if (tab === 'schedule')       loadSchedule(cid);
   if (tab === 'hours')          loadHours(cid);
   if (tab === 'staffDashboard') { loadStaffKPIs(); loadActiveSessions(); }
   if (tab === 'staffClients')   loadClientList();
+  if (tab === 'staffProjects')  loadProjectTracker(cid, true);
   if (tab === 'staffProfile') {
     const photo = sessionStorage.getItem('profilePhoto');
     if (photo) setStaffAvatar('https://drive.google.com/thumbnail?id='+photo+'&sz=w200');
@@ -1257,8 +1271,10 @@ function showStaffDashboard(staffId, staffName) {
   document.getElementById('clientNav').classList.add('hidden');
   document.getElementById('staffNav').classList.remove('hidden');
   document.getElementById('staffNameDisplay').textContent = staffName || 'P.A.L. Staff';
+  document.getElementById('staffDashNameDisplay').textContent = staffName || 'P.A.L. Staff';
   const first = staffName ? staffName.charAt(0).toUpperCase() : 'P';
   document.getElementById('staffAvatarPlaceholder').textContent = first;
+  document.getElementById('staffDashAvatarPlaceholder').textContent = first;
   const photo = sessionStorage.getItem('profilePhoto');
   if (photo) setStaffAvatar('https://drive.google.com/thumbnail?id='+photo+'&sz=w200');
   const sel = document.getElementById('notifSpecificClient');
@@ -1279,7 +1295,12 @@ function setClientAvatar(src) {
 function setStaffAvatar(src) {
   const img = document.getElementById('staffAvatarImg');
   const ph  = document.getElementById('staffAvatarPlaceholder');
-  img.src = src; img.style.display = 'block'; ph.style.display = 'none';
+  if (img) { img.src = src; img.style.display = 'block'; }
+  if (ph)  ph.style.display = 'none';
+  const img2 = document.getElementById('staffDashAvatarImg');
+  const ph2  = document.getElementById('staffDashAvatarPlaceholder');
+  if (img2) { img2.src = src; img2.style.display = 'block'; }
+  if (ph2)  ph2.style.display = 'none';
 }
 
 // ── PROFILE PHOTO — CLIENT ────────────────────────────────────────
@@ -1292,7 +1313,7 @@ async function handleProfilePhotoUpload(event) {
     const base64 = e.target.result.split(',')[1];
     try {
       const res  = await postToScript({ action:'uploadPhoto', clientId,
-        fileName:file.name, mimeType:file.type, base64Data:base64, target:'profile' });
+        fileName:file.name, mimeType:file.type, fileData:base64, target:'profile' });
       const json = await res.json();
       if (json.success && json.fileId) {
         sessionStorage.setItem('profilePhoto', json.fileId);
@@ -1316,7 +1337,7 @@ async function handleStaffPhotoUpload(event) {
     const base64 = e.target.result.split(',')[1];
     try {
       const res  = await postToScript({ action:'uploadPhoto', clientId:staffId,
-        fileName:file.name, mimeType:file.type, base64Data:base64, target:'profile' });
+        fileName:file.name, mimeType:file.type, fileData:base64, target:'profile' });
       const json = await res.json();
       if (json.success && json.fileId) {
         sessionStorage.setItem('profilePhoto', json.fileId);
@@ -1431,7 +1452,7 @@ async function loadServices(clientId) {
 }
 
 // ── JOURNEY ───────────────────────────────────────────────────────
-function loadJourney() {
+  function loadJourney() {
   const startDate = sessionStorage.getItem('startDate');
   const el = document.getElementById('journeySummary');
   if (startDate && startDate !== 'undefined' && startDate !== '') {
@@ -1598,7 +1619,7 @@ async function handleClientMediaUpload(event) {
     const base64 = e.target.result.split(',')[1];
     try {
       const res  = await postToScript({ action:'uploadPhoto', clientId,
-        fileName:file.name, mimeType:file.type, base64Data:base64,
+        fileName:file.name, mimeType:file.type, fileData:base64,
         target:'clientMedia', caption, uploadedBy:'Client' });
       const json = await res.json();
       if (json.success) {
@@ -1678,8 +1699,7 @@ async function loadHours(clientId) {
     }).join('');
   } catch(e) { byProjEl.innerHTML='<div class="empty-state">Error loading hours.</div>'; }
 }
-
-// ── REQUESTS (col: 0=id, 1=clientId, 2=text, 3=priority, 4=date, 5=status) ─────
+  // ── REQUESTS (col: 0=id, 1=clientId, 2=text, 3=priority, 4=date, 5=status) ─────
 async function submitRequest() {
   const clientId  = sessionStorage.getItem('clientId');
   const text      = document.getElementById('requestText').value.trim();
@@ -1815,22 +1835,30 @@ async function updateTask(taskId, clientId, btn) {
 //                 4=desc, 5=status, 6=plannedStart, 7=plannedEnd,
 //                 8=actualEnd, 9=notes
 // ════════════════════════════════════════════════════════════════
-async function loadProjectTracker(clientId) {
+async function loadProjectTracker(clientId, isStaff) {
   const container = document.getElementById('projectsContent');
   if (!container) return;
   container.innerHTML = '<div class="empty-state" style="padding:3rem;">Loading projects...</div>';
+  const filterId = isStaff ? null : clientId;
   try {
     const [projects, phases] = await Promise.all([
-      fetchAllProjects(clientId), fetchAllPhases(clientId)
+      fetchAllProjects(filterId), fetchAllPhases(filterId)
     ]);
     if (!projects.length) {
-      container.innerHTML = '<div class="empty-state" style="padding:3rem;">No projects yet.</div>';
+      container.innerHTML = `<div class="empty-state" style="padding:3rem;">No projects yet.</div>
+        ${isStaff ? `<div style="text-align:center;padding-bottom:2rem;"><button class="btn btn-sm" onclick="openAddProjectModal()">+ NEW PROJECT</button></div>` : ''}`;
       return;
     }
     container.innerHTML = '';
+    if (isStaff) {
+      const btnWrap = document.createElement('div');
+      btnWrap.style.padding = '1rem 1rem 0';
+      btnWrap.innerHTML = `<button class="btn btn-sm" onclick="openAddProjectModal()">+ NEW PROJECT</button>`;
+      container.appendChild(btnWrap);
+    }
     for (const proj of projects) {
       const projPhases = phases.filter(p => p.projectId === proj.projectId);
-      const block = buildProjectBlock(proj, projPhases);
+      const block = buildProjectBlock(proj, projPhases, isStaff);
       container.appendChild(block);
     }
   } catch(e) {
@@ -1875,7 +1903,7 @@ async function fetchAllPhases(clientId) {
   } catch(e) { return []; }
 }
 
-function buildProjectBlock(proj, phases) {
+function buildProjectBlock(proj, phases, isStaff) {
   const sColor = PROJECT_STATUS_COLORS[proj.status] || '#888';
   const wrap   = document.createElement('div');
   wrap.className = 'project-block';
@@ -1884,6 +1912,7 @@ function buildProjectBlock(proj, phases) {
       <div style="flex:1;min-width:0;">
         <div style="color:#666;font-size:0.65rem;letter-spacing:0.2em;margin-bottom:0.3rem;">PROJECT</div>
         <div style="color:#fff;font-size:1rem;letter-spacing:0.08em;">${proj.name}</div>
+        ${proj.clientId && isStaff ? `<div style="color:#D4A574;font-size:0.7rem;margin-top:0.2rem;">CLIENT: ${proj.clientId}</div>` : ''}
         ${proj.description ? `<div style="color:#888;font-size:0.8rem;margin-top:0.4rem;line-height:1.6;">${proj.description}</div>` : ''}
         ${(proj.plannedStart||proj.plannedEnd) ? `
           <div style="display:flex;gap:1.5rem;margin-top:0.6rem;">
@@ -1900,6 +1929,7 @@ function buildProjectBlock(proj, phases) {
     <div class="project-body" id="pbody-${proj.projectId}">
       <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">TIMELINE</div>
       ${buildGantt(phases)}
+      ${isStaff ? `<button onclick="openAddPhaseModal('${proj.projectId}','${proj.clientId}')" style="background:transparent;border:1px solid #444;color:#888;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
       ${buildReport(phases)}
     </div>`;
   return wrap;
@@ -1974,8 +2004,7 @@ function buildGantt(phases) {
   html += '</div></div>';
   return html;
 }
-
-function buildPhaseListOnly(phases) {
+  function buildPhaseListOnly(phases) {
   if (!phases.length) return '<div style="color:#555;font-size:0.8rem;font-style:italic;">No phases yet.</div>';
   return phases.map(p => `
     <div style="padding:0.5rem 0;border-bottom:1px solid #1a1a1a;">
@@ -2021,12 +2050,89 @@ async function updatePhaseStatus(phaseId, newStatus, clientId) {
   } catch(e) { alert('Error updating phase. Please try again.'); }
 }
 
-function openPalModal(type, id) {
+function openAddProjectModal() {
+  document.getElementById('palModalBody').innerHTML = `
+    <div class="modal-title">NEW PROJECT</div>
+    <label class="modal-field-label">CLIENT ID</label>
+    <select id="mProjClient" style="width:100%;background:#1A1A1A;border:1px solid #444;color:#fff;padding:0.7rem;font-family:Georgia,serif;font-size:0.85rem;margin-bottom:0.5rem;">
+      <option value="">Select client...</option>
+      ${Object.entries(CLIENT_NAMES).map(([id,name])=>`<option value="${id}">${id} - ${name}</option>`).join('')}
+    </select>
+    <label class="modal-field-label">PROJECT NAME</label>
+    <input id="mProjName" type="text" placeholder="e.g. Website Redesign" style="margin-bottom:0">
+    <label class="modal-field-label">DESCRIPTION</label>
+    <textarea id="mProjDesc" style="height:70px;"></textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+      <div><label class="modal-field-label">PLANNED START</label><input id="mProjStart" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+      <div><label class="modal-field-label">PLANNED END</label><input id="mProjEnd" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+    </div>
+    <button class="btn" style="margin-top:1.2rem;" onclick="submitNewProject()">CREATE PROJECT</button>
+    <div class="error" id="mProjError"></div>
+    <div class="success-msg" id="mProjSuccess"></div>`;
+  document.getElementById('palProjectModal').style.display = 'flex';
+}
+function openAddPhaseModal(projectId, clientId) {
+  document.getElementById('palModalBody').innerHTML = `
+    <div class="modal-title">ADD PHASE</div>
+    <input type="hidden" id="mPhaseProjectId" value="${projectId}">
+    <input type="hidden" id="mPhaseClientId" value="${clientId}">
+    <label class="modal-field-label">PHASE NAME</label>
+    <input id="mPhaseName" type="text" placeholder="e.g. Discovery & Planning" style="margin-bottom:0">
+    <label class="modal-field-label">DESCRIPTION</label>
+    <textarea id="mPhaseDesc" style="height:60px;"></textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+      <div><label class="modal-field-label">PLANNED START</label><input id="mPhaseStart" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+      <div><label class="modal-field-label">PLANNED END</label><input id="mPhaseEnd" type="text" placeholder="DD/MM/YYYY" style="margin-bottom:0"></div>
+    </div>
+    <label class="modal-field-label">NOTES</label>
+    <input id="mPhaseNotes" type="text" placeholder="Optional notes..." style="margin-bottom:0">
+    <button class="btn" style="margin-top:1.2rem;" onclick="submitNewPhase()">ADD PHASE</button>
+    <div class="error" id="mPhaseError"></div>
+    <div class="success-msg" id="mPhaseSuccess"></div>`;
   document.getElementById('palProjectModal').style.display = 'flex';
 }
 function closePalModal() {
   document.getElementById('palProjectModal').style.display = 'none';
   document.getElementById('palModalBody').innerHTML = '';
+}
+async function submitNewProject() {
+  const clientId  = document.getElementById('mProjClient').value.trim();
+  const name      = document.getElementById('mProjName').value.trim();
+  const desc      = document.getElementById('mProjDesc').value.trim();
+  const start     = document.getElementById('mProjStart').value.trim();
+  const end       = document.getElementById('mProjEnd').value.trim();
+  const errEl     = document.getElementById('mProjError');
+  const successEl = document.getElementById('mProjSuccess');
+  errEl.textContent = ''; successEl.textContent = '';
+  if (!clientId) { errEl.textContent = 'Please select a client.'; return; }
+  if (!name)     { errEl.textContent = 'Please enter a project name.'; return; }
+  const projectId = 'PROJ' + Date.now();
+  try {
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sheet: 'Projects', row: [projectId, clientId, name, desc, start, end, 'Scheduled', formatDateTimeStamp()] }) });
+    successEl.textContent = 'Project created!';
+    setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId'), true); }, 1000);
+  } catch(e) { errEl.textContent = 'Error. Please try again.'; }
+}
+async function submitNewPhase() {
+  const projectId  = document.getElementById('mPhaseProjectId').value;
+  const clientId   = document.getElementById('mPhaseClientId').value;
+  const name       = document.getElementById('mPhaseName').value.trim();
+  const desc       = document.getElementById('mPhaseDesc').value.trim();
+  const start      = document.getElementById('mPhaseStart').value.trim();
+  const end        = document.getElementById('mPhaseEnd').value.trim();
+  const notes      = document.getElementById('mPhaseNotes').value.trim();
+  const errEl      = document.getElementById('mPhaseError');
+  const successEl  = document.getElementById('mPhaseSuccess');
+  errEl.textContent = ''; successEl.textContent = '';
+  if (!name) { errEl.textContent = 'Please enter a phase name.'; return; }
+  const phaseId = 'PH' + Date.now();
+  try {
+    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sheet: 'Project Phases', row: [phaseId, projectId, clientId, name, desc, 'Scheduled', start, end, '', notes, formatDateTimeStamp(), sessionStorage.getItem('clientId')] }) });
+    successEl.textContent = 'Phase added!';
+    setTimeout(() => { closePalModal(); loadProjectTracker(sessionStorage.getItem('clientId'), true); }, 1000);
+  } catch(e) { errEl.textContent = 'Error. Please try again.'; }
 }
 document.addEventListener('click', function(e) {
   const m = document.getElementById('palProjectModal');
@@ -2192,8 +2298,7 @@ async function sendStaffMessage() {
     });
   } catch(e) {}
 }
-
-// ── STAFF: MEDIA ──────────────────────────────────────────────────
+  // ── STAFF: MEDIA ──────────────────────────────────────────────────
 async function loadDetailMedia(clientId) {
   const el = document.getElementById('detailMediaGrid');
   el.innerHTML = '<div class="empty-state" style="grid-column:span 2;">Loading...</div>';
@@ -2237,7 +2342,7 @@ async function handleStaffMediaUpload(event) {
     const base64 = e.target.result.split(',')[1];
     try {
       const res  = await postToScript({ action:'uploadPhoto', clientId,
-        fileName:file.name, mimeType:file.type, base64Data:base64,
+        fileName:file.name, mimeType:file.type, fileData:base64,
         target:'clientMedia', caption, uploadedBy:'PAL' });
       const json = await res.json();
       if (json.success) {
@@ -2464,14 +2569,12 @@ OneSignalDeferred.push(async function(OneSignal) {
 window.addEventListener('load', function() {
   // Restore session if still logged in
   const savedId   = sessionStorage.getItem('clientId');
-  const savedRole = sessionStorage.getItem('userRole');
-  if (savedId && savedRole) {
-    if (savedRole === 'staff') {
-      currentUser = { id: savedId, role: 'staff', name: sessionStorage.getItem('clientName')||'Staff' };
-      showStaffDashboard();
+  const savedName = sessionStorage.getItem('clientName');
+  if (savedId) {
+    if (STAFF_IDS.includes(savedId)) {
+      showStaffDashboard(savedId, savedName || 'Staff');
     } else {
-      currentUser = { id: savedId, role: 'client', name: sessionStorage.getItem('clientName')||'' };
-      showClientDashboard();
+      showDashboard(savedId, savedName || '');
     }
   }
 });
@@ -2479,3 +2582,4 @@ window.addEventListener('load', function() {
 </script>
 </body>
 </html>
+  
