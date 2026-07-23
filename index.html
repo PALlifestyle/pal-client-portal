@@ -518,16 +518,16 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
       <div class="section-title">SERVICES</div>
       <div id="servicesList"></div>
 
-      <div class="section-title">NOSSA JORNADA</div>
+      <div class="section-title">OUR JOURNEY</div>
       <div class="journey-summary" id="journeySummary" style="display:none;">
-        <div class="journey-since-label">CLIENTE DESDE</div>
+        <div class="journey-since-label">CLIENT SINCE</div>
         <div class="journey-since-value" id="journeySinceValue">—</div>
         <div class="journey-note" id="journeyNoteValue"></div>
       </div>
 
-      <div class="section-title">DEIXAR FEEDBACK</div>
+      <div class="section-title">LEAVE FEEDBACK</div>
       <div class="feedback-discreet">
-        <div class="feedback-discreet-title">COMO FOI SUA EXPERIÊNCIA?</div>
+        <div class="feedback-discreet-title">HOW WAS YOUR EXPERIENCE?</div>
         <div class="stars-row" id="dashStarsRow">
           <button class="star-btn" onclick="setDashRating(1)">&#9733;</button>
           <button class="star-btn" onclick="setDashRating(2)">&#9733;</button>
@@ -545,6 +545,7 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
           min-height:70px;resize:vertical;margin-bottom:0.6rem;"></textarea>
         <button class="btn btn-sm" onclick="submitDashFeedback()" style="width:100%;">SUBMIT</button>
         <div class="success-msg" id="dashFeedbackSuccess"></div>
+        <div id="dashFeedbackHistory"></div>
       </div>
 
     </div><!-- /tabDashboard -->
@@ -1147,9 +1148,8 @@ async function login() {
     errorEl.textContent = 'Connection error. Please try again.';
   }
 }
-
-// ── LOGOUT ────────────────────────────────────────────────────────
-  function logout() {
+  // ── LOGOUT ────────────────────────────────────────────────────────
+function logout() {
   sessionStorage.clear();
   activeTimers = {}; currentDetailClientId = '';
   Object.values(timerIntervals).forEach(i => clearInterval(i));
@@ -1355,7 +1355,8 @@ async function handleStaffPhotoUpload(event) {
 function loadDashboard(clientId) {
   loadPayments(clientId);
   loadServices(clientId);
-  loadJourney();
+  loadJourney(clientId);
+  loadFeedbackHistory(clientId);
 }
 
 // ── LOAD PAYMENTS (col: 0=rowId, 1=clientId, 2=amount, 3=dueDate, 4=paidDate, 5=status) ──
@@ -1385,7 +1386,6 @@ async function loadPayments(clientId) {
     }
     const bonus    = parseFloat(sessionStorage.getItem('bonus'))    || 0;
     const discount = parseFloat(sessionStorage.getItem('discount')) || 0;
-    document.getElementById('sumTotalCost').textContent    = '$'+(totalPaid+totalDue).toFixed(2);
     document.getElementById('sumBalance').textContent      = '$'+totalDue.toFixed(2);
     document.getElementById('sumBonus').textContent        = '$'+bonus.toFixed(2);
     document.getElementById('sumDiscount').textContent     = '$'+discount.toFixed(2);
@@ -1434,6 +1434,7 @@ async function loadServices(clientId) {
       clientServices.push({ id:sId, name:sName });
       items.push({ name:sName, date:dateStr, status, cost });
     }
+    document.getElementById('sumTotalCost').textContent = '$'+allTimeCost.toFixed(2);
     document.getElementById('sumTotalGST').textContent  = '$'+allTimeGST.toFixed(2);
     document.getElementById('sumPurchases').textContent = '$0.00';
     document.getElementById('monthLabel').textContent   = now.toLocaleString('default',{month:'long'}).toUpperCase();
@@ -1449,17 +1450,32 @@ async function loadServices(clientId) {
       </div>`).join('');
     loadFeedbackServiceOptions();
   } catch(e) { console.error('loadServices',e); }
-}
-
-// ── JOURNEY ───────────────────────────────────────────────────────
-  function loadJourney() {
-  const startDate = sessionStorage.getItem('startDate');
-  const el = document.getElementById('journeySummary');
-  if (startDate && startDate !== 'undefined' && startDate !== '') {
-    el.style.display = 'block';
-    document.getElementById('journeySinceValue').textContent = startDate;
-    document.getElementById('journeyNoteValue').textContent  = '';
-  }
+}// ── JOURNEY ───────────────────────────────────────────────────────
+async function loadJourney(clientId) {
+  try {
+    const rows = await fetchSheet('Relationship');
+    let found = null;
+    for (const row of rows) {
+      if (row.c[0]?.v === clientId) {
+        found = { welcome: row.c[1]?.v || '', since: row.c[2]?.v || '',
+          services: row.c[3]?.v || '', note: row.c[4]?.v || '', reward: row.c[5]?.v || '' };
+        break;
+      }
+    }
+    const el = document.getElementById('journeySummary');
+    if (found) {
+      el.style.display = 'block';
+      document.getElementById('journeySinceValue').textContent = found.since || sessionStorage.getItem('startDate') || '';
+      document.getElementById('journeyNoteValue').textContent  = found.note || '';
+    } else {
+      const startDate = sessionStorage.getItem('startDate');
+      if (startDate && startDate !== 'undefined' && startDate !== '') {
+        el.style.display = 'block';
+        document.getElementById('journeySinceValue').textContent = startDate;
+        document.getElementById('journeyNoteValue').textContent  = '';
+      }
+    }
+  } catch(e) { console.log('Journey error:', e); }
 }
 
 // ── FEEDBACK ──────────────────────────────────────────────────────
@@ -1468,7 +1484,7 @@ function loadFeedbackServiceOptions() {
   sel.innerHTML = '<option value="">Select a service...</option>';
   clientServices.forEach(s => {
     const o = document.createElement('option');
-    o.value = s.name; o.textContent = s.name; sel.appendChild(o);
+    o.value = s.id; o.textContent = s.name; sel.appendChild(o);
   });
 }
 function setDashRating(n) {
@@ -1479,47 +1495,71 @@ function setDashRating(n) {
 }
 async function submitDashFeedback() {
   const clientId   = sessionStorage.getItem('clientId');
-  const clientName = sessionStorage.getItem('clientName');
   const rating     = currentDashRating;
-  const service    = document.getElementById('dashFeedbackService').value;
+  const serviceId  = document.getElementById('dashFeedbackService').value;
   const comment    = document.getElementById('dashFeedbackComment').value.trim();
   const successEl  = document.getElementById('dashFeedbackSuccess');
   if (!rating) { successEl.textContent='Please select a rating.'; return; }
+  const feedbackId = 'F' + Date.now();
   try {
-    postNoWait({ action:'appendToSheet', sheet:'Feedback',
-      row:[clientId, clientName, rating, service, comment, formatDateTimeStamp()] });
+    postNoWait({ sheet:'Feedback',
+      row:[feedbackId, clientId, serviceId, rating, comment] });
     successEl.textContent = 'Thank you for your feedback!';
     currentDashRating = 0;
     setDashRating(0);
     document.getElementById('dashFeedbackComment').value = '';
     document.getElementById('dashFeedbackService').value = '';
-    setTimeout(() => successEl.textContent='', 4000);
+    setTimeout(() => { successEl.textContent=''; loadFeedbackHistory(clientId); }, 2000);
   } catch(e) { successEl.textContent='Error submitting.'; }
+}
+async function loadFeedbackHistory(clientId) {
+  const container = document.getElementById('dashFeedbackHistory');
+  if (!container) return;
+  try {
+    const rows = await fetchSheet('Feedback');
+    const history = [];
+    for (const row of rows) {
+      if (row.c[1]?.v === clientId) {
+        history.push({ serviceId: row.c[2]?.v || '', rating: row.c[3]?.v || 0, comment: row.c[4]?.v || '' });
+      }
+    }
+    if (!history.length) { container.innerHTML = ''; return; }
+    container.innerHTML = '<div style="color:#666;font-size:0.68rem;letter-spacing:0.2em;margin:1rem 0 0.6rem;">YOUR PAST FEEDBACK</div>' +
+      history.map(f => `
+        <div style="background:#111;border:1px solid #2a2a2a;padding:0.8rem;margin-bottom:0.6rem;">
+          <div style="color:#D4A574;font-size:0.8rem;margin-bottom:0.3rem;">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div>
+          ${f.comment ? `<div style="color:#ccc;font-size:0.8rem;">${f.comment}</div>` : ''}
+        </div>`).join('');
+  } catch(e) {}
 }
 
 // ── INVOICES ──────────────────────────────────────────────────────
 async function loadInvoices(clientId) {
   const el = document.getElementById('invoicesList');
+  el.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
-    const res  = await fetch(`${API_URL}&gid=${PAYMENTS_GID}&t=${Date.now()}`);
-    const text = await res.text();
-    const json = JSON.parse(text.substring(47).slice(0,-2));
-    const rows = (json.table.rows||[]).filter(r =>
-      r.c[1]?.v?.toString().replace("'","").trim() === clientId);
-    if (!rows.length) { el.innerHTML='<div class="empty-state">No invoices yet.</div>'; return; }
-    el.innerHTML = '<div class="payment-history">' +
-      rows.map(row => {
-        const amount = parseFloat(row.c[2]?.v)||0;
-        const due    = row.c[3]?.f||row.c[3]?.v?.toString()||'';
-        const status = row.c[5]?.v?.toString()||'Pending';
-        const cls    = status==='Paid' ? 'paid' : 'unpaid';
-        return `<div class="payment-row">
-          <div class="payment-date">${due}</div>
-          <div class="payment-desc">Invoice</div>
-          <div class="payment-amount">$${amount.toFixed(2)}</div>
-          <div class="payment-status ${cls}">${status}</div>
-        </div>`;
-      }).join('') + '</div>';
+    const rows = await fetchSheet('Services');
+    const invoicesData = [];
+    for (const row of rows) {
+      if (row.c[1]?.v !== clientId) continue;
+      const invoice = row.c[7]?.v || '';
+      if (!invoice) continue;
+      const sName = row.c[3]?.v || 'Service';
+      const cost  = parseFloat(row.c[6]?.v) || 0;
+      const gst   = parseFloat(row.c[8]?.v) || 0;
+      const dateStr = row.c[2]?.f || (row.c[2]?.v ? formatDate(row.c[2].v.toString()) : '');
+      const invoiceFile = row.c[9]?.v || '';
+      invoicesData.push({ invoice, cost, gst, date: dateStr, service: sName, file: invoiceFile });
+    }
+    if (!invoicesData.length) { el.innerHTML='<div class="empty-state">No invoices yet.</div>'; return; }
+    el.innerHTML = invoicesData.map(inv => `
+      <div class="invoice-item" style="background:#1a1a1a;border:1px solid #2a2a2a;padding:1rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="color:#D4A574;font-size:0.85rem;margin-bottom:0.2rem;">${inv.invoice}</div>
+          <div style="color:#888;font-size:0.72rem;">${inv.service} · ${inv.date} · $${inv.cost.toFixed(2)}${inv.gst ? ' (GST $' + inv.gst.toFixed(2) + ')' : ''}</div>
+        </div>
+        ${inv.file ? `<a href="${inv.file}" target="_blank" style="background:#D4A574;color:#1A1A1A;padding:0.4rem 0.8rem;text-decoration:none;font-family:Georgia,serif;font-size:0.72rem;letter-spacing:0.1em;white-space:nowrap;">VIEW PDF</a>` : ''}
+      </div>`).join('');
   } catch(e) { el.innerHTML='<div class="empty-state">Error loading invoices.</div>'; }
 }
   // ── MESSAGES ──────────────────────────────────────────────────────
@@ -2047,7 +2087,7 @@ async function updatePhaseStatus(phaseId, newStatus, clientId) {
         idField:'PhaseID', id:phaseId, updates })
     });
     setTimeout(() => loadProjectTracker(sessionStorage.getItem('clientId')), 900);
-  } catch(e) { alert('Error updating phase. Please try again.'); }
+  } catch(e) { alert('Error updating status. Please try again.'); }
 }
 
 function openAddProjectModal() {
@@ -2583,4 +2623,3 @@ window.addEventListener('load', function() {
 </script>
 </body>
 </html>
-  
