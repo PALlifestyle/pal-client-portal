@@ -2395,7 +2395,7 @@ async function createTaskForDetailClient() {
   try {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ sheet:'Tasks',
+      body: JSON.stringify({ sheet:'Task',
         row:[taskId, clientId, title, desc, 'To Do', '', due, 'PAL',
              formatDateTimeStamp(), '', assigned, ''] })
     });
