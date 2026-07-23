@@ -2453,7 +2453,6 @@ async function loadDetailSchedule(clientId) {
 }
 async function saveAppointmentForDetail() {
   const clientId   = currentDetailClientId;
-  const clientName = CLIENT_NAMES[clientId]||clientId;
   const date       = document.getElementById('apptDate').value.trim();
   const time       = document.getElementById('apptTime').value.trim();
   const type       = document.getElementById('apptType').value;
@@ -2467,7 +2466,7 @@ async function saveAppointmentForDetail() {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ sheet:'Schedule',
-        row:[clientId, date, time, type, location, notes, clientName, 'Scheduled'] })
+        row:[clientId, date, time, type, notes, location, 'Scheduled'] })
     });
     successEl.textContent='Appointment saved!';
     document.getElementById('apptDate').value='';
