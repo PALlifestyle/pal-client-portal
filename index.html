@@ -1307,6 +1307,14 @@ function showStaffDashboard(staffId, staffName) {
     const o = document.createElement('option');
     o.value = id; o.textContent = name; sel.appendChild(o);
   });
+  const actSel = document.getElementById('dashActivityClient');
+  if (actSel) {
+    actSel.innerHTML = '<option value="">Select client...</option>';
+    Object.entries(CLIENT_NAMES).forEach(([id,name]) => {
+      const o = document.createElement('option');
+      o.value = id; o.textContent = name; actSel.appendChild(o);
+    });
+  }
   showTab('staffDashboard', document.querySelector('#staffNav .nav-item-btn'));
 }
 
