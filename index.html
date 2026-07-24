@@ -1367,6 +1367,32 @@ function loadDashboard(clientId) {
   loadServices(clientId);
   loadJourney(clientId);
   loadFeedbackHistory(clientId);
+  loadStaffProfileForClient();
+}
+
+// ── STAFF PROFILE SHOWN ON CLIENT DASHBOARD ───────────────────────
+async function loadStaffProfileForClient() {
+  try {
+    const rows = await fetchSheet('Clients');
+    for (const row of rows) {
+      const id = row.c[0]?.v?.toString().trim();
+      if (STAFF_IDS.includes(id)) {
+        const name  = row.c[1]?.v || 'P.A.L. Staff';
+        const photo = row.c[11]?.v || '';
+        const nameEl = document.getElementById('clientViewStaffName');
+        const phEl   = document.getElementById('clientViewStaffPlaceholder');
+        const imgEl  = document.getElementById('clientViewStaffImg');
+        if (nameEl) nameEl.textContent = name;
+        if (phEl)   phEl.textContent = name.charAt(0).toUpperCase();
+        if (photo && imgEl) {
+          imgEl.src = `https://drive.google.com/thumbnail?id=${photo}&sz=w200`;
+          imgEl.style.display = 'block';
+          if (phEl) phEl.style.display = 'none';
+        }
+        break;
+      }
+    }
+  } catch(e) { console.log('Staff profile error:', e); }
 }
 
 // ── LOAD PAYMENTS (col: 0=rowId, 1=clientId, 2=amount, 3=dueDate, 4=paidDate, 5=status) ──
