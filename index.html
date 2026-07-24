@@ -2560,7 +2560,7 @@ function saveActiveTimers() {
 
 function renderActivityFields() {
   const type = document.getElementById('activityType').value;
-  const clientId = currentDetailClientId;
+  const clientId = document.getElementById('dashActivityClient')?.value || '';
   const el = document.getElementById('activityFields');
   if (!type || !clientId) { el.innerHTML = ''; return; }
   const key = clientId + '_' + type;
