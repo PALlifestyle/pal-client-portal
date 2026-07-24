@@ -2623,7 +2623,7 @@ function renderActivityFields() {
 }
 
 function startTimedActivity(type) {
-  const clientId = currentDetailClientId;
+  const clientId = document.getElementById('dashActivityClient')?.value || '';
   if (!clientId) { alert('Please select a client first.'); return; }
   const key = clientId + '_' + type;
   activeTimers[key] = {
@@ -2643,7 +2643,7 @@ function startTimedActivity(type) {
 }
 
 async function stopTimedActivity(type) {
-  const clientId = currentDetailClientId;
+  const clientId = document.getElementById('dashActivityClient')?.value || '';
   if (!clientId) return;
   const key = clientId + '_' + type;
   const session = activeTimers[key];
