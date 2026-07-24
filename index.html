@@ -2245,23 +2245,6 @@ async function loadStaffKPIs() {
   }
 }
 
-async function loadActiveSessions() {
-  const el = document.getElementById('activeSessionsList');
-  if (!el) return;
-  try {
-    const res  = await fetch(`${SCRIPT_URL}?action=getActiveSessions&t=${Date.now()}`);
-    const json = await res.json();
-    if (!json.data || !json.data.length) {
-      el.innerHTML = '<div class="empty-state">No active sessions.</div>'; return;
-    }
-    el.innerHTML = json.data.map(s => `
-      <div class="session-card">
-        <div class="session-client">${s.clientName||s.clientId}</div>
-        <div class="session-time">${s.startTime||''} · ${s.type||''}</div>
-      </div>`).join('');
-  } catch(e) { el.innerHTML = '<div class="empty-state">—</div>'; }
-}
-
 // ── NOTIFICATIONS ─────────────────────────────────────────────────
 function toggleNotifClientSelect() {
   const val = document.getElementById('notifTarget').value;
