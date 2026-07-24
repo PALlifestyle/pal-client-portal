@@ -2565,51 +2565,234 @@ async function saveAppointmentForDetail() {
 }
 
 // ── STAFF: ACTIVITY LOG ───────────────────────────────────────────
+// ── STAFF: ACTIVITY LOG (with live timer, restored) ────────────────
+activeTimers = JSON.parse(localStorage.getItem('pal_active_timers') || '{}');
+
+function saveActiveTimers() {
+  localStorage.setItem('pal_active_timers', JSON.stringify(activeTimers));
+}
+
 function renderActivityFields() {
   const type = document.getElementById('activityType').value;
-  const el   = document.getElementById('activityFields');
-  if (!type) { el.innerHTML=''; return; }
-  el.innerHTML = `
-    <label style="color:#666;font-size:0.68rem;letter-spacing:0.15em;display:block;margin-top:0.5rem;">DATE</label>
-    <input type="text" id="actDate" value="${formatDateOnly(new Date())}" placeholder="DD/MM/YYYY"
-      style="width:100%;background:#111;border:1px solid #333;color:#fff;
-             padding:0.6rem;font-family:Georgia,serif;font-size:0.82rem;margin-bottom:0.4rem;">
-    <label style="color:#666;font-size:0.68rem;letter-spacing:0.15em;display:block;">HOURS</label>
-    <input type="text" id="actHours" placeholder="e.g. 2.5"
-      style="width:100%;background:#111;border:1px solid #333;color:#fff;
-             padding:0.6rem;font-family:Georgia,serif;font-size:0.82rem;margin-bottom:0.4rem;">
-    <label style="color:#666;font-size:0.68rem;letter-spacing:0.15em;display:block;">NOTES</label>
-    <textarea id="actNotes" style="width:100%;background:#111;border:1px solid #333;color:#fff;
-      padding:0.6rem;font-family:Georgia,serif;font-size:0.82rem;
-      min-height:60px;resize:vertical;margin-bottom:0.6rem;"></textarea>
-    <button class="btn btn-sm" onclick="logActivity('${type}')"
-      style="width:100%;">LOG ACTIVITY</button>
-    <div class="success-msg" id="actSuccess"></div>
-    <div class="error"       id="actError"></div>`;
+  const clientId = currentDetailClientId;
+  const el = document.getElementById('activityFields');
+  if (!type || !clientId) { el.innerHTML = ''; return; }
+  const key = clientId + '_' + type;
+  const running = activeTimers[key];
+  const timerDisplay = `<div class="activity-timer" id="actTimer">${running ? 'Session running...' : ''}</div>`;
+  const startDisplay = running ? 'display:none' : '';
+  const stopDisplay  = running ? '' : 'display:none';
+
+  const fieldsByType = {
+    consultation: `
+      <label class="modal-field-label">FORMAT</label>
+      <select id="actFormat"><option value="Online">Online</option><option value="Presencial">Presencial</option></select>
+      <label class="modal-field-label">LINK / LOCATION</label>
+      <input type="text" id="actLocation" placeholder="Zoom link or address...">
+      <label class="modal-field-label">NOTES</label>
+      <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+      <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
+        <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('consultation')" style="${startDisplay}">START SESSION</button>
+        <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('consultation')" style="${stopDisplay}">STOP &amp; SAVE</button>
+      </div>${timerDisplay}`,
+    meeting: `
+      <label class="modal-field-label">LOCATION / LINK</label>
+      <input type="text" id="actLocation" placeholder="Address or video link...">
+      <label class="modal-field-label">NOTES</label>
+      <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+      <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
+        <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('meeting')" style="${startDisplay}">START SESSION</button>
+        <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('meeting')" style="${stopDisplay}">STOP &amp; SAVE</button>
+      </div>${timerDisplay}`,
+    homevisit: `
+      <div id="homeVisitStatus"></div>
+      <label class="modal-field-label">NOTES</label>
+      <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
+      <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
+        <button class="btn btn-green btn-half" id="checkInBtn" onclick="homeVisitCheckIn()">CHECK IN</button>
+        <button class="btn btn-red btn-half" id="checkOutBtn" onclick="homeVisitCheckOut()">CHECK OUT</button>
+      </div>${timerDisplay}`,
+    execution: `
+      <label class="modal-field-label">PROJECT NAME</label>
+      <input type="text" id="actProject" placeholder="e.g. Soul Fitness Website">
+      <label class="modal-field-label">NOTES</label>
+      <textarea id="actNotes" style="height:60px;" placeholder="What are you working on today?"></textarea>
+      <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
+        <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('execution')" style="${startDisplay}">START SESSION</button>
+        <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('execution')" style="${stopDisplay}">STOP &amp; SAVE</button>
+      </div>${timerDisplay}`,
+    planning: `
+      <label class="modal-field-label">PROJECT NAME</label>
+      <input type="text" id="actProject" placeholder="e.g. Soul Fitness Website">
+      <label class="modal-field-label">NOTES</label>
+      <textarea id="actNotes" style="height:60px;" placeholder="What are you planning today?"></textarea>
+      <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
+        <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('planning')" style="${startDisplay}">START SESSION</button>
+        <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('planning')" style="${stopDisplay}">STOP &amp; SAVE</button>
+      </div>${timerDisplay}`
+  };
+  el.innerHTML = fieldsByType[type] || '';
+  if (type === 'homevisit') updateHomeVisitUI(clientId);
+  if (running) startTimerDisplay(key);
 }
-async function logActivity(type) {
-  const clientId   = currentDetailClientId;
-  const date       = document.getElementById('actDate')?.value.trim()||'';
-  const hours      = parseFloat(document.getElementById('actHours')?.value)||0;
-  const notes      = document.getElementById('actNotes')?.value.trim()||'';
-  const successEl  = document.getElementById('actSuccess');
-  const errorEl    = document.getElementById('actError');
-  if (!date||!hours) { errorEl.textContent='Date and hours are required.'; return; }
-  errorEl.textContent=''; successEl.textContent='Logging...';
-  const typeLabels = { consultation:'Initial Consultation', meeting:'In-Person Meeting',
-    homevisit:'Home Visit', execution:'Project Execution', planning:'Planning' };
+
+function startTimedActivity(type) {
+  const clientId = currentDetailClientId;
+  if (!clientId) { alert('Please select a client first.'); return; }
+  const key = clientId + '_' + type;
+  activeTimers[key] = {
+    startTime: new Date().toISOString(), type, clientId,
+    project: document.getElementById('actProject')?.value || '',
+    notes: document.getElementById('actNotes')?.value || '',
+    location: document.getElementById('actLocation')?.value || '',
+    format: document.getElementById('actFormat')?.value || ''
+  };
+  saveActiveTimers();
+  const startBtn = document.getElementById('actStartBtn');
+  const stopBtn  = document.getElementById('actStopBtn');
+  if (startBtn) startBtn.style.display = 'none';
+  if (stopBtn)  stopBtn.style.display  = 'inline-block';
+  startTimerDisplay(key);
+  loadActiveSessions();
+}
+
+async function stopTimedActivity(type) {
+  const clientId = currentDetailClientId;
+  if (!clientId) return;
+  const key = clientId + '_' + type;
+  const session = activeTimers[key];
+  if (!session) return;
+  const startTime = new Date(session.startTime);
+  const endTime = new Date();
+  const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
+  const dateStr = formatDateOnly(endTime);
+  const typeLabels = { consultation:'Initial Consultation', meeting:'In-Person Meeting', execution:'Project Execution', planning:'Planning' };
   const logId = 'L' + Date.now();
+  let notesStr = session.notes || '';
+  if (session.location) notesStr += (notesStr ? ' | ' : '') + 'Location: ' + session.location;
+  if (session.format)   notesStr += (notesStr ? ' | ' : '') + 'Format: ' + session.format;
+  const startTimeStr = startTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+  const endTimeStr   = endTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
   try {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ sheet:'Time Log',
-        row:[logId, clientId, date, typeLabels[type]||type, hours, notes, '', '', ''] })
+        row:[logId, clientId, dateStr, typeLabels[type] || type, durationHours, notesStr, session.project || '', startTimeStr, endTimeStr] })
     });
-    successEl.textContent='Activity logged!';
-    document.getElementById('actHours').value='';
-    document.getElementById('actNotes').value='';
-    setTimeout(()=>successEl.textContent='',3000);
-  } catch(e) { errorEl.textContent='Error logging activity.'; successEl.textContent=''; }
+    if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
+    delete activeTimers[key];
+    saveActiveTimers();
+    const timerEl = document.getElementById('actTimer');
+    if (timerEl) timerEl.textContent = `Saved! Duration: ${durationHours}h`;
+    const startBtn = document.getElementById('actStartBtn');
+    const stopBtn  = document.getElementById('actStopBtn');
+    if (startBtn) startBtn.style.display = 'inline-block';
+    if (stopBtn)  stopBtn.style.display  = 'none';
+    loadActiveSessions();
+  } catch(e) {
+    const timerEl = document.getElementById('actTimer');
+    if (timerEl) timerEl.textContent = 'Error saving. Please try again.';
+  }
+}
+
+async function homeVisitCheckIn() {
+  const clientId = currentDetailClientId;
+  if (!clientId) { alert('Please select a client first.'); return; }
+  const key = clientId + '_homevisit';
+  if (activeTimers[key]) { alert('Already checked in for this client.'); return; }
+  const notes = document.getElementById('actNotes')?.value || '';
+  activeTimers[key] = { startTime: new Date().toISOString(), type:'homevisit', clientId, notes, checkedIn:true };
+  saveActiveTimers();
+  updateHomeVisitUI(clientId);
+  startTimerDisplay(key);
+  loadActiveSessions();
+}
+
+async function homeVisitCheckOut() {
+  const clientId = currentDetailClientId;
+  if (!clientId) return;
+  const key = clientId + '_homevisit';
+  const session = activeTimers[key];
+  if (!session) { alert('No active check-in found for this client.'); return; }
+  const startTime = new Date(session.startTime);
+  const endTime = new Date();
+  const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
+  const notes = document.getElementById('actNotes')?.value || session.notes || '';
+  const logId = 'L' + Date.now();
+  const startTimeStr = startTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+  const endTimeStr   = endTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Time Log',
+        row:[logId, clientId, formatDateOnly(endTime), 'Home Visit', durationHours, notes, '', startTimeStr, endTimeStr] })
+    });
+    if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
+    delete activeTimers[key];
+    saveActiveTimers();
+    const timerEl = document.getElementById('actTimer');
+    if (timerEl) timerEl.textContent = `Checked out! Duration: ${durationHours}h saved.`;
+    updateHomeVisitUI(clientId);
+    loadActiveSessions();
+  } catch(e) {
+    const timerEl = document.getElementById('actTimer');
+    if (timerEl) timerEl.textContent = 'Error saving check-out. Please try again.';
+  }
+}
+
+function updateHomeVisitUI(clientId) {
+  const key = clientId + '_homevisit';
+  const session = activeTimers[key];
+  const statusEl = document.getElementById('homeVisitStatus');
+  const checkInBtn = document.getElementById('checkInBtn');
+  const checkOutBtn = document.getElementById('checkOutBtn');
+  if (session && session.checkedIn) {
+    const startTime = new Date(session.startTime);
+    const t = startTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+    if (statusEl) statusEl.innerHTML = `<div style="background:#1a2e1a;border:1px solid #4CAF50;padding:0.7rem;color:#4caf50;font-size:0.78rem;margin-bottom:0.6rem;">Checked in at ${t}</div>`;
+    if (checkInBtn)  { checkInBtn.disabled = true; checkInBtn.style.opacity = '0.4'; }
+    if (checkOutBtn) { checkOutBtn.disabled = false; checkOutBtn.style.opacity = '1'; }
+  } else {
+    if (statusEl) statusEl.innerHTML = '';
+    if (checkInBtn)  { checkInBtn.disabled = false; checkInBtn.style.opacity = '1'; }
+    if (checkOutBtn) { checkOutBtn.disabled = true; checkOutBtn.style.opacity = '0.4'; }
+  }
+}
+
+function startTimerDisplay(key) {
+  if (timerIntervals[key]) clearInterval(timerIntervals[key]);
+  timerIntervals[key] = setInterval(() => {
+    const session = activeTimers[key];
+    if (!session) { clearInterval(timerIntervals[key]); return; }
+    const elapsed = new Date() - new Date(session.startTime);
+    const h = Math.floor(elapsed / 3600000);
+    const m = Math.floor((elapsed % 3600000) / 60000);
+    const s = Math.floor((elapsed % 60000) / 1000);
+    const timerEl = document.getElementById('actTimer');
+    if (timerEl) timerEl.textContent = `Running: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+}
+
+function loadActiveSessions() {
+  const container = document.getElementById('activeSessionsList');
+  if (!container) return;
+  const entries = Object.entries(activeTimers);
+  if (!entries.length) { container.innerHTML = '<div class="empty-state">No active sessions.</div>'; return; }
+  const typeLabels = { consultation:'Initial Consultation', meeting:'In-Person Meeting', homevisit:'Home Visit', execution:'Project Execution', planning:'Planning' };
+  container.innerHTML = entries.map(([key, session]) => {
+    const startTime = new Date(session.startTime);
+    const elapsed = new Date() - startTime;
+    const h = Math.floor(elapsed / 3600000);
+    const m = Math.floor((elapsed % 3600000) / 60000);
+    return `
+      <div class="activity-session-card">
+        <div class="activity-session-type">${typeLabels[session.type] || session.type}</div>
+        <div class="activity-session-client">${CLIENT_NAMES[session.clientId] || session.clientId}</div>
+        ${session.project ? `<div class="activity-session-meta">Project: ${session.project}</div>` : ''}
+        <div class="activity-session-meta">Started: ${startTime.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="activity-session-elapsed">${h}h ${m}m running</div>
+      </div>`;
+  }).join('');
 }
   // ════════════════════════════════════════════════════════════════
 //  KEYBOARD / UI HELPERS
