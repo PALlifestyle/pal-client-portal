@@ -786,7 +786,23 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
         <div class="error"       id="notifError"></div>
       </div>
 
-      <div class="section-title">ACTIVE SESSIONS</div>
+      <div class="section-title">LOG ACTIVITY</div>
+      <div class="staff-section-box">
+        <label>CLIENT</label>
+        <select id="dashActivityClient" onchange="renderActivityFields()">
+          <option value="">Select client...</option>
+        </select>
+        <label>ACTIVITY TYPE</label>
+        <select id="activityType" onchange="renderActivityFields()">
+          <option value="">Select type...</option>
+          <option value="consultation">Initial Consultation</option>
+          <option value="meeting">In-Person Meeting</option>
+          <option value="homevisit">Home Visit</option>
+          <option value="execution">Project Execution</option>
+          <option value="planning">Planning</option>
+        </select>
+        <div id="activityFields" style="margin-top:0.4rem;"></div>
+      </div><div class="section-title">ACTIVE SESSIONS</div>
       <div id="activeSessionsList">
         <div class="empty-state">No active sessions.</div>
       </div>
