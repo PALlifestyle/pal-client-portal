@@ -2126,18 +2126,57 @@ function buildPhaseListOnly(phases) {
 
 function buildReport(phases) {
   if (!phases.length) return '';
-  const done  = phases.filter(p=>p.status==='Completed').length;
+  const norm = s => (s || '').toString().trim();
+  const done  = phases.filter(p => norm(p.status) === 'Completed').length;
   const total = phases.length;
   const pct   = total ? Math.round((done/total)*100) : 0;
+  const today = new Date();
+
+  const overdue = phases.filter(p => {
+    const st = norm(p.status);
+    if (st === 'Completed' || st === 'Cancelled') return false;
+    const end = parseAUDate(p.plannedEnd);
+    return end && end < today;
+  });
+
+  const variances = phases
+    .filter(p => p.actualEnd && p.plannedEnd)
+    .map(p => {
+      const planned = parseAUDate(p.plannedEnd);
+      const actual  = parseAUDate(p.actualEnd);
+      if (!planned || !actual) return null;
+      const diffDays = Math.round((actual - planned) / 86400000);
+      return { name: p.name, diffDays };
+    })
+    .filter(Boolean);
+
+  const early   = variances.filter(v => v.diffDays < 0).length;
+  const onTime  = variances.filter(v => v.diffDays === 0).length;
+  const late    = variances.filter(v => v.diffDays > 0).length;
+
+  const overdueHtml = overdue.length ? `
+    <div style="margin-top:0.8rem;background:#2e1a1a;border:1px solid #ff6b6b;padding:0.7rem 0.9rem;">
+      <div style="color:#ff6b6b;font-size:0.68rem;letter-spacing:0.15em;margin-bottom:0.4rem;">OVERDUE (${overdue.length})</div>
+      ${overdue.map(p => `<div style="color:#ffb3b3;font-size:0.78rem;padding:0.15rem 0;">${p.name} — was due ${p.plannedEnd}</div>`).join('')}
+    </div>` : '';
+
+  const varianceHtml = variances.length ? `
+    <div style="display:flex;gap:1.2rem;margin-top:0.8rem;flex-wrap:wrap;">
+      <div style="color:#4CAF50;font-size:0.75rem;">${early} early</div>
+      <div style="color:#4CAF50;font-size:0.75rem;">${onTime} on time</div>
+      <div style="color:#ff6b6b;font-size:0.75rem;">${late} late</div>
+    </div>` : '';
+
   return `<div style="margin-top:1.2rem;border-top:1px solid #2a2a2a;padding-top:1.2rem;">
     <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">PROGRESS</div>
     <div style="color:#aaa;font-size:0.78rem;margin-bottom:0.4rem;">${done}/${total} phases complete</div>
     <div style="background:#333;border-radius:4px;height:6px;">
       <div style="background:#D4A574;height:6px;border-radius:4px;width:${pct}%;"></div>
     </div>
+    ${varianceHtml}
+    ${overdueHtml}
   </div>`;
 }
-
 async function updatePhaseStatus(phaseId, newStatus, clientId) {
   const updates = { Status: newStatus, UpdatedDate: formatDateTimeStamp() };
   if (newStatus === 'Completed') updates['ActualEnd'] = formatDateOnly(new Date());
