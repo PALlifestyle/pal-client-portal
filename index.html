@@ -2913,6 +2913,165 @@ window.addEventListener('load', function() {
     }
   }
 });
+  // ════════════════════════════════════════════════════════════════
+//  DOCUMENTS FEATURE (added separately, does not modify code above)
+// ════════════════════════════════════════════════════════════════
+TAB_MAP.documents = 'tabDocuments';
+
+async function loadClientDocuments(clientId) {
+  const el = document.getElementById('clientDocumentsList');
+  el.innerHTML = '<div class="empty-state">Loading...</div>';
+  try {
+    const rows = await fetchSheet('Documents');
+    const docs = rows.filter(r => r.c[1]?.v === clientId);
+    if (!docs.length) { el.innerHTML = '<div class="empty-state">No documents yet.</div>'; return; }
+    el.innerHTML = docs.map(row => {
+      const name   = row.c[2]?.v || 'Document';
+      const link   = row.c[3]?.v || '#';
+      const status = row.c[4]?.v || 'Sent';
+      const signed = status === 'Signed';
+      return `<div style="background:#1a1a1a;border:1px solid #2a2a2a;padding:1rem;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="color:#fff;font-size:0.88rem;">${name}</div>
+          <div style="color:${signed?'#4caf50':'#D4A574'};font-size:0.72rem;margin-top:0.2rem;">${signed?'Signed':'Pending signature'}</div>
+        </div>
+        ${signed ? '' : `<a href="${link}" target="_blank" style="background:#D4A574;color:#1A1A1A;padding:0.5rem 1rem;text-decoration:none;font-family:Georgia,serif;font-size:0.75rem;letter-spacing:0.1em;white-space:nowrap;">REVIEW &amp; SIGN</a>`}
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = '<div class="empty-state">Error loading documents.</div>'; }
+}
+
+async function loadDetailDocuments(clientId) {
+  const el = document.getElementById('detailDocumentsList');
+  el.innerHTML = '<div class="empty-state">Loading...</div>';
+  try {
+    const rows = await fetchSheet('Documents');
+    const docs = rows.filter(r => r.c[1]?.v === clientId);
+    if (!docs.length) { el.innerHTML = '<div class="empty-state">No documents yet.</div>'; return; }
+    el.innerHTML = docs.map(row => {
+      const docId  = row.c[0]?.v || '';
+      const name   = row.c[2]?.v || 'Document';
+      const status = row.c[4]?.v || 'Sent';
+      return `<div style="background:#1a1a1a;border:1px solid #2a2a2a;padding:1rem;margin-bottom:0.6rem;">
+        <div style="color:#fff;font-size:0.88rem;margin-bottom:0.4rem;">${name}</div>
+        <select class="phase-status-select" onchange="updateDocumentStatus('${docId}',this.value,'${clientId}')">
+          <option value="Sent"   ${status==='Sent'  ?'selected':''}>Sent</option>
+          <option value="Signed" ${status==='Signed'?'selected':''}>Signed</option>
+        </select>
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = '<div class="empty-state">Error loading documents.</div>'; }
+}
+
+async function sendDocumentForDetail() {
+  const clientId  = currentDetailClientId;
+  const name      = document.getElementById('docName').value.trim();
+  const link      = document.getElementById('docLink').value.trim();
+  const successEl = document.getElementById('docSuccess');
+  const errorEl   = document.getElementById('docError');
+  errorEl.textContent = ''; successEl.textContent = '';
+  if (!name || !link) { errorEl.textContent = 'Please enter a name and a link.'; return; }
+  const docId = 'D' + Date.now();
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Documents',
+        row:[docId, clientId, name, link, 'Sent', formatDateTimeStamp(), ''] })
+    });
+    successEl.textContent = 'Document sent!';
+    document.getElementById('docName').value = '';
+    document.getElementById('docLink').value = '';
+    setTimeout(() => { successEl.textContent=''; loadDetailDocuments(clientId); }, 2000);
+  } catch(e) { errorEl.textContent = 'Error sending document.'; }
+}
+
+async function updateDocumentStatus(documentId, newStatus, clientId) {
+  const updates = { Status: newStatus };
+  if (newStatus === 'Signed') updates['Date Signed'] = formatDateOnly(new Date());
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'updateRow', sheet:'Documents',
+        idField:'DocumentID', id:documentId, updates })
+    });
+    setTimeout(() => loadDetailDocuments(clientId), 800);
+  } catch(e) { alert('Error updating document status. Please try again.'); }
+}
+
+// Redefines showTab to also handle the new "documents" tab.
+// This does not remove the original showTab above; it simply
+// replaces it in memory once the page finishes loading.
+function showTab(tab, btn) {
+  Object.values(TAB_MAP).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('active');
+    if (id === 'tabMessages') el.style.display = '';
+  });
+  const activeEl = document.getElementById(TAB_MAP[tab]);
+  if (activeEl) {
+    if (tab === 'messages') {
+      activeEl.style.display = 'flex';
+      activeEl.classList.add('active');
+    } else {
+      activeEl.classList.add('active');
+    }
+  }
+  document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  closeSidebar();
+  const cid = sessionStorage.getItem('clientId');
+  if (tab === 'messages')       loadMessages(cid);
+  if (tab === 'media')          loadMedia(cid);
+  if (tab === 'requests')       loadRequestHistory(cid);
+  if (tab === 'actionplan')     loadActionPlan(cid);
+  if (tab === 'projects')       loadProjectTracker(cid, false);
+  if (tab === 'invoices')       loadInvoices(cid);
+  if (tab === 'schedule')       loadSchedule(cid);
+  if (tab === 'hours')          loadHours(cid);
+  if (tab === 'documents')      loadClientDocuments(cid);
+  if (tab === 'staffDashboard') { loadStaffKPIs(); loadActiveSessions(); }
+  if (tab === 'staffClients')   loadClientList();
+  if (tab === 'staffProjects')  loadProjectTracker(cid, true);
+  if (tab === 'staffProfile') {
+    const photo = sessionStorage.getItem('profilePhoto');
+    if (photo) setStaffAvatar('https://drive.google.com/thumbnail?id='+photo+'&sz=w200');
+    const name = sessionStorage.getItem('clientName');
+    if (name) document.getElementById('staffNameDisplay').textContent = name;
+  }
+}
+
+// Redefines showSubTab to also handle the new "detailDocuments" sub-tab.
+function showSubTab(id, btn) {
+  ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments']
+    .forEach(s => document.getElementById(s).style.display = 'none');
+  document.getElementById(id).style.display = id === 'detailMessages' ? 'flex' : 'block';
+  document.querySelectorAll('.staff-sub-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const cid = currentDetailClientId;
+  if (id === 'detailMessages') loadDetailMessages(cid);
+  if (id === 'detailMedia')    loadDetailMedia(cid);
+  if (id === 'detailTasks')    loadDetailTasks(cid);
+  if (id === 'detailRequests') loadDetailRequests(cid);
+  if (id === 'detailSchedule') loadDetailSchedule(cid);
+  if (id === 'detailDocuments') loadDetailDocuments(cid);
+}
+
+// Redefines showClientDetail so the new "detailDocuments" panel
+// starts hidden correctly when a client is opened, same as the others.
+function showClientDetail(clientId, clientName, photo) {
+  currentDetailClientId = clientId;
+  document.getElementById('clientListView').style.display = 'none';
+  document.getElementById('clientDetailView').classList.remove('hidden');
+  document.getElementById('detailClientName').textContent = clientName;
+  document.getElementById('detailClientId').textContent   = clientId;
+  document.querySelectorAll('.staff-sub-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector('.staff-sub-tab').classList.add('active');
+  ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments']
+    .forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('detailMessages').style.display = 'flex';
+  loadDetailMessages(clientId);
+}
 
 </script>
 </body>
