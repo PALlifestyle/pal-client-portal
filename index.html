@@ -924,6 +924,21 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
             <div class="success-msg" id="apptSuccess"></div>
             <div class="error"       id="apptError"></div>
           </div>
+          <!-- Documents -->
+        <div id="detailDocuments" style="display:none;">
+          <div class="section-title" style="border-top:none;padding-top:0.8rem;">CLIENT DOCUMENTS</div>
+          <div id="detailDocumentsList"><div class="empty-state">Loading...</div></div>
+          <div class="section-title">SEND NEW DOCUMENT</div>
+          <div class="staff-section-box">
+            <label>DOCUMENT NAME</label>
+            <input type="text" id="docName" placeholder="e.g. Service Agreement">
+            <label>BOLDSIGN LINK</label>
+            <input type="text" id="docLink" placeholder="Paste the BoldSign signing link...">
+            <button class="btn" onclick="sendDocumentForDetail()">SEND DOCUMENT</button>
+            <div class="success-msg" id="docSuccess"></div>
+            <div class="error"       id="docError"></div>
+          </div>
+        </div>
          
 
       </div><!-- /clientDetailView -->
