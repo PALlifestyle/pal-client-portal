@@ -1970,13 +1970,13 @@ async function fetchAllProjects(clientId) {
     const text = await res.text();
     const json = JSON.parse(text.substring(47).slice(0,-2));
     return (json.table.rows||[]).map(row => ({
-      projectId:   (row.c[0]?.v||'').toString(),
+      projectId:   (row.c[0]?.v||'').toString().trim(),
       clientId:    (row.c[1]?.v||'').toString().trim(),
       name:        (row.c[2]?.v||'').toString(),
       description: (row.c[3]?.v||'').toString(),
       plannedStart:(row.c[4]?.f||row.c[4]?.v||'').toString(),
       plannedEnd:  (row.c[5]?.f||row.c[5]?.v||'').toString(),
-      status:      (row.c[6]?.v||'Scheduled').toString()
+      status:      (row.c[6]?.v||'Scheduled').toString().trim()
     })).filter(p => !clientId || p.clientId === clientId);
   } catch(e) { return []; }
 }
@@ -1988,11 +1988,11 @@ async function fetchAllPhases(clientId) {
     const json = JSON.parse(text.substring(47).slice(0,-2));
     return (json.table.rows||[]).map(row => ({
       phaseId:     (row.c[0]?.v||'').toString(),
-      projectId:   (row.c[1]?.v||'').toString(),
+      projectId:   (row.c[1]?.v||'').toString().trim(),
       clientId:    (row.c[2]?.v||'').toString().trim(),
       name:        (row.c[3]?.v||'').toString(),
       description: (row.c[4]?.v||'').toString(),
-      status:      (row.c[5]?.v||'Scheduled').toString(),
+      status:      (row.c[5]?.v||'Scheduled').toString().trim(),
       plannedStart:(row.c[6]?.f||row.c[6]?.v||'').toString(),
       plannedEnd:  (row.c[7]?.f||row.c[7]?.v||'').toString(),
       actualEnd:   (row.c[8]?.f||row.c[8]?.v||'').toString(),
