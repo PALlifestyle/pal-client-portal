@@ -2171,10 +2171,16 @@ function checkApptDateAvailable() {
   if (!date) { errorEl.textContent = 'Date is required.'; return; }
   successEl.textContent = 'Saving...';
   try {
-    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+        await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ sheet:'Schedule',
         row:[clientId, date, time, type, notes, location, 'Scheduled'] })
+    });
+    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'sendNotification', target:'specific', clientId,
+        title:'Appointment Confirmed',
+        message:`Your appointment on ${date} at ${time} (${type}) has been confirmed.${location ? ' Location: '+location : ''}` })
     });
     successEl.textContent = 'Appointment saved!';
     document.getElementById('calApptDate').value = '';
