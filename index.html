@@ -642,9 +642,16 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
       <div class="media-grid" id="mediaClientGrid">
         <div class="empty-state" style="grid-column:span 2;">No media from you yet.</div>
       </div>
-      <div class="upload-box">
+            <div class="upload-box">
         <label>SHARE A PHOTO OR VIDEO WITH P.A.L.</label>
         <input type="text" id="uploadCaption" placeholder="Add a caption...">
+        <label>CATEGORY</label>
+        <select id="uploadCategory">
+          <option value="Home Management">Home Management</option>
+          <option value="Pet Care">Pet Care</option>
+          <option value="Personal Project">Personal Project</option>
+          <option value="Documents">Documents</option>
+        </select>
         <input type="file" id="mediaFileInput" accept="image/*,video/*" style="display:none"
                onchange="handleClientMediaUpload(event)">
         <button class="btn" onclick="document.getElementById('mediaFileInput').click()">
