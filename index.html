@@ -2037,9 +2037,10 @@ function showClientCalDay(year, month, day) {
       <div class="cal-appt-status">${a.Status || ''}</div>
     </div>`).join('');
 }
-  async function requestAppointment() {
+    async function requestAppointment() {
   const clientId   = sessionStorage.getItem('clientId');
-  const date       = document.getElementById('clientApptDate').value.trim();
+  const dateRaw    = document.getElementById('clientApptDate').value;
+  const date       = dateRaw ? dateRaw.split('-').reverse().join('/') : '';
   const time       = document.getElementById('clientApptTime').value.trim();
   const type       = document.getElementById('clientApptType').value;
   const location   = document.getElementById('clientApptLocation').value.trim();
