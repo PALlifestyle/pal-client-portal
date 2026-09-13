@@ -3389,6 +3389,60 @@ function showClientDetail(clientId, clientName, photo) {
   document.getElementById('detailMessages').style.display = 'flex';
   loadDetailMessages(clientId);
 }
+  // ════════════════════════════════════════════════════════════════
+//  PAYMENTS FEATURE (added separately, does not modify code above)
+// ════════════════════════════════════════════════════════════════
+TAB_MAP.payments = 'tabPayments';
+
+async function requestPayment() {
+  const clientId  = sessionStorage.getItem('clientId');
+  const amount    = document.getElementById('payReqAmount').value.trim();
+  const desc      = document.getElementById('payReqDescription').value.trim();
+  const method    = document.getElementById('payReqMethod').value;
+  const successEl = document.getElementById('payReqSuccess');
+  const errorEl   = document.getElementById('payReqError');
+  errorEl.textContent = ''; successEl.textContent = '';
+  if (!amount) { errorEl.textContent = 'Amount is required.'; return; }
+  const reqId = 'PR' + Date.now();
+  successEl.textContent = 'Sending...';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Payment Requests',
+        row:[reqId, clientId, 'Client', amount, desc, method, 'Requested', formatDateTimeStamp(), '', ''] })
+    });
+    successEl.textContent = 'Payment request sent!';
+    document.getElementById('payReqAmount').value = '';
+    document.getElementById('payReqDescription').value = '';
+    setTimeout(() => { successEl.textContent = ''; loadClientPayments(clientId); }, 2000);
+  } catch(e) { errorEl.textContent = 'Error sending request.'; successEl.textContent = ''; }
+}
+
+async function loadClientPayments(clientId) {
+  const el = document.getElementById('clientPaymentsList');
+  el.innerHTML = '<div class="empty-state">Loading...</div>';
+  try {
+    const rows = await fetchSheet('Payment Requests');
+    const reqs = rows.filter(r => r.c[1]?.v === clientId);
+    if (!reqs.length) { el.innerHTML = '<div class="empty-state">No payment requests yet.</div>'; return; }
+    el.innerHTML = reqs.map(row => {
+      const amount   = row.c[3]?.v || '';
+      const desc     = row.c[4]?.v || '';
+      const method   = row.c[5]?.v || '';
+      const status   = row.c[6]?.v || 'Requested';
+      const response = row.c[8]?.v || '';
+      const isLink   = method === 'Payment Link' && status === 'Approved' && response;
+      return `<div style="background:#FFFFFF;border:1px solid #E3DED4;padding:1rem;margin-bottom:0.6rem;">
+        <div style="color:#1A1A1A;font-size:0.9rem;margin-bottom:0.2rem;">$${amount} — ${desc}</div>
+        <div style="color:#999;font-size:0.72rem;margin-bottom:0.4rem;">${method} · ${status}</div>
+        ${status === 'Approved' && response ? (isLink
+          ? `<a href="${response}" target="_blank" class="btn" style="display:block;text-align:center;text-decoration:none;">PAY NOW</a>`
+          : `<div style="color:#1A1A1A;font-size:0.82rem;white-space:pre-wrap;background:#FAF8F5;border:1px solid #E3DED4;padding:0.6rem;">${response}</div>`)
+          : ''}
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = '<div class="empty-state">Error loading payments.</div>'; }
+}
 
 </script>
 </body>
