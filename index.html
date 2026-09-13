@@ -3561,6 +3561,41 @@ async function respondToPayment(requestId, status, clientId) {
     setTimeout(() => loadDetailPayments(clientId), 800);
   } catch(e) { alert('Error updating payment. Please try again.'); }
 }
+  let placesAutocompleteInitialized = false;
+function initLocationAutocomplete() {
+  if (placesAutocompleteInitialized) return;
+  const input = document.getElementById('requestLocation');
+  if (!input || typeof google === 'undefined' || !google.maps || !google.maps.places) return;
+  new google.maps.places.Autocomplete(input, { fields: ['formatted_address'] });
+  placesAutocompleteInitialized = true;
+}
+
+function useMyLocation() {
+  const input = document.getElementById('requestLocation');
+  const errEl = document.getElementById('locError');
+  errEl.textContent = '';
+  if (!navigator.geolocation) { errEl.textContent = 'Location not supported on this device.'; return; }
+  input.placeholder = 'Getting location...';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const lat = pos.coords.latitude, lng = pos.coords.longitude;
+      if (typeof google !== 'undefined' && google.maps) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            input.value = results[0].formatted_address;
+          } else {
+            input.value = lat.toFixed(6) + ',' + lng.toFixed(6);
+          }
+        });
+      } else {
+        input.value = lat.toFixed(6) + ',' + lng.toFixed(6);
+      }
+    },
+    err => { errEl.textContent = 'Could not get location. You can type the address instead.'; },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
 </script>
 </body>
 </html>
