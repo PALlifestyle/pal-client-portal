@@ -809,6 +809,37 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
           <div class="kpi-label">PROJECTS IN PROGRESS</div></div>
       </div>
 
+           <div class="section-title">CALENDAR</div>
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="changeCalMonth(-1)">‹</button>
+        <div class="cal-month-label" id="calMonthLabel">—</div>
+        <button class="cal-nav-btn" onclick="changeCalMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-day-detail" id="calDayDetail"></div>
+      <div class="section-title">ADD APPOINTMENT</div>
+      <div class="staff-section-box">
+        <label>CLIENT</label>
+        <select id="calApptClient"><option value="">Select client...</option></select>
+        <label>DATE</label>
+        <input type="text" id="calApptDate" placeholder="DD/MM/YYYY">
+        <label>TIME</label>
+        <input type="text" id="calApptTime" placeholder="e.g. 15:00">
+        <label>TYPE</label>
+        <select id="calApptType">
+          <option value="In Person">In Person</option>
+          <option value="Home Visit">Home Visit</option>
+          <option value="Online">Online</option>
+          <option value="Phone Call">Phone Call</option>
+        </select>
+        <label>LOCATION / LINK</label>
+        <input type="text" id="calApptLocation" placeholder="Address or link...">
+        <label>NOTES</label>
+        <textarea id="calApptNotes"></textarea>
+        <button class="btn" onclick="saveDashAppointment()">SAVE APPOINTMENT</button>
+        <div class="success-msg" id="calApptSuccess"></div>
+        <div class="error" id="calApptError"></div>
+      </div> 
       <div class="section-title">SEND NOTIFICATION</div>
       <div class="staff-section-box">
         <label>TO</label>
