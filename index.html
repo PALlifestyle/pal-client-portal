@@ -3318,7 +3318,7 @@ function showTab(tab, btn) {
   if (tab === 'actionplan')     loadActionPlan(cid);
   if (tab === 'projects')       loadProjectTracker(cid, false);
   if (tab === 'invoices')       loadInvoices(cid);
-  if (tab === 'schedule')       loadSchedule(cid);
+  if (tab === 'schedule')       { loadSchedule(cid); loadClientCalendar(cid); }
   if (tab === 'hours')          loadHours(cid);
   if (tab === 'documents')      loadClientDocuments(cid);
   if (tab === 'staffDashboard') { loadStaffKPIs(); loadActiveSessions(); loadStaffCalendar(); }
