@@ -1185,7 +1185,11 @@ let CLIENT_NAMES = {
   'C004':'Reuben Falzon','C005':'Mattheus da Rosa','C006':'Ana Barbara'
 };
 
-async function refreshClientNames() {
+function goToStaffTab(tabName) {
+  const btn = document.querySelector(`#staffNav .nav-item-btn[onclick*="'${tabName}'"]`);
+  showTab(tabName, btn);
+}
+  async function refreshClientNames() {
   try {
     const rows = await fetchSheet('Clients');
     const updated = {};
