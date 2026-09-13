@@ -3561,6 +3561,27 @@ async function respondToPayment(requestId, status, clientId) {
     setTimeout(() => loadDetailPayments(clientId), 800);
   } catch(e) { alert('Error updating payment. Please try again.'); }
 }
+  function captureCurrentLocation() {
+  return new Promise(resolve => {
+    if (!navigator.geolocation) { resolve(''); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const lat = pos.coords.latitude, lng = pos.coords.longitude;
+        if (typeof google !== 'undefined' && google.maps) {
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status === 'OK' && results[0]) resolve(results[0].formatted_address);
+            else resolve(lat.toFixed(6) + ',' + lng.toFixed(6));
+          });
+        } else {
+          resolve(lat.toFixed(6) + ',' + lng.toFixed(6));
+        }
+      },
+      () => resolve(''),
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  });
+}
   let placesAutocompleteInitialized = false;
 function initLocationAutocomplete() {
   if (placesAutocompleteInitialized) return;
