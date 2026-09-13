@@ -1056,6 +1056,29 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
         <div class="empty-state">Loading...</div>
       </div>
     </div>
+        <div id="tabPayments" class="tab-pane">
+      <div class="section-title" style="border-top:none;padding-top:1rem;">REQUEST PAYMENT</div>
+      <div class="staff-section-box">
+        <label>AMOUNT</label>
+        <input type="text" id="payReqAmount" placeholder="e.g. 150">
+        <label>DESCRIPTION</label>
+        <input type="text" id="payReqDescription" placeholder="What is this payment for?">
+        <label>PREFERRED METHOD</label>
+        <select id="payReqMethod">
+          <option value="PayID">PayID</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Payment Link">Payment Link</option>
+          <option value="Cash">Cash</option>
+        </select>
+        <button class="btn" onclick="requestPayment()">REQUEST PAYMENT</button>
+        <div class="success-msg" id="payReqSuccess"></div>
+        <div class="error" id="payReqError"></div>
+      </div>
+      <div class="section-title">YOUR PAYMENT REQUESTS</div>
+      <div id="clientPaymentsList">
+        <div class="empty-state">Loading...</div>
+      </div>
+    </div>
 
   </div><!-- /contentArea -->
 </div><!-- /appShell -->
