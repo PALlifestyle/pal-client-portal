@@ -827,18 +827,18 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
         </div>
       </div>
       <div class="section-title" style="border-top:none;">STAFF DASHBOARD</div>
-      <div class="staff-kpi-grid">
-        <div class="kpi-card"><div class="kpi-value" id="kpiAppointments">—</div>
+            <div class="staff-kpi-grid">
+        <div class="kpi-card" style="cursor:pointer;" onclick="document.getElementById('calGrid').scrollIntoView({behavior:'smooth'})"><div class="kpi-value" id="kpiAppointments">—</div>
           <div class="kpi-label">SCHEDULED APPOINTMENTS</div></div>
-        <div class="kpi-card"><div class="kpi-value" id="kpiMessages">—</div>
+        <div class="kpi-card" style="cursor:pointer;" onclick="goToStaffTab('staffClients')"><div class="kpi-value" id="kpiMessages">—</div>
           <div class="kpi-label">CLIENT MESSAGES</div></div>
-        <div class="kpi-card"><div class="kpi-value" id="kpiRequests">—</div>
+        <div class="kpi-card" style="cursor:pointer;" onclick="goToStaffTab('staffClients')"><div class="kpi-value" id="kpiRequests">—</div>
           <div class="kpi-label">NEW REQUESTS</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="kpiHours">—</div>
+                <div class="kpi-card" style="cursor:pointer;" onclick="document.getElementById('dashActivityClient').scrollIntoView({behavior:'smooth'})"><div class="kpi-value" id="kpiHours">—</div>
           <div class="kpi-label">TOTAL HOURS LOGGED</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="kpiActiveClients">—</div>
+                <div class="kpi-card" style="cursor:pointer;" onclick="goToStaffTab('staffClients')"><div class="kpi-value" id="kpiActiveClients">—</div>
           <div class="kpi-label">ACTIVE CLIENTS</div></div>
-        <div class="kpi-card"><div class="kpi-value" id="kpiProjects">—</div>
+        <div class="kpi-card" style="cursor:pointer;" onclick="goToStaffTab('staffProjects')"><div class="kpi-value" id="kpiProjects">—</div>
           <div class="kpi-label">PROJECTS IN PROGRESS</div></div>
       </div>
 
