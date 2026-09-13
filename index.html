@@ -3383,7 +3383,7 @@ function showTab(tab, btn) {
 
 // Redefines showSubTab to also handle the new "detailDocuments" sub-tab.
 function showSubTab(id, btn) {
-  ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments']
+    ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments','detailPayments']
     .forEach(s => document.getElementById(s).style.display = 'none');
   document.getElementById(id).style.display = id === 'detailMessages' ? 'flex' : 'block';
   document.querySelectorAll('.staff-sub-tab').forEach(b => b.classList.remove('active'));
@@ -3395,6 +3395,8 @@ function showSubTab(id, btn) {
   if (id === 'detailRequests') loadDetailRequests(cid);
   if (id === 'detailSchedule') loadDetailSchedule(cid);
   if (id === 'detailDocuments') loadDetailDocuments(cid);
+    if (id === 'detailDocuments') loadDetailDocuments(cid);
+  if (id === 'detailPayments') loadDetailPayments(cid);
 }
 
 // Redefines showClientDetail so the new "detailDocuments" panel
