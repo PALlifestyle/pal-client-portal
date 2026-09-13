@@ -3409,7 +3409,7 @@ function showClientDetail(clientId, clientName, photo) {
   document.getElementById('detailClientId').textContent   = clientId;
   document.querySelectorAll('.staff-sub-tab').forEach(b => b.classList.remove('active'));
   document.querySelector('.staff-sub-tab').classList.add('active');
-  ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments']
+    ['detailMessages','detailMedia','detailTasks','detailRequests','detailSchedule','detailDocuments','detailPayments']
     .forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('detailMessages').style.display = 'flex';
   loadDetailMessages(clientId);
