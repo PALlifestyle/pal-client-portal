@@ -1324,7 +1324,7 @@ function showTab(tab, btn) {
   if (tab === 'invoices')       loadInvoices(cid);
   if (tab === 'schedule')       loadSchedule(cid);
   if (tab === 'hours')          loadHours(cid);
-  if (tab === 'staffDashboard') { loadStaffKPIs(); loadActiveSessions(); }
+  if (tab === 'staffDashboard') { loadStaffKPIs(); loadActiveSessions(); loadStaffCalendar(); }
   if (tab === 'staffClients')   loadClientList();
   if (tab === 'staffProjects')  loadProjectTracker(cid, true);
   if (tab === 'staffProfile') {
