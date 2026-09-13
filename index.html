@@ -1858,7 +1858,109 @@ async function requestAppointment() {
   } catch(e) { errorEl.textContent='Error sending request.'; successEl.textContent=''; }
 }
   // ── SCHEDULE (via Apps Script) ────────────────────────────────────
-async function loadSchedule(clientId) {
+let calMonthOffset = 0;
+let calAllAppts = [];
+
+async function loadStaffCalendar() {
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=getSchedule&t=${Date.now()}`);
+    const json = await res.json();
+    calAllAppts = json.data || [];
+    renderCalGrid();
+  } catch(e) {}
+}
+
+function changeCalMonth(delta) {
+  calMonthOffset += delta;
+  renderCalGrid();
+}
+
+function renderCalGrid() {
+  const gridEl   = document.getElementById('calGrid');
+  const labelEl  = document.getElementById('calMonthLabel');
+  const detailEl = document.getElementById('calDayDetail');
+  if (!gridEl) return;
+  const base = new Date();
+  const refMonth = new Date(base.getFullYear(), base.getMonth() + calMonthOffset, 1);
+  const year = refMonth.getFullYear(), month = refMonth.getMonth();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  labelEl.textContent = monthNames[month] + ' ' + year;
+
+  const apptsByDay = {};
+  calAllAppts.forEach(a => {
+    const d = parseAUDate(a.Date || '');
+    if (!d) return;
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      const key = d.getDate();
+      if (!apptsByDay[key]) apptsByDay[key] = [];
+      apptsByDay[key].push(a);
+    }
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+  let html = ['SUN','MON','TUE','WED','THU','FRI','SAT'].map(d => `<div class="cal-weekday">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = isCurrentMonth && today.getDate() === day;
+    const hasAppt = !!apptsByDay[day];
+    html += `<div class="cal-day${isToday?' today':''}" onclick="showCalDay(${year},${month},${day})">
+      <div class="cal-day-num">${day}</div>
+      ${hasAppt ? '<div class="cal-dot"></div>' : ''}
+    </div>`;
+  }
+  gridEl.innerHTML = html;
+  detailEl.innerHTML = '';
+}
+
+function showCalDay(year, month, day) {
+  const detailEl = document.getElementById('calDayDetail');
+  const dayAppts = calAllAppts.filter(a => {
+    const d = parseAUDate(a.Date || '');
+    return d && d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+  });
+  if (!dayAppts.length) { detailEl.innerHTML = '<div class="empty-state">No appointments this day.</div>'; return; }
+  detailEl.innerHTML = dayAppts.map(a => `
+    <div class="cal-appt-card">
+      <div class="cal-appt-client">${CLIENT_NAMES[a.ClientID] || a.ClientID}</div>
+      <div>${a.Time || ''} ${a.Type ? '— ' + a.Type : ''}</div>
+      ${a.Location ? `<div>📍 ${a.Location}</div>` : ''}
+      ${a.Notes ? `<div>${a.Notes}</div>` : ''}
+      <div class="cal-appt-status">${a.Status || ''}</div>
+    </div>`).join('');
+}
+
+async function saveDashAppointment() {
+  const clientId  = document.getElementById('calApptClient').value;
+  const date      = document.getElementById('calApptDate').value.trim();
+  const time      = document.getElementById('calApptTime').value.trim();
+  const type      = document.getElementById('calApptType').value;
+  const location  = document.getElementById('calApptLocation').value.trim();
+  const notes     = document.getElementById('calApptNotes').value.trim();
+  const successEl = document.getElementById('calApptSuccess');
+  const errorEl   = document.getElementById('calApptError');
+  errorEl.textContent = ''; successEl.textContent = '';
+  if (!clientId) { errorEl.textContent = 'Select a client.'; return; }
+  if (!date) { errorEl.textContent = 'Date is required.'; return; }
+  successEl.textContent = 'Saving...';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Schedule',
+        row:[clientId, date, time, type, notes, location, 'Scheduled'] })
+    });
+    successEl.textContent = 'Appointment saved!';
+    document.getElementById('calApptDate').value = '';
+    document.getElementById('calApptTime').value = '';
+    document.getElementById('calApptLocation').value = '';
+    document.getElementById('calApptNotes').value = '';
+    setTimeout(() => { successEl.textContent = ''; loadStaffCalendar(); }, 2000);
+  } catch(e) { errorEl.textContent = 'Error saving.'; successEl.textContent = ''; }
+}
+  async function loadSchedule(clientId) {
   const upEl   = document.getElementById('scheduleUpcoming');
   const pastEl = document.getElementById('schedulePast');
   upEl.innerHTML = '<div class="empty-state">Loading...</div>';
