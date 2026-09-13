@@ -1992,6 +1992,7 @@ async function handleClientMediaUpload(event) {
   if (!file) return;
   const clientId  = sessionStorage.getItem('clientId');
   const caption   = document.getElementById('uploadCaption').value.trim();
+  const category  = document.getElementById('uploadCategory').value;
   const successEl = document.getElementById('mediaUploadSuccess');
   const errorEl   = document.getElementById('mediaUploadError');
   successEl.textContent = 'Uploading...'; errorEl.textContent = '';
@@ -2001,7 +2002,7 @@ async function handleClientMediaUpload(event) {
     try {
       const res  = await postToScript({ action:'uploadPhoto', clientId,
         fileName:file.name, mimeType:file.type, fileData:base64,
-        target:'clientMedia', caption, uploadedBy:'Client' });
+        target:'clientMedia', caption, uploadedBy:'Client', category });
       const json = await res.json();
       if (json.success) {
         successEl.textContent = 'Uploaded successfully!';
