@@ -676,8 +676,29 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
     <!-- ══════════════════════════════════════════════════════
          TAB: SCHEDULE
          ══════════════════════════════════════════════════════ -->
-    <div id="tabSchedule" class="tab-pane">
-      <div class="section-title" style="border-top:none;padding-top:1rem;">UPCOMING APPOINTMENTS</div>
+        <div id="tabSchedule" class="tab-pane">
+      <div class="section-title" style="border-top:none;padding-top:1rem;">REQUEST APPOINTMENT</div>
+      <div class="staff-section-box">
+        <label>DATE</label>
+        <input type="text" id="clientApptDate" placeholder="DD/MM/YYYY">
+        <label>TIME</label>
+        <input type="text" id="clientApptTime" placeholder="e.g. 15:00">
+        <label>TYPE</label>
+        <select id="clientApptType">
+          <option value="In Person">In Person</option>
+          <option value="Home Visit">Home Visit</option>
+          <option value="Online">Online</option>
+          <option value="Phone Call">Phone Call</option>
+        </select>
+        <label>LOCATION / LINK</label>
+        <input type="text" id="clientApptLocation" placeholder="Address or link...">
+        <label>NOTES</label>
+        <textarea id="clientApptNotes"></textarea>
+        <button class="btn" onclick="requestAppointment()">REQUEST APPOINTMENT</button>
+        <div class="success-msg" id="clientApptSuccess"></div>
+        <div class="error"       id="clientApptError"></div>
+      </div>
+      <div class="section-title">UPCOMING APPOINTMENTS</div>
       <div id="scheduleUpcoming">
         <div class="empty-state">Loading...</div>
       </div>
