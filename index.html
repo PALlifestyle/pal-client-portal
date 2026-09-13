@@ -1848,7 +1848,80 @@ async function handleClientMediaUpload(event) {
   event.target.value = '';
 }
 
-async function requestAppointment() {
+let clientCalMonthOffset = 0;
+let clientCalAppts = [];
+
+async function loadClientCalendar(clientId) {
+  try {
+    const res  = await fetch(`${SCRIPT_URL}?action=getSchedule&clientId=${encodeURIComponent(clientId)}&t=${Date.now()}`);
+    const json = await res.json();
+    clientCalAppts = json.data || [];
+    renderClientCalGrid();
+  } catch(e) {}
+}
+
+function changeClientCalMonth(delta) {
+  clientCalMonthOffset += delta;
+  renderClientCalGrid();
+}
+
+function renderClientCalGrid() {
+  const gridEl   = document.getElementById('clientCalGrid');
+  const labelEl  = document.getElementById('clientCalMonthLabel');
+  const detailEl = document.getElementById('clientCalDayDetail');
+  if (!gridEl) return;
+  const base = new Date();
+  const refMonth = new Date(base.getFullYear(), base.getMonth() + clientCalMonthOffset, 1);
+  const year = refMonth.getFullYear(), month = refMonth.getMonth();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  labelEl.textContent = monthNames[month] + ' ' + year;
+
+  const apptsByDay = {};
+  clientCalAppts.forEach(a => {
+    const d = parseAUDate(a.Date || '');
+    if (!d) return;
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      const key = d.getDate();
+      if (!apptsByDay[key]) apptsByDay[key] = [];
+      apptsByDay[key].push(a);
+    }
+  });
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+  let html = ['SUN','MON','TUE','WED','THU','FRI','SAT'].map(d => `<div class="cal-weekday">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = isCurrentMonth && today.getDate() === day;
+    const hasAppt = !!apptsByDay[day];
+    html += `<div class="cal-day${isToday?' today':''}" onclick="showClientCalDay(${year},${month},${day})">
+      <div class="cal-day-num">${day}</div>
+      ${hasAppt ? '<div class="cal-dot"></div>' : ''}
+    </div>`;
+  }
+  gridEl.innerHTML = html;
+  detailEl.innerHTML = '';
+}
+
+function showClientCalDay(year, month, day) {
+  const detailEl = document.getElementById('clientCalDayDetail');
+  const dayAppts = clientCalAppts.filter(a => {
+    const d = parseAUDate(a.Date || '');
+    return d && d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+  });
+  if (!dayAppts.length) { detailEl.innerHTML = '<div class="empty-state">No appointments this day.</div>'; return; }
+  detailEl.innerHTML = dayAppts.map(a => `
+    <div class="cal-appt-card">
+      <div>${a.Time || ''} ${a.Type ? '— ' + a.Type : ''}</div>
+      ${a.Location ? `<div>📍 ${a.Location}</div>` : ''}
+      ${a.Notes ? `<div>${a.Notes}</div>` : ''}
+      <div class="cal-appt-status">${a.Status || ''}</div>
+    </div>`).join('');
+}
+  async function requestAppointment() {
   const clientId   = sessionStorage.getItem('clientId');
   const date       = document.getElementById('clientApptDate').value.trim();
   const time       = document.getElementById('clientApptTime').value.trim();
