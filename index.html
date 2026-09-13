@@ -2336,10 +2336,10 @@ async function loadRequestHistory(clientId) {
 //  Tasks cols: 0=taskId, 1=clientId, 2=title, 3=desc,
 //              4=status, 5=comment, 6=dueDate, 10=assignedTo, 11=requestedBy
 // ════════════════════════════════════════════════════════════════
+let kanbanTasksCache = [];
+let kanbanAddTarget = 'Client';
+
 async function loadActionPlan(clientId) {
-  const container = document.getElementById('taskList');
-  if (!container) return;
-  container.innerHTML = '<div class="empty-state">Loading tasks...</div>';
   try {
     const res  = await fetch(`${API_URL}&gid=${TASKS_GID}&t=${Date.now()}`);
     const text = await res.text();
@@ -2349,66 +2349,126 @@ async function loadActionPlan(clientId) {
       const rId = row.c[1]?.v?.toString().trim();
       if (rId !== clientId) continue;
       tasks.push({
-        taskId:     (row.c[0]?.v||'').toString(),
-        title:      row.c[2]?.v?.toString()||'',
-        description:row.c[3]?.v?.toString()||'',
-        status:     row.c[4]?.v?.toString()||'To Do',
-        comment:    row.c[5]?.v?.toString()||'',
-        dueDate:    row.c[6]?.f||row.c[6]?.v?.toString()||'',
-        assignedTo: row.c[10]?.v?.toString()||'',
-        requestedBy:row.c[11]?.v?.toString()||''
+        taskId:      (row.c[0]?.v||'').toString(),
+        title:       row.c[2]?.v?.toString()||'',
+        description: row.c[3]?.v?.toString()||'',
+        status:      row.c[4]?.v?.toString()||'To Do',
+        comment:     row.c[5]?.v?.toString()||'',
+        dueDate:     row.c[6]?.f||row.c[6]?.v?.toString()||'',
+        assignedTo:  (row.c[10]?.v?.toString()||'Client').trim()
       });
     }
-    if (!tasks.length) {
-      container.innerHTML = '<div class="empty-state">No tasks yet. No tasks yet. Your PAL support will add tasks here for you.</div>';
-      return;
-    }
-    const order = ['To Do','Ongoing','Waiting','Skip','Done'];
-    tasks.sort((a,b) => order.indexOf(a.status) - order.indexOf(b.status));
-    container.innerHTML = tasks.map(t => `
-      <div class="task-item" id="task-${t.taskId}">
-        <div class="task-header">
-          <span class="task-status ${getTaskStatusClass(t.status)}">${t.status}</span>
-          ${t.assignedTo ? `<span class="task-assign">${t.assignedTo}</span>` : ''}
-          ${t.dueDate    ? `<span class="task-due">📅 ${t.dueDate}</span>` : ''}
-          ${t.requestedBy? `<span class="task-due">by ${t.requestedBy}</span>` : ''}
-        </div>
-        <div class="task-title">${t.title}</div>
-        ${t.description ? `<div class="task-desc">${t.description}</div>` : ''}
-        ${t.comment     ? `<div class="task-comment">"${t.comment}"</div>` : ''}
-        <div class="task-update-row">
-          <select id="statusSelect-${t.taskId}">
-            <option value="To Do"   ${t.status==='To Do'   ?'selected':''}>To Do</option>
-            <option value="Ongoing" ${t.status==='Ongoing' ?'selected':''}>Ongoing</option>
-            <option value="Waiting" ${t.status==='Waiting' ?'selected':''}>Waiting</option>
-            <option value="Skip"    ${t.status==='Skip'    ?'selected':''}>Skip</option>
-            <option value="Done"    ${t.status==='Done'    ?'selected':''}>Done</option>
-          </select>
-          <input type="text" id="commentInput-${t.taskId}" placeholder="Add a comment...">
-          <button class="btn btn-sm" onclick="updateTask('${t.taskId}','${clientId}',this)">UPDATE</button>
-          <span class="task-update-msg" id="taskMsg-${t.taskId}"></span>
-        </div>
-      </div>`).join('');
-  } catch(e) { container.innerHTML='<div class="empty-state">Error loading tasks.</div>'; }
+    kanbanTasksCache = tasks;
+    renderKanbanBoard('kanbanClientBoard', tasks.filter(t => t.assignedTo === 'Client'), clientId);
+    renderKanbanBoard('kanbanPalBoard', tasks.filter(t => t.assignedTo === 'PAL'), clientId);
+    renderTaskSummary(tasks);
+  } catch(e) {
+    document.getElementById('kanbanClientBoard').innerHTML = '<div class="empty-state">Error loading tasks.</div>';
+  }
 }
 
-async function updateTask(taskId, clientId, btn) {
-  const status  = document.getElementById('statusSelect-'+taskId).value;
-  const comment = document.getElementById('commentInput-'+taskId)?.value.trim()||'';
-  const msgEl   = document.getElementById('taskMsg-'+taskId);
-  const orig    = btn.textContent;
-  btn.disabled=true; btn.textContent='...'; msgEl.textContent='';
+const KANBAN_COLUMNS = [
+  { status:'To Do',   color:'#FF4444' },
+  { status:'Ongoing', color:'#2196F3' },
+  { status:'Waiting', color:'#FF9800' },
+  { status:'Skip',    color:'#9C27B0' },
+  { status:'Done',    color:'#4CAF50' }
+];
+
+function renderKanbanBoard(containerId, tasks, clientId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = KANBAN_COLUMNS.map(col => `
+    <div class="kanban-col">
+      <div class="kanban-col-header" style="background:${col.color};">${col.status}</div>
+      <div class="kanban-col-body" data-status="${col.status}" id="${containerId}-${col.status.replace(' ','')}">
+        ${tasks.filter(t => t.status === col.status).map(t => `
+          <div class="kanban-card" draggable="true" data-task-id="${t.taskId}">
+            <div class="kanban-card-title">${t.title}</div>
+            ${t.dueDate ? `<div class="kanban-card-due">📅 ${t.dueDate}</div>` : ''}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  KANBAN_COLUMNS.forEach(col => {
+    const colEl = document.getElementById(`${containerId}-${col.status.replace(' ','')}`);
+    if (colEl && typeof Sortable !== 'undefined') {
+      new Sortable(colEl, {
+        group: containerId,
+        animation: 150,
+        onEnd: function(evt) {
+          const taskId = evt.item.dataset.taskId;
+          const newStatus = evt.to.dataset.status;
+          updateTaskStatusOnly(taskId, newStatus);
+        }
+      });
+    }
+  });
+}
+
+async function updateTaskStatusOnly(taskId, status) {
   try {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'updateTask', taskId, status, comment, updatedAt:formatDateTimeStamp() })
+      body: JSON.stringify({ action:'updateTask', taskId, status, comment:'', updatedAt:formatDateTimeStamp() })
     });
-    msgEl.textContent = 'Updated!';
-    const badge = document.querySelector(`#task-${taskId} .task-status`);
-    if (badge) { badge.textContent=status; badge.className='task-status '+getTaskStatusClass(status); }
-    setTimeout(()=>msgEl.textContent='',3000);
-  } catch(e) { msgEl.textContent='Error. Try again.'; }
-  btn.disabled=false; btn.textContent=orig;
+    const task = kanbanTasksCache.find(t => t.taskId === taskId);
+    if (task) task.status = status;
+    renderTaskSummary(kanbanTasksCache);
+  } catch(e) { alert('Error updating task. Please refresh and try again.'); }
+}
+
+function showAddTaskForm(target) {
+  kanbanAddTarget = target;
+  document.getElementById('addTaskFormWrap').style.display = 'flex';
+  document.getElementById('newTaskTitle').focus();
+}
+
+async function saveNewTask() {
+  const clientId  = sessionStorage.getItem('clientId');
+  const title     = document.getElementById('newTaskTitle').value.trim();
+  const dueRaw    = document.getElementById('newTaskDueDate').value;
+  const dueDate   = dueRaw ? dueRaw.split('-').reverse().join('/') : '';
+  const successEl = document.getElementById('newTaskSuccess');
+  const errorEl   = document.getElementById('newTaskError');
+  errorEl.textContent = ''; successEl.textContent = '';
+  if (!title) { errorEl.textContent = 'Title is required.'; return; }
+  const taskId = 'T' + Date.now();
+  successEl.textContent = 'Saving...';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Task',
+        row:[taskId, clientId, title, '', 'To Do', '', dueDate, 'Client', formatDateTimeStamp(), '', kanbanAddTarget, 'Client'] })
+    });
+    successEl.textContent = 'Task added!';
+    document.getElementById('newTaskTitle').value = '';
+    document.getElementById('newTaskDueDate').value = '';
+    setTimeout(() => {
+      successEl.textContent = '';
+      document.getElementById('addTaskFormWrap').style.display = 'none';
+      loadActionPlan(clientId);
+    }, 1200);
+  } catch(e) { errorEl.textContent = 'Error saving task.'; successEl.textContent = ''; }
+}
+
+function renderTaskSummary(tasks) {
+  const el = document.getElementById('taskSummary');
+  if (!el) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const overdue = tasks.filter(t => {
+    if (t.status === 'Done' || t.status === 'Skip') return false;
+    const d = parseAUDate(t.dueDate);
+    return d && d < today;
+  });
+  if (!overdue.length) { el.innerHTML = '<div class="empty-state">No overdue tasks. All caught up!</div>'; return; }
+  el.innerHTML = overdue.map(t => {
+    const d = parseAUDate(t.dueDate);
+    const daysLate = Math.floor((today - d) / 86400000);
+    return `<div class="kanban-summary-item">
+      <div>${t.title} <span style="color:#999;font-size:0.68rem;">(${t.assignedTo})</span></div>
+      <div class="kanban-summary-overdue">${daysLate} day${daysLate===1?'':'s'} overdue</div>
+    </div>`;
+  }).join('');
 }
 
 // ════════════════════════════════════════════════════════════════
