@@ -3147,6 +3147,10 @@ async function homeVisitCheckOut() {
   const key = clientId + '_homevisit';
   const session = activeTimers[key];
   if (!session) { alert('No active check-in found for this client.'); return; }
+  const checkOutBtn = document.getElementById('checkOutBtn');
+  if (checkOutBtn) { checkOutBtn.disabled = true; checkOutBtn.textContent = 'Getting location...'; }
+  const checkOutLocation = await captureCurrentLocation();
+  if (checkOutBtn) { checkOutBtn.disabled = false; checkOutBtn.textContent = 'CHECK OUT'; }
   const startTime = new Date(session.startTime);
   const endTime = new Date();
   const durationHours = parseFloat(((endTime - startTime) / 3600000).toFixed(2));
@@ -3154,11 +3158,12 @@ async function homeVisitCheckOut() {
   const logId = 'L' + Date.now();
   const startTimeStr = startTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
   const endTimeStr   = endTime.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+  const locationInfo = 'Check-in: ' + (session.checkInLocation || 'n/a') + ' | Check-out: ' + (checkOutLocation || 'n/a');
   try {
     await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ sheet:'Time Log',
-        row:[logId, clientId, formatDateOnly(endTime), 'Home Visit', durationHours, notes, '', startTimeStr, endTimeStr] })
+        row:[logId, clientId, formatDateOnly(endTime), 'Home Visit', durationHours, notes, '', startTimeStr, endTimeStr, locationInfo] })
     });
     if (timerIntervals[key]) { clearInterval(timerIntervals[key]); delete timerIntervals[key]; }
     delete activeTimers[key];
