@@ -1508,7 +1508,8 @@ function showDashboard(clientId, clientName) {
 }
 
 // ── SHOW STAFF DASHBOARD ──────────────────────────────────────────
-function showStaffDashboard(staffId, staffName) {
+async function showStaffDashboard(staffId, staffName) {
+  await refreshClientNames();
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appShell').style.display    = 'flex';
   document.getElementById('clientNav').classList.add('hidden');
