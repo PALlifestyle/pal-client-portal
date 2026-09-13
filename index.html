@@ -1023,6 +1023,28 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
             <div class="error"       id="docError"></div>
           </div>
         </div>
+                <!-- Payments -->
+        <div id="detailPayments" style="display:none;">
+          <div class="section-title" style="border-top:none;padding-top:0.8rem;">PAYMENT REQUESTS</div>
+          <div id="detailPaymentsList"><div class="empty-state">Loading...</div></div>
+          <div class="section-title">NEW PAYMENT REQUEST</div>
+          <div class="staff-section-box">
+            <label>AMOUNT</label>
+            <input type="text" id="staffPayAmount" placeholder="e.g. 150">
+            <label>DESCRIPTION</label>
+            <input type="text" id="staffPayDescription" placeholder="What is this payment for?">
+            <label>METHOD</label>
+            <select id="staffPayMethod">
+              <option value="PayID">PayID</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Payment Link">Payment Link</option>
+              <option value="Cash">Cash</option>
+            </select>
+            <button class="btn" onclick="sendPaymentForDetail()">SEND PAYMENT REQUEST</button>
+            <div class="success-msg" id="staffPaySuccess"></div>
+            <div class="error"       id="staffPayError"></div>
+          </div>
+        </div>
          
 
       </div><!-- /clientDetailView -->
