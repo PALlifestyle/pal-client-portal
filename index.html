@@ -3030,8 +3030,9 @@ function renderActivityFields() {
         <button class="btn btn-green btn-half" id="actStartBtn" onclick="startTimedActivity('meeting')" style="${startDisplay}">START SESSION</button>
         <button class="btn btn-red btn-half" id="actStopBtn" onclick="stopTimedActivity('meeting')" style="${stopDisplay}">STOP &amp; SAVE</button>
       </div>${timerDisplay}`,
-    homevisit: `
+        homevisit: `
       <div id="homeVisitStatus"></div>
+      <div id="homeVisitLocationDisplay" style="color:#999;font-size:0.75rem;margin-bottom:0.4rem;"></div>
       <label class="modal-field-label">NOTES</label>
       <textarea id="actNotes" style="height:60px;" placeholder="Optional notes..."></textarea>
       <div style="display:flex;gap:0.8rem;margin-top:0.6rem;">
