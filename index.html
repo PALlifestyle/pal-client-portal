@@ -2326,9 +2326,10 @@ async function loadStaffKPIs() {
     document.getElementById('kpiRequests').textContent     = json.newRequests      ?? '—';
         document.getElementById('kpiHours').textContent        = json.totalHours != null
       ? decimalToHHMM(json.totalHours) : '—';
-    document.getElementById('kpiActiveClients').textContent = json.activeClients ?? '—';
+        document.getElementById('kpiActiveClients').textContent = json.activeClients ?? '—';
+    document.getElementById('kpiProjects').textContent = json.projectsInProgress ?? '—';
   } catch(e) {
-    ['kpiAppointments','kpiMessages','kpiRequests','kpiHours','kpiActiveClients']
+    ['kpiAppointments','kpiMessages','kpiRequests','kpiHours','kpiActiveClients','kpiProjects']
       .forEach(id => document.getElementById(id).textContent = '—');
   }
 }
