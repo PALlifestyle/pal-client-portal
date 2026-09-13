@@ -3467,6 +3467,76 @@ async function loadClientPayments(clientId) {
   } catch(e) { el.innerHTML = '<div class="empty-state">Error loading payments.</div>'; }
 }
 
+async function loadDetailPayments(clientId) {
+  const el = document.getElementById('detailPaymentsList');
+  el.innerHTML = '<div class="empty-state">Loading...</div>';
+  try {
+    const rows = await fetchSheet('Payment Requests');
+    const reqs = rows.filter(r => r.c[1]?.v === clientId);
+    if (!reqs.length) { el.innerHTML = '<div class="empty-state">No payment requests yet.</div>'; return; }
+    el.innerHTML = reqs.map(row => {
+      const reqId    = row.c[0]?.v || '';
+      const by       = row.c[2]?.v || '';
+      const amount   = row.c[3]?.v || '';
+      const desc     = row.c[4]?.v || '';
+      const method   = row.c[5]?.v || '';
+      const status   = row.c[6]?.v || 'Requested';
+      const response = row.c[8]?.v || '';
+      if (status === 'Requested') {
+        return `<div style="background:#FFFFFF;border:1px solid #E3DED4;padding:1rem;margin-bottom:0.6rem;">
+          <div style="color:#1A1A1A;font-size:0.9rem;margin-bottom:0.2rem;">$${amount} — ${desc}</div>
+          <div style="color:#999;font-size:0.72rem;margin-bottom:0.5rem;">Requested by ${by} · ${method}</div>
+          <label style="color:#999;font-size:0.68rem;letter-spacing:0.15em;display:block;margin-bottom:0.3rem;">RESPONSE (LINK OR ACCOUNT DETAILS)</label>
+          <textarea id="payResponse_${reqId}" style="width:100%;background:#FAF8F5;border:1px solid #DDD5C7;color:#1A1A1A;padding:0.6rem;font-family:Georgia,serif;font-size:0.82rem;min-height:60px;margin-bottom:0.5rem;"></textarea>
+          <button class="btn btn-half" style="background:#4CAF50;color:#fff;" onclick="respondToPayment('${reqId}','Approved','${clientId}')">APPROVE</button>
+          <button class="btn btn-half" style="background:#E05757;color:#fff;" onclick="respondToPayment('${reqId}','Rejected','${clientId}')">REJECT</button>
+        </div>`;
+      }
+      return `<div style="background:#FFFFFF;border:1px solid #E3DED4;padding:1rem;margin-bottom:0.6rem;">
+        <div style="color:#1A1A1A;font-size:0.9rem;margin-bottom:0.2rem;">$${amount} — ${desc}</div>
+        <div style="color:#999;font-size:0.72rem;margin-bottom:0.4rem;">${method} · ${status}</div>
+        ${response ? `<div style="color:#1A1A1A;font-size:0.82rem;white-space:pre-wrap;background:#FAF8F5;border:1px solid #E3DED4;padding:0.6rem;">${response}</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = '<div class="empty-state">Error loading payments.</div>'; }
+}
+
+async function sendPaymentForDetail() {
+  const clientId  = currentDetailClientId;
+  const amount    = document.getElementById('staffPayAmount').value.trim();
+  const desc      = document.getElementById('staffPayDescription').value.trim();
+  const method    = document.getElementById('staffPayMethod').value;
+  const successEl = document.getElementById('staffPaySuccess');
+  const errorEl   = document.getElementById('staffPayError');
+  errorEl.textContent = ''; successEl.textContent = '';
+  if (!amount) { errorEl.textContent = 'Amount is required.'; return; }
+  const reqId = 'PR' + Date.now();
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Payment Requests',
+        row:[reqId, clientId, 'PAL', amount, desc, method, 'Requested', formatDateTimeStamp(), '', ''] })
+    });
+    successEl.textContent = 'Payment request sent!';
+    document.getElementById('staffPayAmount').value = '';
+    document.getElementById('staffPayDescription').value = '';
+    setTimeout(() => { successEl.textContent = ''; loadDetailPayments(clientId); }, 2000);
+  } catch(e) { errorEl.textContent = 'Error sending.'; successEl.textContent = ''; }
+}
+
+async function respondToPayment(requestId, status, clientId) {
+  const textEl = document.getElementById('payResponse_' + requestId);
+  const responseInfo = textEl ? textEl.value.trim() : '';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'updateRow', sheet:'Payment Requests',
+        idField:'RequestID', id:requestId,
+        updates:{ Status: status, ResponseInfo: responseInfo, ResponseDate: formatDateTimeStamp() } })
+    });
+    setTimeout(() => loadDetailPayments(clientId), 800);
+  } catch(e) { alert('Error updating payment. Please try again.'); }
+}
 </script>
 </body>
 </html>
