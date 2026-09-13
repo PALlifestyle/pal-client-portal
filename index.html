@@ -691,11 +691,27 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
     <!-- ══════════════════════════════════════════════════════
          TAB: ACTION PLAN
          ══════════════════════════════════════════════════════ -->
-    <div id="tabActionplan" class="tab-pane">
-      <div class="section-title" style="border-top:none;padding-top:1rem;">ACTION PLAN</div>
-      <div id="taskList">
-        <div class="empty-state">Loading tasks...</div>
+      <div id="tabActionplan" class="tab-pane">
+      <div class="section-title" style="border-top:none;padding-top:1rem;">MY ACTIONS</div>
+      <div id="kanbanClientBoard" class="kanban-board"></div>
+      <button class="btn kanban-add-btn" style="width:calc(100% - 2rem);" onclick="showAddTaskForm('Client')">+ ADD MY TASK</button>
+
+      <div class="section-title">PAL ACTIONS</div>
+      <div id="kanbanPalBoard" class="kanban-board"></div>
+      <button class="btn kanban-add-btn" style="width:calc(100% - 2rem);" onclick="showAddTaskForm('PAL')">+ REQUEST A TASK FOR PAL</button>
+
+      <div id="addTaskFormWrap" class="staff-section-box" style="display:none;margin:0.5rem 1rem 1rem;">
+        <label>TASK TITLE</label>
+        <input type="text" id="newTaskTitle" placeholder="What needs to be done?">
+        <label>DUE DATE (OPTIONAL)</label>
+        <input type="date" id="newTaskDueDate">
+        <button class="btn" onclick="saveNewTask()">SAVE TASK</button>
+        <div class="success-msg" id="newTaskSuccess"></div>
+        <div class="error" id="newTaskError"></div>
       </div>
+
+      <div class="section-title">PENDING &amp; OVERDUE</div>
+      <div id="taskSummary"><div class="empty-state">Loading...</div></div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════
