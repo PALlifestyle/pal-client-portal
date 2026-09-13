@@ -2322,10 +2322,11 @@ async function loadStaffKPIs() {
     document.getElementById('kpiAppointments').textContent = json.newAppointments ?? '—';
     document.getElementById('kpiMessages').textContent     = json.clientMessages   ?? '—';
     document.getElementById('kpiRequests').textContent     = json.newRequests      ?? '—';
-    document.getElementById('kpiHours').textContent        = json.totalHours != null
+        document.getElementById('kpiHours').textContent        = json.totalHours != null
       ? decimalToHHMM(json.totalHours) : '—';
+    document.getElementById('kpiActiveClients').textContent = json.activeClients ?? '—';
   } catch(e) {
-    ['kpiAppointments','kpiMessages','kpiRequests','kpiHours']
+    ['kpiAppointments','kpiMessages','kpiRequests','kpiHours','kpiActiveClients']
       .forEach(id => document.getElementById(id).textContent = '—');
   }
 }
