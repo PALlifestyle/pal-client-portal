@@ -854,10 +854,11 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
       <div class="staff-section-box">
         <label>CLIENT</label>
         <select id="calApptClient"><option value="">Select client...</option></select>
-        <label>DATE</label>
-        <input type="text" id="calApptDate" placeholder="DD/MM/YYYY">
+                <label>DATE</label>
+        <input type="date" id="calApptDate" onchange="checkApptDateAvailable()">
+        <div class="error" id="calApptDateError" style="margin-top:-0.3rem;"></div>
         <label>TIME</label>
-        <input type="text" id="calApptTime" placeholder="e.g. 15:00">
+        <input type="time" id="calApptTime">
         <label>TYPE</label>
         <select id="calApptType">
           <option value="In Person">In Person</option>
