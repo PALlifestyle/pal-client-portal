@@ -3128,11 +3128,17 @@ async function homeVisitCheckIn() {
   const key = clientId + '_homevisit';
   if (activeTimers[key]) { alert('Already checked in for this client.'); return; }
   const notes = document.getElementById('actNotes')?.value || '';
-  activeTimers[key] = { startTime: new Date().toISOString(), type:'homevisit', clientId, notes, checkedIn:true };
+  const checkInBtn = document.getElementById('checkInBtn');
+  if (checkInBtn) { checkInBtn.disabled = true; checkInBtn.textContent = 'Getting location...'; }
+  const checkInLocation = await captureCurrentLocation();
+  if (checkInBtn) { checkInBtn.disabled = false; checkInBtn.textContent = 'CHECK IN'; }
+  activeTimers[key] = { startTime: new Date().toISOString(), type:'homevisit', clientId, notes, checkInLocation, checkedIn:true };
   saveActiveTimers();
   updateHomeVisitUI(clientId);
   startTimerDisplay(key);
   loadActiveSessions();
+  const locEl = document.getElementById('homeVisitLocationDisplay');
+  if (locEl) locEl.textContent = checkInLocation ? ('Checked in at: ' + checkInLocation) : '';
 }
 
 async function homeVisitCheckOut() {
