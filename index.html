@@ -3385,7 +3385,7 @@ function showTab(tab, btn) {
   const cid = sessionStorage.getItem('clientId');
   if (tab === 'messages')       loadMessages(cid);
   if (tab === 'media')          loadMedia(cid);
-  if (tab === 'requests')       loadRequestHistory(cid);
+    if (tab === 'requests')       { loadRequestHistory(cid); initLocationAutocomplete(); }
   if (tab === 'actionplan')     loadActionPlan(cid);
   if (tab === 'projects')       loadProjectTracker(cid, false);
   if (tab === 'invoices')       loadInvoices(cid);
