@@ -657,8 +657,15 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
           <option value="High">High</option>
         </select>
         <label>DATE / TIME REQUESTED (optional)</label>
+                <label>DATE / TIME REQUESTED (optional)</label>
         <input type="text" id="requestDateTime"
                placeholder="e.g. 15/07/2026 at 10:00 AM">
+        <label>LOCATION (OPTIONAL)</label>
+        <div style="display:flex;gap:0.5rem;">
+          <input type="text" id="requestLocation" placeholder="Start typing an address...">
+          <button type="button" style="background:#1A1A1A;color:#D4A574;border:none;padding:0 1rem;cursor:pointer;font-family:Georgia,serif;font-size:1rem;flex-shrink:0;" onclick="useMyLocation()">📍</button>
+        </div>
+        <div class="error" id="locError" style="margin-top:0.3rem;"></div>
         <button class="btn" onclick="submitRequest()">SUBMIT REQUEST</button>
         <div class="success-msg" id="requestSuccess"></div>
         <div class="error"       id="requestError"></div>
