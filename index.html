@@ -1949,8 +1949,11 @@ async function loadMedia(clientId) {
   palEl.innerHTML    = '<div class="empty-state" style="grid-column:span 2;">Loading...</div>';
   clientEl.innerHTML = '<div class="empty-state" style="grid-column:span 2;">Loading...</div>';
   try {
-    const rows  = await fetchSheet('Media');
-    const items = rows.filter(r => r.c[1]?.v === clientId);
+    const rows   = await fetchSheet('Media');
+    const filterCat = document.getElementById('mediaCategoryFilter')?.value || '';
+    let items = rows.filter(r => r.c[1]?.v === clientId);
+    if (filterCat) items = items.filter(r => (r.c[5]?.v || '') === filterCat);
+    items = items.slice().reverse();
     const palItems    = items.filter(r => r.c[3]?.v === 'PAL');
     const clientItems = items.filter(r => r.c[3]?.v !== 'PAL');
     function renderGrid(list, container, emptyMsg) {
@@ -1960,10 +1963,11 @@ async function loadMedia(clientId) {
       }
       container.innerHTML = '';
       list.forEach(row => {
-        const fileId  = row.c[0]?.v || '';
-        const caption = row.c[2]?.v || '';
-        const date    = formatDate(row.c[4]?.v || '');
-        const card    = document.createElement('div');
+        const fileId   = row.c[0]?.v || '';
+        const caption  = row.c[2]?.v || '';
+        const date     = formatDate(row.c[4]?.v || '');
+        const category = row.c[5]?.v || '';
+        const card     = document.createElement('div');
         card.className = 'media-card';
         card.innerHTML = `
           <a href="https://drive.google.com/file/d/${fileId}/view" target="_blank">
@@ -1971,6 +1975,7 @@ async function loadMedia(clientId) {
                  alt="${caption}" loading="lazy" onerror="this.style.display='none'">
           </a>
           ${caption?`<div class="media-caption">${caption}</div>`:''}
+          ${category?`<div style="color:#B8875A;font-size:0.62rem;letter-spacing:0.06em;padding:0 0.5rem;">${category}</div>`:''}
           ${date?`<div class="media-date">${date}</div>`:''}`;
         container.appendChild(card);
       });
