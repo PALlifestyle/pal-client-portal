@@ -692,7 +692,15 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
          TAB: SCHEDULE
          ══════════════════════════════════════════════════════ -->
         <div id="tabSchedule" class="tab-pane">
-      <div class="section-title" style="border-top:none;padding-top:1rem;">REQUEST APPOINTMENT</div>
+      <div class="section-title" style="border-top:none;padding-top:1rem;">CALENDAR</div>
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="changeClientCalMonth(-1)">‹</button>
+        <div class="cal-month-label" id="clientCalMonthLabel">—</div>
+        <button class="cal-nav-btn" onclick="changeClientCalMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="clientCalGrid"></div>
+      <div class="cal-day-detail" id="clientCalDayDetail"></div>
+      <div class="section-title">REQUEST APPOINTMENT</div>
       <div class="staff-section-box">
         <label>DATE</label>
         <input type="text" id="clientApptDate" placeholder="DD/MM/YYYY">
