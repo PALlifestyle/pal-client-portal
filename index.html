@@ -633,8 +633,18 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
     <!-- ══════════════════════════════════════════════════════
          TAB: PHOTOS & VIDEOS
          ══════════════════════════════════════════════════════ -->
-    <div id="tabMedia" class="tab-pane">
-      <div class="section-title" style="border-top:none;padding-top:1rem;">FROM P.A.L.</div>
+        <div id="tabMedia" class="tab-pane">
+      <div class="section-title" style="border-top:none;padding-top:1rem;">FILTER BY CATEGORY</div>
+      <div style="padding:0 1rem 0.8rem;">
+        <select id="mediaCategoryFilter" onchange="loadMedia(sessionStorage.getItem('clientId'))" style="width:100%;background:#FFFFFF;border:1px solid #DDD5C7;color:#1A1A1A;padding:0.6rem;font-family:Georgia,serif;font-size:0.82rem;">
+          <option value="">All Categories</option>
+          <option value="Home Management">Home Management</option>
+          <option value="Pet Care">Pet Care</option>
+          <option value="Personal Project">Personal Project</option>
+          <option value="Documents">Documents</option>
+        </select>
+      </div>
+      <div class="section-title" style="margin-top:0;">FROM P.A.L.</div>
       <div class="media-grid" id="mediaPALGrid">
         <div class="empty-state" style="grid-column:span 2;">No media from P.A.L. yet.</div>
       </div>
