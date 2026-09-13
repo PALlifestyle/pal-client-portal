@@ -2157,7 +2157,8 @@ function checkApptDateAvailable() {
 }
   async function saveDashAppointment() {
   const clientId  = document.getElementById('calApptClient').value;
-  const date      = document.getElementById('calApptDate').value.trim();
+  const dateRaw   = document.getElementById('calApptDate').value;
+  const date      = dateRaw ? dateRaw.split('-').reverse().join('/') : '';
   const time      = document.getElementById('calApptTime').value.trim();
   const type      = document.getElementById('calApptType').value;
   const location  = document.getElementById('calApptLocation').value.trim();
