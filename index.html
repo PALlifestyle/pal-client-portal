@@ -311,6 +311,21 @@ body{background:#1A1A1A;color:#fff;font-family:Georgia,serif;}
 .kpi-card{background:#222;border:1px solid #2a2a2a;padding:1rem;text-align:center;}
 .kpi-value{color:#D4A574;font-size:1.6rem;margin-bottom:0.3rem;}
 .kpi-label{color:#666;font-size:0.65rem;letter-spacing:0.12em;}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin:0 1rem 0.6rem;}
+.cal-nav-btn{background:transparent;border:1px solid #444;color:#D4A574;padding:0.3rem 0.7rem;font-family:Georgia,serif;font-size:0.85rem;cursor:pointer;}
+.cal-nav-btn:hover{border-color:#D4A574;}
+.cal-month-label{color:#fff;font-size:0.9rem;letter-spacing:0.1em;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin:0 1rem 1rem;}
+.cal-weekday{color:#666;font-size:0.6rem;text-align:center;padding:0.3rem 0;letter-spacing:0.05em;}
+.cal-day{background:#1a1a1a;border:1px solid #2a2a2a;min-height:2.6rem;padding:0.3rem;position:relative;cursor:pointer;}
+.cal-day.empty{background:transparent;border:none;cursor:default;}
+.cal-day-num{color:#888;font-size:0.72rem;}
+.cal-day.today .cal-day-num{color:#D4A574;font-weight:bold;}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:#D4A574;position:absolute;bottom:0.3rem;left:50%;transform:translateX(-50%);}
+.cal-day-detail{margin:0 1rem 1rem;}
+.cal-appt-card{background:#1a1a1a;border:1px solid #2a2a2a;padding:0.7rem 1rem;margin-bottom:0.5rem;font-size:0.78rem;}
+.cal-appt-client{color:#D4A574;font-size:0.8rem;margin-bottom:0.2rem;}
+.cal-appt-status{color:#666;font-size:0.65rem;letter-spacing:0.08em;margin-top:0.2rem;}
 .staff-section-box{margin:0 1rem 1rem;background:#1a1a1a;border:1px solid #2a2a2a;padding:1rem;
   display:flex;flex-direction:column;gap:0.5rem;}
 .staff-section-box label{color:#666;font-size:0.68rem;letter-spacing:0.15em;}
