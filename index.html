@@ -313,6 +313,17 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
 .kpi-card{background:#FFFFFF;border:1px solid #E3DED4;padding:1rem;text-align:center;}
 .kpi-value{color:#1A1A1A;font-size:1.6rem;margin-bottom:0.3rem;}
 .kpi-label{color:#999;font-size:0.65rem;letter-spacing:0.12em;}
+  .kanban-board{display:flex;gap:0.6rem;overflow-x:auto;padding:0 1rem 0.8rem;-webkit-overflow-scrolling:touch;}
+.kanban-col{background:#FFFFFF;border:1px solid #E3DED4;min-width:150px;flex:0 0 150px;display:flex;flex-direction:column;}
+.kanban-col-header{padding:0.5rem;text-align:center;font-size:0.65rem;letter-spacing:0.08em;color:#fff;font-weight:bold;}
+.kanban-col-body{flex:1;min-height:80px;padding:0.4rem;display:flex;flex-direction:column;gap:0.4rem;}
+.kanban-card{background:#FAF8F5;border:1px solid #E3DED4;border-left:3px solid #999;padding:0.5rem 0.6rem;font-size:0.72rem;cursor:grab;}
+.kanban-card:active{cursor:grabbing;}
+.kanban-card-title{color:#1A1A1A;margin-bottom:0.2rem;}
+.kanban-card-due{color:#999;font-size:0.62rem;}
+.kanban-add-btn{margin:0.5rem 1rem;}
+.kanban-summary-item{padding:0.6rem 1rem;border-bottom:1px solid #EDE9E1;font-size:0.78rem;}
+.kanban-summary-overdue{color:#C62828;font-size:0.7rem;}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin:0 1rem 0.6rem;}
 .cal-nav-btn{background:transparent;border:1px solid #DDD5C7;color:#1A1A1A;padding:0.3rem 0.7rem;font-family:Georgia,serif;font-size:0.85rem;cursor:pointer;}
 .cal-nav-btn:hover{border-color:#1A1A1A;}
