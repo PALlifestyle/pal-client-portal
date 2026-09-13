@@ -2138,7 +2138,24 @@ function showCalDay(year, month, day) {
     </div>`).join('');
 }
 
-async function saveDashAppointment() {
+function checkApptDateAvailable() {
+  const dateInput = document.getElementById('calApptDate');
+  const errEl = document.getElementById('calApptDateError');
+  const val = dateInput.value;
+  if (!val) { errEl.textContent = ''; return; }
+  const [y, m, d] = val.split('-').map(Number);
+  const isBooked = calAllAppts.some(a => {
+    const parsed = parseAUDate(a.Date || '');
+    return parsed && parsed.getFullYear() === y && parsed.getMonth() === (m - 1) && parsed.getDate() === d;
+  });
+  if (isBooked) {
+    errEl.textContent = 'This date already has an appointment. Please choose another day.';
+    dateInput.value = '';
+  } else {
+    errEl.textContent = '';
+  }
+}
+  async function saveDashAppointment() {
   const clientId  = document.getElementById('calApptClient').value;
   const date      = document.getElementById('calApptDate').value.trim();
   const time      = document.getElementById('calApptTime').value.trim();
