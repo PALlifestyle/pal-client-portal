@@ -2554,16 +2554,16 @@ function buildProjectBlock(proj, phases, isStaff) {
   wrap.innerHTML = `
     <div class="project-block-header" onclick="toggleProjectBody('pbody-${proj.projectId}')">
       <div style="flex:1;min-width:0;">
-        <div style="color:#666;font-size:0.65rem;letter-spacing:0.2em;margin-bottom:0.3rem;">PROJECT</div>
-        <div style="color:#fff;font-size:1rem;letter-spacing:0.08em;">${proj.name}</div>
+        <div style="color:#999;font-size:0.65rem;letter-spacing:0.2em;margin-bottom:0.3rem;">PROJECT</div>
+        <div style="color:#1A1A1A;font-size:1rem;letter-spacing:0.08em;">${proj.name}</div>
         ${proj.clientId && isStaff ? `<div style="color:#D4A574;font-size:0.7rem;margin-top:0.2rem;">CLIENT: ${proj.clientId}</div>` : ''}
-        ${proj.description ? `<div style="color:#888;font-size:0.8rem;margin-top:0.4rem;line-height:1.6;">${proj.description}</div>` : ''}
+        ${proj.description ? `<div style="color:#6b6b6b;font-size:0.8rem;margin-top:0.4rem;line-height:1.6;">${proj.description}</div>` : ''}
         ${(proj.plannedStart||proj.plannedEnd) ? `
           <div style="display:flex;gap:1.5rem;margin-top:0.6rem;">
-            ${proj.plannedStart ? `<div><div style="color:#555;font-size:0.6rem;letter-spacing:0.12em;">START</div>
-              <div style="color:#aaa;font-size:0.78rem;">${proj.plannedStart}</div></div>` : ''}
-            ${proj.plannedEnd   ? `<div><div style="color:#555;font-size:0.6rem;letter-spacing:0.12em;">END</div>
-              <div style="color:#aaa;font-size:0.78rem;">${proj.plannedEnd}</div></div>` : ''}
+            ${proj.plannedStart ? `<div><div style="color:#999;font-size:0.6rem;letter-spacing:0.12em;">START</div>
+              <div style="color:#1A1A1A;font-size:0.78rem;">${proj.plannedStart}</div></div>` : ''}
+            ${proj.plannedEnd   ? `<div><div style="color:#999;font-size:0.6rem;letter-spacing:0.12em;">END</div>
+              <div style="color:#1A1A1A;font-size:0.78rem;">${proj.plannedEnd}</div></div>` : ''}
           </div>` : ''}
       </div>
       <div class="project-status-badge" style="color:${sColor};border-color:${sColor};">
@@ -2572,8 +2572,8 @@ function buildProjectBlock(proj, phases, isStaff) {
     </div>
     <div class="project-body" id="pbody-${proj.projectId}">
       <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">TIMELINE</div>
-      ${buildGantt(phases)}
-      ${isStaff ? `<button onclick="openAddPhaseModal('${proj.projectId}','${proj.clientId}')" style="background:transparent;border:1px solid #444;color:#888;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
+      ${buildGantt(phases, isStaff)}
+      ${isStaff ? `<button onclick="openAddPhaseModal('${proj.projectId}','${proj.clientId}')" style="background:transparent;border:1px solid #DDD5C7;color:#8a8a8a;padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.7rem;cursor:pointer;margin-top:0.8rem;">+ ADD PHASE</button>` : ''}
       ${buildReport(phases)}
     </div>`;
   return wrap;
@@ -2585,15 +2585,15 @@ function toggleProjectBody(id) {
   el.style.display = el.style.display === 'block' ? 'none' : 'block';
 }
 
-function buildGantt(phases) {
-  if (!phases.length) return '<div style="color:#555;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
+function buildGantt(phases, isStaff) {
+  if (!phases.length) return '<div style="color:#999;font-size:0.8rem;padding:0.5rem 0;font-style:italic;">No phases yet.</div>';
   const parsed = phases.map(p => ({
     ...p,
     startDate: parseAUDate(p.plannedStart),
     endDate:   parseAUDate(p.plannedEnd),
     actualEndDate: parseAUDate(p.actualEnd)
   })).filter(p => p.startDate && p.endDate);
-  if (!parsed.length) return buildPhaseListOnly(phases);
+  if (!parsed.length) return buildPhaseListOnly(phases, isStaff);
   const allDates = parsed.flatMap(p => [p.startDate, p.endDate]);
   let minDate = new Date(Math.min(...allDates.map(d=>d.getTime())));
   let maxDate = new Date(Math.max(...allDates.map(d=>d.getTime())));
@@ -2614,7 +2614,7 @@ function buildGantt(phases) {
     let actualMarker = '';
     if (p.actualEndDate) {
       const ap  = ((p.actualEndDate - minDate) / 86400000 / totalDays) * 100;
-      const col = p.actualEndDate <= p.endDate ? '#4CAF50' : '#ff6b6b';
+      const col = p.actualEndDate <= p.endDate ? '#4CAF50' : '#C62828';
       actualMarker = `<div class="gantt-actual-line" style="left:${ap.toFixed(1)}%;background:${col};"></div>`;
     }
     html += `<div class="gantt-row">
@@ -2630,9 +2630,10 @@ function buildGantt(phases) {
     <div style="padding:0 0 0.6rem;">
       <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
         <span style="background:${cfg.bar};color:${cfg.text};padding:0.2rem 0.55rem;font-size:0.65rem;letter-spacing:0.1em;font-family:Georgia,serif;font-weight:bold;">${p.status}</span>
-        <span style="color:#aaa;font-size:0.72rem;">${p.plannedStart} → ${p.plannedEnd}</span>
-        ${p.notes?`<span style="color:#666;font-size:0.7rem;font-style:italic;">${p.notes}</span>`:''}
+        <span style="color:#8a8a8a;font-size:0.72rem;">${p.plannedStart} → ${p.plannedEnd}</span>
+        ${p.notes?`<span style="color:#999;font-size:0.7rem;font-style:italic;">${p.notes}</span>`:''}
       </div>
+      ${isStaff ? `
       <div style="margin-top:0.4rem;display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
         <select class="phase-status-select"
           onchange="updatePhaseStatus('${p.phaseId}',this.value,'${p.clientId}')">
@@ -2642,22 +2643,23 @@ function buildGantt(phases) {
           <option value="Completed"  ${p.status==='Completed'  ?'selected':''}>Completed</option>
           <option value="Cancelled"  ${p.status==='Cancelled'  ?'selected':''}>Cancelled</option>
         </select>
-      </div>
+      </div>` : ''}
     </div>`;
   });
   html += '</div></div>';
   return html;
 }
-function buildPhaseListOnly(phases) {
-  if (!phases.length) return '<div style="color:#555;font-size:0.8rem;font-style:italic;">No phases yet.</div>';
+function buildPhaseListOnly(phases, isStaff) {
+  if (!phases.length) return '<div style="color:#999;font-size:0.8rem;font-style:italic;">No phases yet.</div>';
   return phases.map(p => {
     const cfg = PHASE_STATUS_CONFIG[p.status] || PHASE_STATUS_CONFIG['Scheduled'];
     return `
-    <div style="padding:0.5rem 0;border-bottom:1px solid #1a1a1a;">
+    <div style="padding:0.5rem 0;border-bottom:1px solid #EDE9E1;">
       <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
         <span style="background:${cfg.bar};color:${cfg.text};padding:0.2rem 0.55rem;font-size:0.65rem;letter-spacing:0.1em;font-family:Georgia,serif;font-weight:bold;">${p.status}</span>
-        <span style="color:#fff;font-size:0.82rem;">${p.name}</span>
+        <span style="color:#1A1A1A;font-size:0.82rem;">${p.name}</span>
       </div>
+      ${isStaff ? `
       <select class="phase-status-select"
         onchange="updatePhaseStatus('${p.phaseId}',this.value,'${p.clientId}')">
         <option value="Scheduled"  ${p.status==='Scheduled'  ?'selected':''}>Scheduled</option>
@@ -2665,7 +2667,7 @@ function buildPhaseListOnly(phases) {
         <option value="Waiting"    ${p.status==='Waiting'    ?'selected':''}>Waiting</option>
         <option value="Completed"  ${p.status==='Completed'  ?'selected':''}>Completed</option>
         <option value="Cancelled"  ${p.status==='Cancelled'  ?'selected':''}>Cancelled</option>
-      </select>
+      </select>` : ''}
     </div>`;
   }).join('');
 }
@@ -2701,22 +2703,26 @@ function buildReport(phases) {
   const late    = variances.filter(v => v.diffDays > 0).length;
 
   const overdueHtml = overdue.length ? `
-    <div style="margin-top:0.8rem;background:#2e1a1a;border:1px solid #ff6b6b;padding:0.7rem 0.9rem;">
-      <div style="color:#ff6b6b;font-size:0.68rem;letter-spacing:0.15em;margin-bottom:0.4rem;">OVERDUE (${overdue.length})</div>
-      ${overdue.map(p => `<div style="color:#ffb3b3;font-size:0.78rem;padding:0.15rem 0;">${p.name} — was due ${p.plannedEnd}</div>`).join('')}
+    <div style="margin-top:0.8rem;background:#FCE8E8;border:1px solid #E8A8A8;padding:0.7rem 0.9rem;">
+      <div style="color:#C62828;font-size:0.68rem;letter-spacing:0.15em;margin-bottom:0.4rem;">OVERDUE (${overdue.length})</div>
+      ${overdue.map(p => {
+        const end = parseAUDate(p.plannedEnd);
+        const daysLate = end ? Math.floor((today - end) / 86400000) : 0;
+        return `<div style="color:#C62828;font-size:0.78rem;padding:0.15rem 0;">${p.name} — ${daysLate} day${daysLate===1?'':'s'} overdue</div>`;
+      }).join('')}
     </div>` : '';
 
   const varianceHtml = variances.length ? `
     <div style="display:flex;gap:1.2rem;margin-top:0.8rem;flex-wrap:wrap;">
-      <div style="color:#4CAF50;font-size:0.75rem;">${early} early</div>
-      <div style="color:#4CAF50;font-size:0.75rem;">${onTime} on time</div>
-      <div style="color:#ff6b6b;font-size:0.75rem;">${late} late</div>
+      <div style="color:#2E7D32;font-size:0.75rem;">${early} early</div>
+      <div style="color:#2E7D32;font-size:0.75rem;">${onTime} on time</div>
+      <div style="color:#C62828;font-size:0.75rem;">${late} late</div>
     </div>` : '';
 
-  return `<div style="margin-top:1.2rem;border-top:1px solid #2a2a2a;padding-top:1.2rem;">
+  return `<div style="margin-top:1.2rem;border-top:1px solid #E3DED4;padding-top:1.2rem;">
     <div style="color:#D4A574;font-size:0.65rem;letter-spacing:0.22em;margin-bottom:0.6rem;">PROGRESS</div>
-    <div style="color:#aaa;font-size:0.78rem;margin-bottom:0.4rem;">${done}/${total} phases complete</div>
-    <div style="background:#333;border-radius:4px;height:6px;">
+    <div style="color:#8a8a8a;font-size:0.78rem;margin-bottom:0.4rem;">${done}/${total} phases complete</div>
+    <div style="background:#E3DED4;border-radius:4px;height:6px;">
       <div style="background:#D4A574;height:6px;border-radius:4px;width:${pct}%;"></div>
     </div>
     ${varianceHtml}
