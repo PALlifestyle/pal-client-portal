@@ -1786,7 +1786,32 @@ async function handleClientMediaUpload(event) {
   event.target.value = '';
 }
 
-// ── SCHEDULE (via Apps Script) ────────────────────────────────────
+async function requestAppointment() {
+  const clientId   = sessionStorage.getItem('clientId');
+  const date       = document.getElementById('clientApptDate').value.trim();
+  const time       = document.getElementById('clientApptTime').value.trim();
+  const type       = document.getElementById('clientApptType').value;
+  const location   = document.getElementById('clientApptLocation').value.trim();
+  const notes      = document.getElementById('clientApptNotes').value.trim();
+  const successEl  = document.getElementById('clientApptSuccess');
+  const errorEl    = document.getElementById('clientApptError');
+  if (!date) { errorEl.textContent='Date is required.'; return; }
+  errorEl.textContent=''; successEl.textContent='Sending...';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ sheet:'Schedule',
+        row:[clientId, date, time, type, notes, location, 'Requested'] })
+    });
+    successEl.textContent='Appointment requested! We will confirm it soon.';
+    document.getElementById('clientApptDate').value='';
+    document.getElementById('clientApptTime').value='';
+    document.getElementById('clientApptLocation').value='';
+    document.getElementById('clientApptNotes').value='';
+    setTimeout(()=>{ successEl.textContent=''; loadSchedule(clientId); },2000);
+  } catch(e) { errorEl.textContent='Error sending request.'; successEl.textContent=''; }
+}
+  // ── SCHEDULE (via Apps Script) ────────────────────────────────────
 async function loadSchedule(clientId) {
   const upEl   = document.getElementById('scheduleUpcoming');
   const pastEl = document.getElementById('schedulePast');
