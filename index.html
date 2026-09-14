@@ -3048,9 +3048,10 @@ async function handleStaffMediaUpload(event) {
   reader.onload = async function(e) {
     const base64 = e.target.result.split(',')[1];
     try {
-      const res  = await postToScript({ action:'uploadPhoto', clientId,
-        fileName:file.name, mimeType:file.type, fileData:base64,
-        target:'clientMedia', caption, uploadedBy:'PAL' });
+      const category = document.getElementById('staffUploadCategory')?.value || '';
+const res  = await postToScript({ action:'uploadPhoto', clientId,
+      fileName:file.name, mimeType:file.type, fileData:base64,
+      target:'clientMedia', caption, category, uploadedBy:'PAL' });
       const json = await res.json();
       if (json.success) {
         successEl.textContent='Uploaded!';
