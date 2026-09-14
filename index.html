@@ -1619,6 +1619,10 @@ async function showStaffDashboard(staffId, staffName) {
       o.value = id; o.textContent = name; calSel.appendChild(o);
     });
   }
+    const projectsNavBtn = document.querySelector('#staffNav .nav-item-btn[onclick*="staffProjects"]');
+  if (projectsNavBtn) projectsNavBtn.parentElement.style.display = (STAFF_PERMS.role === 'Limited') ? 'none' : '';
+  const paymentsSubTab = document.querySelector('.staff-sub-tab[onclick*="detailPayments"]');
+  if (paymentsSubTab) paymentsSubTab.style.display = (STAFF_PERMS.role === 'Limited') ? 'none' : '';
   showTab('staffDashboard', document.querySelector('#staffNav .nav-item-btn'));
 }
 
