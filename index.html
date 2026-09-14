@@ -1255,6 +1255,22 @@ function goToStaffTab(tabName) {
   } catch(e) { /* keep existing list if this fails */ }
 }
 const STAFF_IDS = ['STAFF001', 'STAFF002'];
+let STAFF_PERMS = { allowedClients: 'ALL', role: 'Admin' };
+async function loadStaffPermissions(staffId) {
+  STAFF_PERMS = { allowedClients: 'ALL', role: 'Admin' };
+  try {
+    const rows = await fetchSheet('Staff');
+    for (const row of rows) {
+      const rowId = row.c[0]?.v?.toString().trim();
+      if (rowId === staffId) {
+        const allowed = row.c[3]?.v?.toString().trim() || 'ALL';
+        const role    = row.c[4]?.v?.toString().trim() || 'Admin';
+        STAFF_PERMS = { allowedClients: allowed, role: role };
+        break;
+      }
+    }
+  } catch(e) { /* mantém acesso total se falhar */ }
+}
 const PROJECT_STATUS_COLORS = {
   'Scheduled':'#2196F3','In Progress':'#D4A574',
   'Waiting':'#E8A000','Completed':'#4CAF50','Cancelled':'#ff4444'
