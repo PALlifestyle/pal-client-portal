@@ -2935,8 +2935,12 @@ async function loadClientList() {
   const el = document.getElementById('clientListContainer');
   el.innerHTML = '<div class="empty-state">Loading clients...</div>';
   try {
-    const rows = await fetchSheet('Clients');
-    const clients = rows.filter(r => !STAFF_IDS.includes(r.c[0]?.v?.toString()));
+        const rows = await fetchSheet('Clients');
+    let clients = rows.filter(r => !STAFF_IDS.includes(r.c[0]?.v?.toString()));
+    if (STAFF_PERMS.allowedClients !== 'ALL') {
+      const allowedList = STAFF_PERMS.allowedClients.split(',').map(s => s.trim());
+      clients = clients.filter(r => allowedList.includes(r.c[0]?.v?.toString()));
+    }
     if (!clients.length) { el.innerHTML='<div class="empty-state">No clients found.</div>'; return; }
     el.innerHTML = '';
     clients.forEach(row => {
