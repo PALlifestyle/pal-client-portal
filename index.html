@@ -1999,9 +1999,10 @@ async function handleClientMediaUpload(event) {
   reader.onload = async function(e) {
     const base64 = e.target.result.split(',')[1];
     try {
-      const res  = await postToScript({ action:'uploadPhoto', clientId,
-        fileName:file.name, mimeType:file.type, fileData:base64,
-        target:'clientMedia', caption, uploadedBy:'Client' });
+      const category = document.getElementById('uploadCategory')?.value || '';
+const res  = await postToScript({ action:'uploadPhoto', clientId,
+  fileName:file.name, mimeType:file.type, fileData:base64,
+  target:'clientMedia', caption, category, uploadedBy:'Client' });
       const json = await res.json();
       if (json.success) {
         successEl.textContent = 'Uploaded successfully!';
