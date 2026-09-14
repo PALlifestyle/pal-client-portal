@@ -1013,6 +1013,13 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
           <div class="upload-box">
             <label>UPLOAD FOR THIS CLIENT</label>
             <input type="text" id="staffUploadCaption" placeholder="Caption...">
+            <label>CATEGORY</label>
+<select id="staffUploadCategory">
+  <option value="Home Management">Home Management</option>
+  <option value="Pet Care">Pet Care</option>
+  <option value="Personal Project">Personal Project</option>
+  <option value="Documents">Documents</option>
+</select>
             <input type="file" id="staffMediaInput" accept="image/*,video/*" style="display:none"
                    onchange="handleStaffMediaUpload(event)">
             <button class="btn" onclick="document.getElementById('staffMediaInput').click()">
