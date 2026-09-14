@@ -1582,6 +1582,9 @@ function showDashboard(clientId, clientName) {
 
 // ── SHOW STAFF DASHBOARD ──────────────────────────────────────────
 async function showStaffDashboard(staffId, staffName) {
+  async function showStaffDashboard(staffId, staffName) {
+  await refreshClientNames();
+  await loadStaffPermissions(staffId);
   await refreshClientNames();
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appShell').style.display    = 'flex';
