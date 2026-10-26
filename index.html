@@ -1936,7 +1936,7 @@ async function loadInvoices(clientId) {
   } catch(e) { el.innerHTML='<div class="empty-state">Error loading invoices.</div>'; }
 }
   // ── MESSAGES ──────────────────────────────────────────────────────
-async function loadMessages(clientId) {
+function linkify(t){const e=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');return e.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,u=>{const m=u.match(/[.,!?)]+$/);const tail=m?m[0]:'';const c=tail?u.slice(0,-tail.length):u;const h=c.startsWith('http')?c:'https://'+c;return `<a href="${h}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;word-break:break-all;">${c}</a>`+tail;});} function linkify(t){const e=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');return e.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,u=>{const m=u.match(/[.,!?)]+$/);const tail=m?m[0]:'';const c=tail?u.slice(0,-tail.length):u;const h=c.startsWith('http')?c:'https://'+c;return `<a href="${h}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;word-break:break-all;">${c}</a>`+tail;});} function linkify(t){const e=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');return e.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,u=>{const m=u.match(/[.,!?)]+$/);const tail=m?m[0]:'';const c=tail?u.slice(0,-tail.length):u;const h=c.startsWith('http')?c:'https://'+c;return `<a href="${h}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;word-break:break-all;">${c}</a>`+tail;});} async function loadMessages(clientId) {
   const el = document.getElementById('messagesList');
   el.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
@@ -1951,7 +1951,7 @@ async function loadMessages(clientId) {
       const isClient = from !== 'PAL' && from !== 'Staff';
       const div = document.createElement('div');
       div.className = 'msg-bubble ' + (isClient ? 'msg-client' : 'msg-pal');
-      div.innerHTML = `<div class="msg-text">${text}</div><div class="msg-time">${date}</div>`;
+      div.innerHTML = `<div class="msg-text">${linkify(text)}</div><div class="msg-time">${date}</div>`;
       el.appendChild(div);
     });
     el.scrollTop = el.scrollHeight;
@@ -1968,7 +1968,7 @@ async function sendMessage() {
   const el  = document.getElementById('messagesList');
   const div = document.createElement('div');
   div.className = 'msg-bubble msg-client';
-  div.innerHTML = `<div class="msg-text">${text}</div><div class="msg-time">${ts}</div>`;
+  div.innerHTML = `<div class="msg-text">${linkify(text)}</div><div class="msg-time">${ts}</div>`;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
   try {
@@ -3009,7 +3009,7 @@ async function loadDetailMessages(clientId) {
       const div = document.createElement('div');
       div.className = 'msg-bubble '+(isClient?'msg-client':'msg-pal');
       div.innerHTML = `<div class="msg-sender">${from}</div>
-        <div class="msg-text">${text}</div>
+        <div class="msg-text">${linkify(text)}</div>
         <div class="msg-time">${date}</div>`;
       el.appendChild(div);
     });
@@ -3028,7 +3028,7 @@ async function sendStaffMessage() {
   const div = document.createElement('div');
   div.className = 'msg-bubble msg-pal';
   div.innerHTML = `<div class="msg-sender">PAL</div>
-    <div class="msg-text">${text}</div>
+    <div class="msg-text">${linkify(text)}</div>
     <div class="msg-time">${ts}</div>`;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
