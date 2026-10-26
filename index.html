@@ -40,10 +40,16 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
 
 /* ── TOP BAR ─────────────────────────────────────────────────── */
 .top-bar{background:#FFFFFF;border-bottom:1px solid #E3DED4;padding:0.75rem 1rem;
+  padding-top:calc(0.75rem + env(safe-area-inset-top));
   display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:200;flex-shrink:0;}
-.hamburger-btn{background:transparent;border:none;color:#1A1A1A;font-size:1.4rem;
-  cursor:pointer;padding:0.2rem 0.5rem;line-height:1;}
+.hamburger-btn{width:44px;height:44px;padding:0;flex-shrink:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;
+  background:transparent;border:none;cursor:pointer;border-radius:6px;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.hamburger-btn span{display:block;width:24px;height:2.5px;background:#1A1A1A;border-radius:2px;}
+.hamburger-btn:active{background:#F1EFEA;}
+#sidebar{padding-top:env(safe-area-inset-top);}
 .top-bar-logo{height:56px;border-radius:3px;}
 .logout-btn{background:#1A1A1A;border:none;color:#D4A574;
   padding:0.35rem 0.8rem;font-family:Georgia,serif;font-size:0.72rem;
@@ -417,7 +423,7 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
 
   <!-- TOP BAR -->
     <div class="top-bar">
-    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Menu">&#9776;</button>
+    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
     <img src="pal-logo-black.jpeg" alt="PAL" class="top-bar-logo">
     <div>
       <button class="logout-btn" onclick="logout()">LOGOUT</button>
