@@ -685,19 +685,19 @@ body{background:#FAF8F5;color:#1A1A1A;font-family:Georgia,serif;}
     <div id="tabRequests" class="tab-pane">
       <div class="section-title" style="border-top:none;padding-top:1rem;">NEW REQUEST</div>
       <div class="request-form">
-        <label>WHAT DO YOU NEED?</label>
-        <textarea id="requestText" placeholder="Describe your request..."></textarea>
+        <label>WHAT DO YOU NEED? * (DETAILS AND INSTRUCTIONS)</label>
+        <textarea id="requestText" placeholder="Describe what you need, any instructions or details..."></textarea>
         <label>PRIORITY</label>
         <select id="requestPriority">
           <option value="Low">Low</option>
           <option value="Medium" selected>Medium</option>
           <option value="High">High</option>
         </select>
-        <label>DATE / TIME REQUESTED (optional)</label>
-                <label>DATE / TIME REQUESTED (optional)</label>
-        <input type="text" id="requestDateTime"
+        
+                
+        <label>PREFERRED DATE &amp; TIME *</label><input type="datetime-local" id="requestDateTime"
                placeholder="e.g. 15/07/2026 at 10:00 AM">
-        <label>LOCATION (OPTIONAL)</label>
+        <label>LOCATION *</label>
         <div style="display:flex;gap:0.5rem;">
           <input type="text" id="requestLocation" placeholder="Start typing an address...">
           <button type="button" style="background:#1A1A1A;color:#D4A574;border:none;padding:0 1rem;cursor:pointer;font-family:Georgia,serif;font-size:1rem;flex-shrink:0;" onclick="useMyLocation()">📍</button>
@@ -2344,7 +2344,7 @@ async function loadHours(clientId) {
   } catch(e) { byProjEl.innerHTML='<div class="empty-state">Error loading hours.</div>'; }
 }
   // ── REQUESTS (col: 0=id, 1=clientId, 2=text, 3=priority, 4=date, 5=status) ─────
-async function submitRequest() {
+function reqCell(c){return c?(c.f||(c.v??'').toString()):'';} async function submitRequest(){const clientId=sessionStorage.getItem('clientId');const text=document.getElementById('requestText').value.trim();const priority=document.getElementById('requestPriority').value;const dtRaw=document.getElementById('requestDateTime').value;const location=document.getElementById('requestLocation').value.trim();const successEl=document.getElementById('requestSuccess');const errorEl=document.getElementById('requestError');errorEl.textContent='';successEl.textContent='';const details=text.replace(/^Service:.*$/m,'').trim();if(details.length<10){errorEl.textContent='Please describe what you need, with any instructions or details.';return;}if(!dtRaw){errorEl.textContent='Please choose your preferred date and time.';return;}if(new Date(dtRaw)<new Date()){errorEl.textContent='Please choose a date and time in the future.';return;}if(!location){errorEl.textContent='Please add the location.';return;}const parts=dtRaw.split('T');const requestedFor=parts[0].split('-').reverse().join('/')+' '+parts[1];successEl.textContent='Submitting...';const requestId='R'+Date.now();try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({sheet:'Requests',row:[requestId,clientId,text,priority,formatDateTimeStamp(),'New',requestedFor,location]})});successEl.textContent='Request submitted!';document.getElementById('requestText').value='';document.getElementById('requestDateTime').value='';document.getElementById('requestLocation').value='';setTimeout(()=>{successEl.textContent='';loadRequestHistory(clientId);},2000);}catch(e){errorEl.textContent='Error submitting.';successEl.textContent='';}} async function submitRequestOld() {
   const clientId  = sessionStorage.getItem('clientId');
   const text      = document.getElementById('requestText').value.trim();
   const priority  = document.getElementById('requestPriority').value;
@@ -2366,7 +2366,7 @@ async function submitRequest() {
     setTimeout(() => { successEl.textContent=''; loadRequestHistory(clientId); }, 2000);
   } catch(e) { errorEl.textContent='Error submitting.'; successEl.textContent=''; }
 }
-async function loadRequestHistory(clientId) {
+function renderRequestItem(row,showClient){const text=row.c[2]?.v||'';const priority=row.c[3]?.v||'Medium';const created=reqCell(row.c[4]);const status=row.c[5]?.v||'New';const when=reqCell(row.c[6]);const where=reqCell(row.c[7]);const cid=(row.c[1]?.v||'').toString();const cls=status==='New'?'task-status-todo':status==='In Progress'?'task-status-ongoing':'task-status-done';return `<div class="request-history-item"><div class="request-history-top"><span class="task-status ${cls}">${status}</span><span class="request-priority">${priority}</span><span class="request-date">${created}</span></div>${showClient?`<div style="color:#D4A574;font-size:0.72rem;letter-spacing:0.08em;margin-bottom:0.2rem;">${CLIENT_NAMES[cid]||cid}</div>`:''}<div class="request-desc" style="white-space:pre-wrap;">${linkify(text)}</div>${when?`<div class="request-when">&#128197; ${when}</div>`:''}${where?`<div class="request-when">&#128205; ${where}</div>`:''}</div>`;} async function loadRequestHistory(clientId){const el=document.getElementById('requestHistoryList');el.innerHTML='<div class="empty-state">Loading...</div>';try{const rows=await fetchSheet('Requests');const items=rows.filter(r=>r.c[1]?.v===clientId);if(!items.length){el.innerHTML='<div class="empty-state">No requests yet.</div>';return;}el.innerHTML=items.slice().reverse().map(r=>renderRequestItem(r,false)).join('');}catch(e){el.innerHTML='<div class="empty-state">Error loading requests.</div>';}} async function loadRequestHistoryOld(clientId) {
   const el = document.getElementById('requestHistoryList');
   el.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
@@ -3150,7 +3150,7 @@ async function createTaskForDetailClient() {
 }
 
 // ── STAFF: REQUESTS ───────────────────────────────────────────────
-async function loadDetailRequests(clientId) {
+async function loadDetailRequests(clientId){const el=document.getElementById('detailRequestsList');el.innerHTML='<div class="empty-state">Loading...</div>';try{const rows=await fetchSheet('Requests');const items=rows.filter(r=>r.c[1]?.v===clientId);if(!items.length){el.innerHTML='<div class="empty-state">No requests yet.</div>';return;}el.innerHTML=items.slice().reverse().map(r=>renderRequestItem(r,false)).join('');}catch(e){el.innerHTML='<div class="empty-state">Error loading requests.</div>';}} async function loadDetailRequestsOld(clientId) {
   const el = document.getElementById('detailRequestsList');
   el.innerHTML = '<div class="empty-state">Loading...</div>';
   try {
