@@ -12,10 +12,15 @@ for(const scen of ['afterAP','afterXero','beforeAP']) for(const apOpen of [false
   const xero=document.createElement('div');xero.innerHTML='<div class="section-title">XERO</div><div>x</div>';tab.append(xero);
   const mk=(id,t)=>{const d=document.createElement('div');d.id=id;d.innerHTML='<div class="section-title">'+t+'</div><div>body</div>';return d;};
   const blocks=[mk('actCard','ACTIONS'),mk('tmBox','TEAM'),mk('staffReviews','REVIEWS')];
+  const unk=document.createElement('div');unk.id='unknownBox';unk.innerHTML='<div class="section-title">PROPERTY CARE</div><div>damage</div>';at.after(unk);
+  const extras=['spDash','invDash','linDash','xeroDash'].map(id=>{const d=document.createElement('div');d.id=id;d.innerHTML='<div class="section-title">'+id+'</div><div>content</div>';return d;});
+  extras.forEach(d=>{at.after(d);at=d;});
   if(scen==='afterAP')blocks.forEach(d=>{at.after(d);at=d;});else if(scen==='afterXero')blocks.forEach(d=>tab.append(d));else blocks.forEach(d=>h.before(d));
   try{svcApply('S');}catch(e){}await new Promise(r=>setTimeout(r,700));
   const heads=[...tab.querySelectorAll('.clpHead,.svcHead')].filter(x=>x.offsetParent).map(x=>x.textContent.replace(/[^A-Z ]/g,'').trim());
-  return heads;},scen);
+  const hiddenExtras=['spDash','invDash','linDash','xeroDash'].filter(id=>{const e=document.getElementById(id);return !e.offsetParent&&!e.closest('.svcBlk');});
+  if(document.getElementById('unknownBox').classList.contains('svcHid'))hiddenExtras.push('unknownBox');
+  return heads.concat(hiddenExtras.map(x=>'HIDDEN:'+x));},scen);
  const want=['ACTION PLAN','ACTIONS','HOME MANAGEMENT','PET CARE','PERSONAL PROJECTS','TEAM','REVIEWS'];
  const ok=JSON.stringify(r)===JSON.stringify(want)&&!errs.length;if(!ok)fail++;
  console.log((ok?'PASS':'FAIL'),scen,'AP open:'+apOpen,ok?'':JSON.stringify(r)+' '+errs.join('|'));await p.close();}
