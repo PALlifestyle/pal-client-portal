@@ -21,7 +21,7 @@ for(const scen of ['afterAP','afterXero','beforeAP']) for(const apOpen of [false
   const hiddenExtras=['spDash','invDash','linDash','xeroDash'].filter(id=>{const e=document.getElementById(id);return !e.offsetParent&&!e.closest('.svcBlk');});
   if(document.getElementById('unknownBox').classList.contains('svcHid'))hiddenExtras.push('unknownBox');
   return heads.concat(hiddenExtras.map(x=>'HIDDEN:'+x));},scen);
- const want=['ACTION PLAN','ACTIONS','HOME MANAGEMENT','PET CARE','PERSONAL PROJECTS','RECOMMENDED','TEAM','REVIEWS'];
+ const want=['ACTION PLAN','ACTIONS','HOME MANAGEMENT','PET CARE','PERSONAL PROJECTS','RECOMMENDED','MANAGEMENT','TEAM','REVIEWS'];
  const ok=JSON.stringify(r)===JSON.stringify(want)&&!errs.length;if(!ok)fail++;
  console.log((ok?'PASS':'FAIL'),scen,'AP open:'+apOpen,ok?'':JSON.stringify(r)+' '+errs.join('|'));await p.close();}
 await b.close();console.log(fail?'REGRESSION FAILED':'ALL PASS');process.exit(fail?1:0);})();
